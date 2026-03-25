@@ -1,0 +1,25 @@
+# Автоматически определять текстовые файлы
+* text=auto
+
+# Явно указать текстовые файлы Unity
+*.asset text
+*.meta text
+*.unity text
+*.prefab text
+*.inputactions text
+*.json text
+*.txt text
+*.xml text
+*.css text
+*.js text
+*.html text
+
+# Unity бинарные файлы
+*.png binary
+*.jpg binary
+*.tga binary
+*.dll binary
+*.so binary
+*.a binary
+*.ttf binary
+*.pdf binary
