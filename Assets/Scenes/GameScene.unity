@@ -764,6 +764,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 7
+  acceleration: 50
+  deceleration: 40
   maxFallSpeed: 20
   groundCheck: {fileID: 832461702}
   groundCheckRadius: 0.1
@@ -972,7 +974,7 @@ MonoBehaviour:
   chargeRestoreTime: 0.8
   soundWavePrefab: {fileID: 2189392241876459306, guid: 97d78bcf116a2f847afb429b8aa3ce67, type: 3}
   waveSpeed: 15
-  waveMaxDistance: 20
+  waveMaxDistance: 5
   recoilForce: 15
   spawnOffset: 0.8
 --- !u!1 &986599347

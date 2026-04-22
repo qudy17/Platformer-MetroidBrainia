@@ -7,6 +7,13 @@ public class PlayerMovement : MonoBehaviour
     [Header("Настройки движения")]
     public float moveSpeed = 7f;
 
+    [Header("Ускорение и торможение")]
+    [Tooltip("Как быстро игрок разгоняется (выше = резче старт)")]
+    public float acceleration = 50f;
+
+    [Tooltip("Как быстро игрок тормозит когда не нажата клавиша")]
+    public float deceleration = 40f;
+
     [Header("Ограничение скорости падения")]
     public float maxFallSpeed = 20f;
 
@@ -15,8 +22,7 @@ public class PlayerMovement : MonoBehaviour
     public float groundCheckRadius = 0.1f;
     public LayerMask groundLayer;
 
-    // Направление взгляда игрока — читается из ScreamAbility
-    // По умолчанию смотрим вправо
+    // Направление взгляда — читается из ScreamAbility
     public Vector2 FacingDirection { get; private set; } = Vector2.right;
 
     private Rigidbody2D rb;
@@ -44,10 +50,6 @@ public class PlayerMovement : MonoBehaviour
         ClampFallSpeed();
     }
 
-    // ─────────────────────────────────────────
-    //  Ввод
-    // ─────────────────────────────────────────
-
     void ReadInput()
     {
         horizontalInput = 0f;
@@ -68,32 +70,42 @@ public class PlayerMovement : MonoBehaviour
             verticalInput = -1f;
     }
 
-    // ─────────────────────────────────────────
-    //  Направление взгляда
-    // ─────────────────────────────────────────
-
     void UpdateFacingDirection()
     {
-        // Приоритет: вертикаль важнее горизонтали
-        // Если зажаты оба — смотрим по диагонали
-        // Если ничего не зажато — сохраняем последнее направление
-
         if (horizontalInput != 0f || verticalInput != 0f)
         {
             FacingDirection = new Vector2(horizontalInput, verticalInput).normalized;
         }
     }
 
-    // ─────────────────────────────────────────
-    //  Движение
-    // ─────────────────────────────────────────
-
     void Move()
     {
-        rb.linearVelocity = new Vector2(
-            horizontalInput * moveSpeed,
-            rb.linearVelocity.y
-        );
+        float currentSpeedX = rb.linearVelocity.x;
+        float targetSpeedX = horizontalInput * moveSpeed;
+
+        float newSpeedX;
+
+        if (horizontalInput != 0f)
+        {
+            // Игрок нажал клавишу — разгоняемся к целевой скорости
+            newSpeedX = Mathf.MoveTowards(
+                currentSpeedX,
+                targetSpeedX,
+                acceleration * Time.fixedDeltaTime
+            );
+        }
+        else
+        {
+            // Клавиша не нажата — тормозим
+            // Но НЕ гасим импульс от отдачи резко — торможение постепенное
+            newSpeedX = Mathf.MoveTowards(
+                currentSpeedX,
+                0f,
+                deceleration * Time.fixedDeltaTime
+            );
+        }
+
+        rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);
     }
 
     void ClampFallSpeed()
@@ -107,10 +119,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // ─────────────────────────────────────────
-    //  Земля
-    // ─────────────────────────────────────────
-
     void CheckGround()
     {
         IsGrounded = Physics2D.OverlapCircle(
@@ -120,33 +128,22 @@ public class PlayerMovement : MonoBehaviour
         );
     }
 
-    // ─────────────────────────────────────────
-    //  Флип спрайта (только по горизонтали)
-    // ─────────────────────────────────────────
-
     void FlipCharacter()
     {
-        // Флипаем только если есть горизонтальное движение
         if (horizontalInput > 0f)
             transform.localScale = new Vector3(1f, 1.5f, 1f);
         else if (horizontalInput < 0f)
             transform.localScale = new Vector3(-1f, 1.5f, 1f);
     }
 
-    // ─────────────────────────────────────────
-    //  Gizmos
-    // ─────────────────────────────────────────
-
     void OnDrawGizmosSelected()
     {
-        // Проверка земли
         if (groundCheck != null)
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
         }
 
-        // Направление взгляда
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(
             transform.position,
