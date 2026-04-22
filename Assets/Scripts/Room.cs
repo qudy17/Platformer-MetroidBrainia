@@ -3,10 +3,9 @@ using UnityEngine;
 public class Room : MonoBehaviour
 {
     [Header("Размеры комнаты (в юнитах)")]
-    public float roomWidth = 60f;    // 1920px / 32ppu = 60 юнитов
-    public float roomHeight = 33.75f; // 1080px / 32ppu = 33.75 юнитов
+    public float roomWidth = 60f;
+    public float roomHeight = 33.75f;
 
-    // Центр комнаты (вычисляется автоматически из позиции объекта)
     public Vector3 RoomCenter => transform.position;
 
     // Границы комнаты
@@ -15,7 +14,6 @@ public class Room : MonoBehaviour
         new Vector3(roomWidth, roomHeight, 0)
     );
 
-    // Проверяем находится ли точка внутри комнаты
     public bool ContainsPoint(Vector2 point)
     {
         return RoomBounds.Contains(new Vector3(point.x, point.y, 0));
@@ -24,7 +22,7 @@ public class Room : MonoBehaviour
     // Рисуем границы комнаты в редакторе
     void OnDrawGizmos()
     {
-        Gizmos.color = new Color(0f, 1f, 1f, 0.3f); // голубой полупрозрачный
+        Gizmos.color = new Color(0f, 1f, 1f, 0.3f);
         Gizmos.DrawWireCube(transform.position, new Vector3(roomWidth, roomHeight, 0));
 
         // Крестик в центре
