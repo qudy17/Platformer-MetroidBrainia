@@ -11,16 +11,24 @@ public class SoundWave : MonoBehaviour
     private Rigidbody2D rb;
     private bool initialized = false;
 
-    // Rigidbody игрока — применяем отдачу когда волна врезается
     private Rigidbody2D playerRb;
     private float recoilForce;
 
     [Header("Слои")]
-    [Tooltip("Слои твёрдых поверхностей — волна останавливается и толкает игрока")]
     public LayerMask solidLayer;
-
-    [Tooltip("Слой игрока — волна игнорирует")]
     public LayerMask playerLayer;
+    public LayerMask movableBlockLayer;
+
+    [Header("Параметры удара по блоку")]
+    public float blockImpactForceMultiplier = 1.2f;
+    public bool destroyOnBlockHit = true;
+
+    [Header("Отдача при ударе по блоку")]
+    [Tooltip("Применять ли отдачу к игроку при ударе волны по блоку")]
+    public bool applyRecoilOnBlockHit = true;
+
+    // ─── НОВОЕ: флаг, предотвращающий двойное срабатывание ───
+    private bool hasCollided = false;
 
     void Awake()
     {
@@ -32,9 +40,6 @@ public class SoundWave : MonoBehaviour
         col.isTrigger = true;
     }
 
-    /// <summary>
-    /// Инициализация волны после спавна.
-    /// </summary>
     public void Initialize(
         Vector2 dir,
         float spd,
@@ -54,6 +59,9 @@ public class SoundWave : MonoBehaviour
 
         rb.linearVelocity = direction * speed;
         initialized = true;
+
+        // Сбрасываем флаг при инициализации
+        hasCollided = false;
     }
 
     void Update()
@@ -63,35 +71,78 @@ public class SoundWave : MonoBehaviour
         float distanceTravelled = Vector2.Distance(startPosition, transform.position);
         if (distanceTravelled >= maxDistance)
         {
-            // Волна улетела слишком далеко — отдачи нет
             DestroyWave();
         }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        // ─── КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: проверяем флаг ПЕРВЫМ ДЕЛОМ ───
+        if (hasCollided) return;
+
         int otherLayer = 1 << other.gameObject.layer;
 
         // Игнорируем игрока
         if ((otherLayer & playerLayer) != 0)
+            return;
+
+        // ── Подвижный блок ──────────────────────────────────────────────
+        if ((otherLayer & movableBlockLayer) != 0)
         {
+            hasCollided = true;  // <-- ставим флаг ДО обработки
+            HandleBlockHit(other);
             return;
         }
 
-        // Твёрдая поверхность — отталкиваем игрока и уничтожаем волну
+        // ── Твёрдая поверхность ─────────────────────────────────────────
         if ((otherLayer & solidLayer) != 0)
         {
-            Debug.Log($"[SoundWave] Попал в поверхность: {other.gameObject.name} " +
-                      $"→ применяем отдачу");
-
+            hasCollided = true;  // <-- ставим флаг ДО обработки
+            Debug.Log($"[SoundWave] Попал в поверхность: {other.gameObject.name}");
             ApplyRecoilToPlayer();
             DestroyWave();
             return;
         }
+    }
 
-        // ЗАГЛУШКА — другие объекты добавим позже
-        Debug.Log($"[SoundWave] Попал в объект: {other.gameObject.name} " +
-                  $"(слой: {LayerMask.LayerToName(other.gameObject.layer)})");
+    void HandleBlockHit(Collider2D blockCollider)
+    {
+        Debug.Log($"[SoundWave] Столкновение с: {blockCollider.gameObject.name}, слой: {LayerMask.LayerToName(blockCollider.gameObject.layer)}");
+
+        // Ищем MovableBlock на самом объекте
+        MovableBlock block = blockCollider.GetComponent<MovableBlock>();
+
+        // Если не нашли — ищем в родителе (для групп блоков)
+        if (block == null)
+        {
+            block = blockCollider.GetComponentInParent<MovableBlock>();
+            Debug.Log($"[SoundWave] Поиск в родителе: {(block != null ? "НАЙДЕН" : "НЕ НАЙДЕН")}");
+        }
+        else
+        {
+            Debug.Log("[SoundWave] MovableBlock найден на самом объекте");
+        }
+
+        if (block != null)
+        {
+            float impactForce = recoilForce * blockImpactForceMultiplier;
+            Debug.Log($"[SoundWave] Вызываю ReceiveWaveImpact с силой: {impactForce}");
+            bool hitSuccess = block.ReceiveWaveImpact(direction, impactForce);
+
+            if (applyRecoilOnBlockHit && hitSuccess)
+            {
+                ApplyRecoilToPlayer();
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"[SoundWave] MovableBlock не найден на {blockCollider.gameObject.name} и его родителях!");
+        }
+
+        if (destroyOnBlockHit)
+        {
+            DestroyWave();
+        }
     }
 
     void ApplyRecoilToPlayer()
@@ -102,11 +153,8 @@ public class SoundWave : MonoBehaviour
             return;
         }
 
-        // Отдача — противоположно направлению волны
         Vector2 recoilDir = -direction;
 
-        // Крик вниз (волна летит вниз, врезается в пол)
-        // → отдача вверх → сбрасываем вертикальную скорость для чистого прыжка
         if (recoilDir.y > 0.3f)
         {
             playerRb.linearVelocity = new Vector2(
