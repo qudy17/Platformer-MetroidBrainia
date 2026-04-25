@@ -6,9 +6,9 @@ public class MovableBlock : MonoBehaviour
 {
     [Header("Физика блока")]
     public float friction = 8f;
-    public float maxSpeed = 12f;
-    public float blockMass = 2f;
-    public float waveForceMultiplier = 20f;
+    public float maxSpeed = 20f;
+    public float blockMass = 80f;
+    public float waveForceMultiplier = 40f;
 
     [Header("Слои")]
     public LayerMask groundLayer;

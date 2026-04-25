@@ -18,6 +18,7 @@ public class SoundWave : MonoBehaviour
     public LayerMask solidLayer;
     public LayerMask playerLayer;
     public LayerMask movableBlockLayer;
+    public LayerMask fragileBlockLayer; // ДОБАВЛЕНО
 
     [Header("Параметры удара по блоку")]
     public float blockImpactForceMultiplier = 1.2f;
@@ -27,7 +28,11 @@ public class SoundWave : MonoBehaviour
     [Tooltip("Применять ли отдачу к игроку при ударе волны по блоку")]
     public bool applyRecoilOnBlockHit = true;
 
-    // ─── НОВОЕ: флаг, предотвращающий двойное срабатывание ───
+    [Header("Хрупкие блоки")] // ДОБАВЛЕНО
+    public float fragileBlockRecoilRadius = 3f; // Радиус отдачи при разрушении
+    public float fragileBlockRecoilForce = 10f; // Сила отдачи при разрушении
+
+    // ─── Флаг, предотвращающий двойное срабатывание ───
     private bool hasCollided = false;
 
     void Awake()
@@ -38,6 +43,7 @@ public class SoundWave : MonoBehaviour
 
         CircleCollider2D col = GetComponent<CircleCollider2D>();
         col.isTrigger = true;
+        hasCollided = false;
     }
 
     public void Initialize(
@@ -77,7 +83,7 @@ public class SoundWave : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // ─── КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: проверяем флаг ПЕРВЫМ ДЕЛОМ ───
+        // ─── Проверяем флаг ПЕРВЫМ ДЕЛОМ ───
         if (hasCollided) return;
 
         int otherLayer = 1 << other.gameObject.layer;
@@ -89,15 +95,23 @@ public class SoundWave : MonoBehaviour
         // ── Подвижный блок ──────────────────────────────────────────────
         if ((otherLayer & movableBlockLayer) != 0)
         {
-            hasCollided = true;  // <-- ставим флаг ДО обработки
+            hasCollided = true;
             HandleBlockHit(other);
+            return;
+        }
+
+        // ── Хрупкий блок ──────────────────────────────────────────────
+        if ((otherLayer & fragileBlockLayer) != 0)
+        {
+            hasCollided = true;
+            HandleFragileBlockHit(other);
             return;
         }
 
         // ── Твёрдая поверхность ─────────────────────────────────────────
         if ((otherLayer & solidLayer) != 0)
         {
-            hasCollided = true;  // <-- ставим флаг ДО обработки
+            hasCollided = true;
             Debug.Log($"[SoundWave] Попал в поверхность: {other.gameObject.name}");
             ApplyRecoilToPlayer();
             DestroyWave();
@@ -109,10 +123,8 @@ public class SoundWave : MonoBehaviour
     {
         Debug.Log($"[SoundWave] Столкновение с: {blockCollider.gameObject.name}, слой: {LayerMask.LayerToName(blockCollider.gameObject.layer)}");
 
-        // Ищем MovableBlock на самом объекте
         MovableBlock block = blockCollider.GetComponent<MovableBlock>();
 
-        // Если не нашли — ищем в родителе (для групп блоков)
         if (block == null)
         {
             block = blockCollider.GetComponentInParent<MovableBlock>();
@@ -143,6 +155,66 @@ public class SoundWave : MonoBehaviour
         {
             DestroyWave();
         }
+    }
+
+    void HandleFragileBlockHit(Collider2D blockCollider)
+    {
+        Debug.Log($"[SoundWave] Столкновение с хрупким блоком: {blockCollider.gameObject.name}");
+
+        FragileBlock fragileBlock = blockCollider.GetComponent<FragileBlock>();
+
+        if (fragileBlock == null)
+        {
+            fragileBlock = blockCollider.GetComponentInParent<FragileBlock>();
+        }
+
+        if (fragileBlock != null)
+        {
+            // Разрушаем блок
+            fragileBlock.DestroyBlock();
+
+            // Проверяем, близко ли игрок — если да, откидываем
+            if (playerRb != null)
+            {
+                float distanceToPlayer = Vector2.Distance(
+                    transform.position,
+                    playerRb.transform.position
+                );
+
+                if (distanceToPlayer <= fragileBlockRecoilRadius)
+                {
+                    ApplyFragileBlockRecoil();
+                }
+            }
+        }
+
+        // Уничтожаем волну
+        DestroyWave();
+    }
+
+    void ApplyFragileBlockRecoil()
+    {
+        if (playerRb == null) return;
+
+        Vector2 recoilDir = -direction;
+
+        if (recoilDir.y > 0.3f)
+        {
+            playerRb.linearVelocity = new Vector2(
+                playerRb.linearVelocity.x,
+                0f
+            );
+        }
+
+        playerRb.AddForce(recoilDir * fragileBlockRecoilForce, ForceMode2D.Impulse);
+
+        Debug.Log($"[SoundWave] Отдача от хрупкого блока: направление {recoilDir}, сила {fragileBlockRecoilForce}");
+    }
+
+    public void HitFragileBlock()
+    {
+        // Уже обработано в HandleFragileBlockHit
+        DestroyWave();
     }
 
     void ApplyRecoilToPlayer()

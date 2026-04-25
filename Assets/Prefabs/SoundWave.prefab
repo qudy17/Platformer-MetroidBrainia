@@ -119,8 +119,14 @@ MonoBehaviour:
   movableBlockLayer:
     serializedVersion: 2
     m_Bits: 512
+  fragileBlockLayer:
+    serializedVersion: 2
+    m_Bits: 1024
   blockImpactForceMultiplier: 1.2
   destroyOnBlockHit: 1
+  applyRecoilOnBlockHit: 1
+  fragileBlockRecoilRadius: 3
+  fragileBlockRecoilForce: 10
 --- !u!212 &2069101561098029203
 SpriteRenderer:
   serializedVersion: 2
