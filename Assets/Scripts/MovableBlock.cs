@@ -8,7 +8,7 @@ public class MovableBlock : MonoBehaviour
     public float friction = 8f;
     public float maxSpeed = 12f;
     public float blockMass = 2f;
-    public float waveForceMultiplier = 1f;
+    public float waveForceMultiplier = 20f;
 
     [Header("Слои")]
     public LayerMask groundLayer;
@@ -19,7 +19,7 @@ public class MovableBlock : MonoBehaviour
     public float groundCheckDistance = 0.1f;
 
     [Tooltip("С какой силой игрок может толкать активированный блок. 0 = не может толкать")]
-    public float playerPushForce = 0f; // 0 = игрок не толкает блок
+    public float playerPushForce = 0f;
 
     private Rigidbody2D rb;
     private CompositeCollider2D compositeCollider;
@@ -36,34 +36,27 @@ public class MovableBlock : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
 
         isGroup = compositeCollider != null;
-
-        rb.mass = blockMass;
-        rb.gravityScale = 3f;
+        blockMass = rb.mass;
         rb.freezeRotation = true;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        rb.sleepMode = RigidbodySleepMode2D.NeverSleep;
 
-        // Dynamic, но с замороженной позицией
         rb.bodyType = RigidbodyType2D.Dynamic;
-        FreezePosition();
     }
 
     void Start()
     {
-        if (isGroup)
-        {
-            StartCoroutine(DelayedGroundCheck());
-        }
-        else
-        {
-            CheckIfShouldFall();
-        }
+        StartCoroutine(DelayedGroundCheck());
     }
 
     IEnumerator DelayedGroundCheck()
     {
-        yield return new WaitForFixedUpdate();
-        yield return new WaitForFixedUpdate();
+        for (int i = 0; i < 5; i++)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
         CheckIfShouldFall();
     }
 
@@ -73,12 +66,13 @@ public class MovableBlock : MonoBehaviour
 
         if (!IsGrounded)
         {
-            Debug.Log($"[MovableBlock] {gameObject.name}: в воздухе! Начинаю падение.");
-            UnfreezeForPhysics();
+            Debug.Log($"[MovableBlock] {gameObject.name}: в воздухе! Включаю гравитацию.");
+            rb.gravityScale = 3f;
+            hasBeenHit = true;
         }
         else
         {
-            Debug.Log($"[MovableBlock] {gameObject.name}: на земле. Заморожен.");
+            Debug.Log($"[MovableBlock] {gameObject.name}: на земле. Остаётся с нулевой гравитацией.");
         }
     }
 
@@ -91,36 +85,28 @@ public class MovableBlock : MonoBehaviour
         ClampSpeed();
     }
 
-    void FreezePosition()
+    void ActivateBlock()
     {
-        rb.constraints = RigidbodyConstraints2D.FreezePositionX |
-                         RigidbodyConstraints2D.FreezePositionY |
-                         RigidbodyConstraints2D.FreezeRotation;
-    }
-
-    void UnfreezeForPhysics()
-    {
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        hasBeenHit = true;
+        if (!hasBeenHit)
+        {
+            hasBeenHit = true;
+            rb.gravityScale = 3f;
+            Debug.Log($"[MovableBlock] {gameObject.name}: АКТИВИРОВАН!");
+        }
     }
 
     void OnCollisionStay2D(Collision2D collision)
     {
         int otherLayer = 1 << collision.gameObject.layer;
 
-        // Если игрок толкает замороженный блок — полностью игнорируем
         if ((otherLayer & playerLayer) != 0 && !hasBeenHit)
         {
-            // Обнуляем силу, которую игрок передаёт блоку
             rb.linearVelocity = Vector2.zero;
             return;
         }
 
-        // Если игрок толкает активированный блок и playerPushForce = 0 — игнорируем
         if ((otherLayer & playerLayer) != 0 && hasBeenHit && playerPushForce <= 0f)
         {
-            // Не даём игроку менять скорость блока
-            // Но коллизия остаётся (игрок не проходит сквозь)
             return;
         }
     }
@@ -129,7 +115,6 @@ public class MovableBlock : MonoBehaviour
     {
         int otherLayer = 1 << collision.gameObject.layer;
 
-        // При столкновении с другим активированным блоком — передаём импульс
         if ((otherLayer & movableBlockLayer) != 0)
         {
             MovableBlock otherBlock = collision.gameObject.GetComponent<MovableBlock>();
@@ -138,9 +123,8 @@ public class MovableBlock : MonoBehaviour
 
             if (otherBlock != null && otherBlock.hasBeenHit && !hasBeenHit)
             {
-                // Соседний блок активирован и толкает нас — активируемся
                 Debug.Log($"[MovableBlock] {gameObject.name}: активирован соседним блоком!");
-                UnfreezeForPhysics();
+                ActivateBlock();
             }
         }
     }
@@ -157,6 +141,7 @@ public class MovableBlock : MonoBehaviour
             Bounds bounds = compositeCollider.bounds;
             if (bounds.size == Vector3.zero)
             {
+                Debug.LogWarning($"[MovableBlock] {gameObject.name}: bounds compositeCollider = ZERO! Проверяю через детей.");
                 IsGrounded = CheckGroundByChildren(combinedMask);
                 return;
             }
@@ -185,8 +170,26 @@ public class MovableBlock : MonoBehaviour
         {
             if (col.usedByComposite)
             {
-                if (CheckGroundAtPoints(col.bounds.center, col.bounds.size, mask))
-                    return true;
+                Vector2[] points = new Vector2[]
+                {
+                    col.bounds.center + new Vector3(-col.bounds.size.x * 0.4f, -col.bounds.size.y * 0.5f),
+                    col.bounds.center + new Vector3( 0f,                           -col.bounds.size.y * 0.5f),
+                    col.bounds.center + new Vector3( col.bounds.size.x * 0.4f, -col.bounds.size.y * 0.5f)
+                };
+
+                foreach (var point in points)
+                {
+                    RaycastHit2D[] hits = Physics2D.RaycastAll(point, Vector2.down, groundCheckDistance, mask);
+
+                    foreach (var hit in hits)
+                    {
+                        if (hit.collider == null) continue;
+                        if (hit.collider.transform.IsChildOf(transform)) continue;
+                        if (hit.collider.transform == transform) continue;
+
+                        return true;
+                    }
+                }
             }
         }
 
@@ -204,8 +207,17 @@ public class MovableBlock : MonoBehaviour
 
         foreach (var point in points)
         {
-            if (Physics2D.Raycast(point, Vector2.down, groundCheckDistance, mask).collider != null)
+            RaycastHit2D[] hits = Physics2D.RaycastAll(point, Vector2.down, groundCheckDistance, mask);
+
+            foreach (var hit in hits)
+            {
+                if (hit.collider == null) continue;
+                if (hit.collider.transform.IsChildOf(transform)) continue;
+                if (hit.collider.transform == transform) continue;
+
+                Debug.Log($"[MovableBlock] {gameObject.name}: Земля найдена: {hit.collider.gameObject.name}, дистанция: {hit.distance:F4}");
                 return true;
+            }
         }
 
         return false;
@@ -233,12 +245,10 @@ public class MovableBlock : MonoBehaviour
     {
         Debug.Log($"[MovableBlock] {gameObject.name}: удар волной! Сила: {waveForce}");
 
-        UnfreezeForPhysics();
+        ActivateBlock();
 
         float speed = waveForce / blockMass * waveForceMultiplier;
         rb.linearVelocity = new Vector2(waveDirection.x * speed, rb.linearVelocity.y);
-
-        Debug.Log($"[MovableBlock] {gameObject.name}: скорость: {rb.linearVelocity}");
 
         return true;
     }

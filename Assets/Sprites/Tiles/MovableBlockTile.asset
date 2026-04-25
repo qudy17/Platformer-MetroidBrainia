@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b08ceb78e3b2495b8d808a5860e66794, type: 3}
   m_Name: MovableBlockTile
   m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.Tilemaps.AutoTile
-  m_DefaultSprite: {fileID: 0}
+  m_DefaultSprite: {fileID: 6937817954938267909, guid: 0a00243eb79f10e4d986d71fbea09abf, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_MaskType: 0

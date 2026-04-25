@@ -14,7 +14,7 @@ TagManager:
   - Ground
   - Wall
   - Player
-  - 
+  - MovableBlock
   - 
   - 
   - 
@@ -46,6 +46,9 @@ TagManager:
     locked: 0
   - name: Decorations
     uniqueID: 2130707997
+    locked: 0
+  - name: Scream
+    uniqueID: 4187635147
     locked: 0
   - name: Ground
     uniqueID: 2068085759

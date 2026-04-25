@@ -181,9 +181,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MovableBlock
   friction: 8
   maxSpeed: 20
-  blockMass: 2
-  waveForceMultiplier: 1
-  neighborCheckRadius: 1.2
+  blockMass: 80
+  waveForceMultiplier: 40
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -194,3 +193,5 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   groundCheckDistance: 0.1
+  playerPushForce: 0
+  hasBeenHit: 0

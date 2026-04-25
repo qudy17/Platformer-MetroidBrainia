@@ -144,17 +144,18 @@ public class MovableBlockSpawner : MonoBehaviour
             }
         }
 
+
         // Добавляем Rigidbody2D на родителя
         Rigidbody2D rb = parent.AddComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.mass = prefabMass * cells.Count;
-        rb.gravityScale = 3f;
+        rb.gravityScale = 0f; // Временно отключаем гравитацию
         rb.freezeRotation = true;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-        rb.constraints = RigidbodyConstraints2D.FreezePositionX |
-                         RigidbodyConstraints2D.FreezePositionY |
-                         RigidbodyConstraints2D.FreezeRotation;
+        // НЕ замораживаем позицию! Пусть физика работает
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        rb.sleepMode = RigidbodySleepMode2D.NeverSleep; // Не даём "заснуть"
 
         // Добавляем CompositeCollider2D
         CompositeCollider2D composite = parent.AddComponent<CompositeCollider2D>();
@@ -169,7 +170,7 @@ public class MovableBlockSpawner : MonoBehaviour
             movableBlock.friction = prefabBlock.friction;
             movableBlock.maxSpeed = prefabBlock.maxSpeed;
             movableBlock.blockMass = rb.mass;
-            movableBlock.waveForceMultiplier = prefabBlock.waveForceMultiplier;
+            movableBlock.waveForceMultiplier = prefabBlock.waveForceMultiplier * cells.Count;
             movableBlock.groundLayer = prefabBlock.groundLayer;
             movableBlock.playerLayer = prefabBlock.playerLayer;
             movableBlock.movableBlockLayer = prefabBlock.movableBlockLayer;
