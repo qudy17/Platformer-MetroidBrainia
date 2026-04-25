@@ -27,7 +27,9 @@ public class ScreamAbility : MonoBehaviour
     private Rigidbody2D rb;
     private PlayerMovement playerMovement;
 
-    // Публичное свойство — SoundWave возьмёт отсюда силу отдачи
+    // Запоминаем последнее "чистое" направление
+    private Vector2 lastFourDirection = Vector2.right;
+
     public float RecoilForce => recoilForce;
 
     void Start()
@@ -61,13 +63,42 @@ public class ScreamAbility : MonoBehaviour
 
     void PerformScream()
     {
-        Vector2 direction = playerMovement.FacingDirection;
+        // Получаем направление от PlayerMovement и округляем до 4 сторон
+        Vector2 rawDirection = playerMovement.FacingDirection;
+        Vector2 direction = SnapToFourDirections(rawDirection);
 
         SpawnWave(direction);
         ConsumeCharge();
 
         Debug.Log($"[Scream] Крик в направлении: {direction}. " +
                   $"Зарядов осталось: {currentCharges}");
+    }
+
+    // Округление направления до 4 сторон
+    Vector2 SnapToFourDirections(Vector2 input)
+    {
+        // Если направление почти нулевое — используем последнее сохранённое
+        if (input.magnitude < 0.1f)
+            return lastFourDirection;
+
+        // Вертикаль имеет ПРИОРИТЕТ над горизонталью
+        if (Mathf.Abs(input.y) > 0.1f)
+        {
+            // Если есть вертикальное нажатие — стреляем вертикально
+            Vector2 result = new Vector2(0f, Mathf.Sign(input.y));
+            lastFourDirection = result;
+            return result;
+        }
+        else if (Mathf.Abs(input.x) > 0.1f)
+        {
+            // Горизонтальное направление
+            Vector2 result = new Vector2(Mathf.Sign(input.x), 0f);
+            lastFourDirection = result;
+            return result;
+        }
+
+        // Если ничего не нажато — последнее направление
+        return lastFourDirection;
     }
 
     void SpawnWave(Vector2 direction)
@@ -90,8 +121,6 @@ public class ScreamAbility : MonoBehaviour
         SoundWave wave = waveObj.GetComponent<SoundWave>();
         if (wave != null)
         {
-            // Передаём волне: направление, скорость, дистанцию,
-            // ссылку на Rigidbody игрока и силу отдачи
             wave.Initialize(
                 direction,
                 waveSpeed,
