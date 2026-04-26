@@ -20,6 +20,7 @@ public class SoundWave : MonoBehaviour
     public LayerMask movableBlockLayer;
     public LayerMask fragileBlockLayer;
     public LayerMask enemyLayer;
+    public LayerMask acousticMirrorLayer;
 
     [Header("Параметры удара по блоку")]
     public float blockImpactForceMultiplier = 1.2f;
@@ -29,11 +30,19 @@ public class SoundWave : MonoBehaviour
     [Tooltip("Применять ли отдачу к игроку при ударе волны по блоку")]
     public bool applyRecoilOnBlockHit = true;
 
-    [Header("Хрупкие блоки")] // ДОБАВЛЕНО
-    public float fragileBlockRecoilRadius = 3f; // Радиус отдачи при разрушении
-    public float fragileBlockRecoilForce = 10f; // Сила отдачи при разрушении
+    [Tooltip("Максимальное расстояние до игрока для применения отдачи")]
+    public float recoilMaxDistance = 5f; // ДОБАВЛЕНО
 
-    // ─── Флаг, предотвращающий двойное срабатывание ───
+    [Header("Хрупкие блоки")]
+    public float fragileBlockRecoilRadius = 3f;
+    public float fragileBlockRecoilForce = 10f;
+
+    [Header("Отражение")]
+    [Tooltip("Максимальное количество отражений")]
+    public int maxReflections = 3;
+    private int currentReflections = 0;
+    private bool hasReflected = false;
+
     private bool hasCollided = false;
 
     void Awake()
@@ -66,34 +75,41 @@ public class SoundWave : MonoBehaviour
 
         rb.linearVelocity = direction * speed;
         initialized = true;
-
-        // Сбрасываем флаг при инициализации
         hasCollided = false;
+        currentReflections = 0;
+        hasReflected = false;
     }
 
     void Update()
     {
         if (!initialized) return;
 
+        if (hasReflected) return;
+
         float distanceTravelled = Vector2.Distance(startPosition, transform.position);
         if (distanceTravelled >= maxDistance)
         {
+            Debug.Log($"[SoundWave] Превышена максимальная дистанция ({maxDistance})");
             DestroyWave();
         }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // ─── Проверяем флаг ПЕРВЫМ ДЕЛОМ ───
         if (hasCollided) return;
 
         int otherLayer = 1 << other.gameObject.layer;
 
-        // Игнорируем игрока
-        if ((otherLayer & playerLayer) != 0)
-            return;
+        if ((otherLayer & playerLayer) != 0) return;
 
-        // ── Подвижный блок ──────────────────────────────────────────────
+        // Акустическое зеркало — ОТРАЖАЕМСЯ
+        if ((otherLayer & acousticMirrorLayer) != 0)
+        {
+            HandleMirrorReflection(other);
+            return;
+        }
+
+        // Подвижный блок
         if ((otherLayer & movableBlockLayer) != 0)
         {
             hasCollided = true;
@@ -101,7 +117,7 @@ public class SoundWave : MonoBehaviour
             return;
         }
 
-        // ── Хрупкий блок ──────────────────────────────────────────────
+        // Хрупкий блок
         if ((otherLayer & fragileBlockLayer) != 0)
         {
             hasCollided = true;
@@ -109,16 +125,17 @@ public class SoundWave : MonoBehaviour
             return;
         }
 
-        // ── Твёрдая поверхность ─────────────────────────────────────────
+        // Твёрдая поверхность
         if ((otherLayer & solidLayer) != 0)
         {
             hasCollided = true;
             Debug.Log($"[SoundWave] Попал в поверхность: {other.gameObject.name}");
-            ApplyRecoilToPlayer();
+            TryApplyRecoilToPlayer(); // ИСПРАВЛЕНО
             DestroyWave();
             return;
         }
 
+        // Враг
         if ((otherLayer & enemyLayer) != 0)
         {
             hasCollided = true;
@@ -127,36 +144,59 @@ public class SoundWave : MonoBehaviour
         }
     }
 
-    void HandleBlockHit(Collider2D blockCollider)
+    void HandleMirrorReflection(Collider2D mirrorCollider)
     {
-        Debug.Log($"[SoundWave] Столкновение с: {blockCollider.gameObject.name}, слой: {LayerMask.LayerToName(blockCollider.gameObject.layer)}");
-
-        MovableBlock block = blockCollider.GetComponent<MovableBlock>();
-
-        if (block == null)
+        if (currentReflections >= maxReflections)
         {
-            block = blockCollider.GetComponentInParent<MovableBlock>();
-            Debug.Log($"[SoundWave] Поиск в родителе: {(block != null ? "НАЙДЕН" : "НЕ НАЙДЕН")}");
+            Debug.Log($"[SoundWave] Достигнут лимит отражений ({maxReflections})");
+            TryApplyRecoilToPlayer(); // ИСПРАВЛЕНО
+            DestroyWave();
+            return;
+        }
+
+        AcousticMirror mirror = mirrorCollider.GetComponent<AcousticMirror>();
+        if (mirror == null)
+            mirror = mirrorCollider.GetComponentInParent<AcousticMirror>();
+
+        if (mirror != null)
+        {
+            Vector2 surfaceNormal = mirror.GetSurfaceNormal(transform.position);
+            Vector2 reflectDirection = Vector2.Reflect(direction, surfaceNormal).normalized;
+
+            Debug.Log($"[SoundWave] Отражение! Вход: {direction}, Нормаль: {surfaceNormal}, Выход: {reflectDirection}");
+
+            direction = reflectDirection;
+            hasReflected = true;
+            rb.linearVelocity = direction * speed;
+
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, 0f, angle);
+
+            currentReflections++;
         }
         else
         {
-            Debug.Log("[SoundWave] MovableBlock найден на самом объекте");
+            hasCollided = true;
+            TryApplyRecoilToPlayer(); // ИСПРАВЛЕНО
+            DestroyWave();
         }
+    }
+
+    void HandleBlockHit(Collider2D blockCollider)
+    {
+        MovableBlock block = blockCollider.GetComponent<MovableBlock>();
+        if (block == null)
+            block = blockCollider.GetComponentInParent<MovableBlock>();
 
         if (block != null)
         {
             float impactForce = recoilForce * blockImpactForceMultiplier;
-            Debug.Log($"[SoundWave] Вызываю ReceiveWaveImpact с силой: {impactForce}");
             bool hitSuccess = block.ReceiveWaveImpact(direction, impactForce);
 
             if (applyRecoilOnBlockHit && hitSuccess)
             {
-                ApplyRecoilToPlayer();
+                TryApplyRecoilToPlayer(); // ИСПРАВЛЕНО
             }
-        }
-        else
-        {
-            Debug.LogWarning($"[SoundWave] MovableBlock не найден на {blockCollider.gameObject.name} и его родителях!");
         }
 
         if (destroyOnBlockHit)
@@ -167,21 +207,14 @@ public class SoundWave : MonoBehaviour
 
     void HandleFragileBlockHit(Collider2D blockCollider)
     {
-        Debug.Log($"[SoundWave] Столкновение с хрупким блоком: {blockCollider.gameObject.name}");
-
         FragileBlock fragileBlock = blockCollider.GetComponent<FragileBlock>();
-
         if (fragileBlock == null)
-        {
             fragileBlock = blockCollider.GetComponentInParent<FragileBlock>();
-        }
 
         if (fragileBlock != null)
         {
-            // Разрушаем блок
             fragileBlock.DestroyBlock();
 
-            // Проверяем, близко ли игрок — если да, откидываем
             if (playerRb != null)
             {
                 float distanceToPlayer = Vector2.Distance(
@@ -196,7 +229,6 @@ public class SoundWave : MonoBehaviour
             }
         }
 
-        // Уничтожаем волну
         DestroyWave();
     }
 
@@ -215,23 +247,34 @@ public class SoundWave : MonoBehaviour
         }
 
         playerRb.AddForce(recoilDir * fragileBlockRecoilForce, ForceMode2D.Impulse);
-
-        Debug.Log($"[SoundWave] Отдача от хрупкого блока: направление {recoilDir}, сила {fragileBlockRecoilForce}");
     }
 
     public void HitFragileBlock()
     {
-        // Уже обработано в HandleFragileBlockHit
         DestroyWave();
     }
 
-    void ApplyRecoilToPlayer()
+    // НОВЫЙ МЕТОД: проверяет расстояние до игрока перед отдачей
+    void TryApplyRecoilToPlayer()
     {
-        if (playerRb == null)
+        if (playerRb == null) return;
+
+        // Проверяем расстояние до игрока
+        float distanceToPlayer = Vector2.Distance(
+            transform.position,
+            playerRb.transform.position
+        );
+
+        // Если игрок слишком далеко — не применяем отдачу
+        if (distanceToPlayer > recoilMaxDistance)
         {
-            Debug.LogError("[SoundWave] playerRb не назначен!");
+            Debug.Log($"[SoundWave] Игрок слишком далеко для отдачи ({distanceToPlayer:F1} > {recoilMaxDistance})");
             return;
         }
+
+        // Применяем отдачу (уменьшаем силу в зависимости от расстояния)
+        float distanceFactor = 1f - (distanceToPlayer / recoilMaxDistance);
+        float adjustedRecoil = recoilForce * distanceFactor;
 
         Vector2 recoilDir = -direction;
 
@@ -243,9 +286,9 @@ public class SoundWave : MonoBehaviour
             );
         }
 
-        playerRb.AddForce(recoilDir * recoilForce, ForceMode2D.Impulse);
+        playerRb.AddForce(recoilDir * adjustedRecoil, ForceMode2D.Impulse);
 
-        Debug.Log($"[SoundWave] Отдача: направление {recoilDir}, сила {recoilForce}");
+        Debug.Log($"[SoundWave] Отдача: направление {recoilDir}, сила {adjustedRecoil:F1} (дистанция: {distanceToPlayer:F1})");
     }
 
     void HandleEnemyHit(Collider2D enemyCollider)

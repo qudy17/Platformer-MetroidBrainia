@@ -125,11 +125,15 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 4096
+  acousticMirrorLayer:
+    serializedVersion: 2
+    m_Bits: 8192
   blockImpactForceMultiplier: 1.2
   destroyOnBlockHit: 1
   applyRecoilOnBlockHit: 1
   fragileBlockRecoilRadius: 3
   fragileBlockRecoilForce: 10
+  maxReflections: 10
 --- !u!212 &2069101561098029203
 SpriteRenderer:
   serializedVersion: 2
