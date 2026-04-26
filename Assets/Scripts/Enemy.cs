@@ -8,8 +8,8 @@ public class Enemy : MonoBehaviour
     [Header("Физика")]
     public float friction = 8f;
     public float maxSpeed = 20f;
-    public float enemyMass = 40f;
-    public float waveForceMultiplier = 30f;
+    public float enemyMass = 80f;
+    public float waveForceMultiplier = 40f;
 
     [Header("Слои")]
     public LayerMask groundLayer;

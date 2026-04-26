@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b08ceb78e3b2495b8d808a5860e66794, type: 3}
   m_Name: CheckpointTile
   m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.Tilemaps.AutoTile
-  m_DefaultSprite: {fileID: 0}
-  m_DefaultGameObject: {fileID: 0}
+  m_DefaultSprite: {fileID: -3448120935943364757, guid: 34ed8c6f849274c4393e8e8d254e224f, type: 3}
+  m_DefaultGameObject: {fileID: 5180346327607825151, guid: b0b1033ffc9dd9e4798e04b97b2f11b7, type: 3}
   m_DefaultColliderType: 1
   m_MaskType: 0
   m_Random: 0

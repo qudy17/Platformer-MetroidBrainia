@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b08ceb78e3b2495b8d808a5860e66794, type: 3}
   m_Name: AcousticMirror
   m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.Tilemaps.AutoTile
-  m_DefaultSprite: {fileID: 0}
-  m_DefaultGameObject: {fileID: 0}
+  m_DefaultSprite: {fileID: -3342743851459327484, guid: 60b368916ab3fc94e898ca6e016199f8, type: 3}
+  m_DefaultGameObject: {fileID: 134152471679558499, guid: 1a7173e02cbb9fd44a35415f986be9f7, type: 3}
   m_DefaultColliderType: 1
   m_MaskType: 0
   m_Random: 0

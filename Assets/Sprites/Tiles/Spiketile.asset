@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b08ceb78e3b2495b8d808a5860e66794, type: 3}
   m_Name: Spiketile
   m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.Tilemaps.AutoTile
-  m_DefaultSprite: {fileID: 0}
-  m_DefaultGameObject: {fileID: 0}
+  m_DefaultSprite: {fileID: -5159362228428509745, guid: a8335523d22bce5439e5ad4a8f43d5a0, type: 3}
+  m_DefaultGameObject: {fileID: 3185803719788179667, guid: 9a04d236d229df7458523ab40f202878, type: 3}
   m_DefaultColliderType: 1
   m_MaskType: 0
   m_Random: 0

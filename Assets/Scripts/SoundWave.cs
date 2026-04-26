@@ -21,6 +21,7 @@ public class SoundWave : MonoBehaviour
     public LayerMask fragileBlockLayer;
     public LayerMask enemyLayer;
     public LayerMask acousticMirrorLayer;
+    public LayerMask resonancePipeLayer;
 
     [Header("Параметры удара по блоку")]
     public float blockImpactForceMultiplier = 1.2f;
@@ -31,7 +32,7 @@ public class SoundWave : MonoBehaviour
     public bool applyRecoilOnBlockHit = true;
 
     [Tooltip("Максимальное расстояние до игрока для применения отдачи")]
-    public float recoilMaxDistance = 5f; // ДОБАВЛЕНО
+    public float recoilMaxDistance = 5f;
 
     [Header("Хрупкие блоки")]
     public float fragileBlockRecoilRadius = 3f;
@@ -39,11 +40,36 @@ public class SoundWave : MonoBehaviour
 
     [Header("Отражение")]
     [Tooltip("Максимальное количество отражений")]
-    public int maxReflections = 3;
+    public int maxReflections = 10;
     private int currentReflections = 0;
     private bool hasReflected = false;
 
     private bool hasCollided = false;
+
+    public Vector2 GetDirection()
+    {
+        return direction;
+    }
+
+    public float GetSpeed()
+    {
+        return speed;
+    }
+
+    public float GetMaxDistance()
+    {
+        return maxDistance;
+    }
+
+    public Rigidbody2D GetPlayerRb()
+    {
+        return playerRb;
+    }
+
+    public float GetRecoilForce()
+    {
+        return recoilForce;
+    }
 
     void Awake()
     {
@@ -87,6 +113,12 @@ public class SoundWave : MonoBehaviour
         if (hasReflected) return;
 
         float distanceTravelled = Vector2.Distance(startPosition, transform.position);
+
+        // ДЕТАЛЬНЫЙ ЛОГ
+        Debug.Log($"[SoundWave] Update: startPos={startPosition}, currentPos={transform.position}, " +
+                  $"travelled={distanceTravelled:F3}, maxDist={maxDistance:F3}, " +
+                  $"travelled >= maxDist = {distanceTravelled >= maxDistance}");
+
         if (distanceTravelled >= maxDistance)
         {
             Debug.Log($"[SoundWave] Превышена максимальная дистанция ({maxDistance})");
@@ -101,6 +133,13 @@ public class SoundWave : MonoBehaviour
         int otherLayer = 1 << other.gameObject.layer;
 
         if ((otherLayer & playerLayer) != 0) return;
+
+        // Резонансные трубы — НЕ УНИЧТОЖАЕМ волну здесь!
+        // Обработка идёт в ResonancePipe.OnTriggerEnter2D()
+        if ((otherLayer & resonancePipeLayer) != 0)
+        {
+            return;
+        }
 
         // Акустическое зеркало — ОТРАЖАЕМСЯ
         if ((otherLayer & acousticMirrorLayer) != 0)
@@ -130,7 +169,7 @@ public class SoundWave : MonoBehaviour
         {
             hasCollided = true;
             Debug.Log($"[SoundWave] Попал в поверхность: {other.gameObject.name}");
-            TryApplyRecoilToPlayer(); // ИСПРАВЛЕНО
+            TryApplyRecoilToPlayer();
             DestroyWave();
             return;
         }
@@ -203,6 +242,12 @@ public class SoundWave : MonoBehaviour
         {
             DestroyWave();
         }
+    }
+
+    public void HitResonancePipe()
+    {
+        // Просто заглушка, чтобы избежать ошибок
+        // Волна уничтожается в ResonancePipe.ReceiveWave()
     }
 
     void HandleFragileBlockHit(Collider2D blockCollider)
@@ -308,6 +353,7 @@ public class SoundWave : MonoBehaviour
 
     void DestroyWave()
     {
+        Debug.Log($"[SoundWave] DestroyWave вызван! Позиция: {transform.position}, Имя: {gameObject.name}");
         Destroy(gameObject);
     }
 }
