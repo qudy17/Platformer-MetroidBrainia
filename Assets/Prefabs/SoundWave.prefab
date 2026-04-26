@@ -122,6 +122,9 @@ MonoBehaviour:
   fragileBlockLayer:
     serializedVersion: 2
     m_Bits: 1024
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 4096
   blockImpactForceMultiplier: 1.2
   destroyOnBlockHit: 1
   applyRecoilOnBlockHit: 1

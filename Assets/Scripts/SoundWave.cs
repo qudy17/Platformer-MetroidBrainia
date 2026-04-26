@@ -18,7 +18,8 @@ public class SoundWave : MonoBehaviour
     public LayerMask solidLayer;
     public LayerMask playerLayer;
     public LayerMask movableBlockLayer;
-    public LayerMask fragileBlockLayer; // ДОБАВЛЕНО
+    public LayerMask fragileBlockLayer;
+    public LayerMask enemyLayer;
 
     [Header("Параметры удара по блоку")]
     public float blockImpactForceMultiplier = 1.2f;
@@ -115,6 +116,13 @@ public class SoundWave : MonoBehaviour
             Debug.Log($"[SoundWave] Попал в поверхность: {other.gameObject.name}");
             ApplyRecoilToPlayer();
             DestroyWave();
+            return;
+        }
+
+        if ((otherLayer & enemyLayer) != 0)
+        {
+            hasCollided = true;
+            HandleEnemyHit(other);
             return;
         }
     }
@@ -238,6 +246,21 @@ public class SoundWave : MonoBehaviour
         playerRb.AddForce(recoilDir * recoilForce, ForceMode2D.Impulse);
 
         Debug.Log($"[SoundWave] Отдача: направление {recoilDir}, сила {recoilForce}");
+    }
+
+    void HandleEnemyHit(Collider2D enemyCollider)
+    {
+        Enemy enemy = enemyCollider.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            float impactForce = recoilForce * blockImpactForceMultiplier;
+            enemy.ReceiveWaveImpact(direction, impactForce);
+        }
+
+        if (destroyOnBlockHit)
+        {
+            DestroyWave();
+        }
     }
 
     void DestroyWave()

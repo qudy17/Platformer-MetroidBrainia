@@ -8,7 +8,7 @@ public class Spikes : MonoBehaviour
 
     [Header("Слои")]
     public LayerMask playerLayer;
-    public LayerMask movableBlockLayer; // Чтобы шипы не убивали блоки
+    public LayerMask enemyLayer; // ДОБАВЛЕНО
 
     private BoxCollider2D boxCollider;
 
@@ -20,23 +20,29 @@ public class Spikes : MonoBehaviour
             boxCollider = gameObject.AddComponent<BoxCollider2D>();
         }
 
-        // ВАЖНО: Коллайдер НЕ триггер
         boxCollider.isTrigger = false;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // Проверяем, что столкнулись с игроком
-        if (((1 << collision.gameObject.layer) & playerLayer) != 0)
+        int otherLayer = 1 << collision.gameObject.layer;
+
+        // Игрок умирает от шипов
+        if ((otherLayer & playerLayer) != 0)
         {
             KillPlayer(collision.gameObject);
         }
-        // Подвижные блоки просто касаются и остаются на шипах
+
+        // Враг умирает от шипов
+        if ((otherLayer & enemyLayer) != 0)
+        {
+            KillEnemy(collision.gameObject);
+        }
     }
 
     void KillPlayer(GameObject player)
     {
-        Debug.Log($"[Spikes] Игрок коснулся шипов в позиции {transform.position}");
+        Debug.Log($"[Spikes] Игрок коснулся шипов!");
 
         PlayerRespawn playerRespawn = player.GetComponent<PlayerRespawn>();
         if (playerRespawn != null)
@@ -46,6 +52,15 @@ public class Spikes : MonoBehaviour
         else
         {
             Debug.LogWarning("[Spikes] PlayerRespawn не найден на игроке!");
+        }
+    }
+
+    void KillEnemy(GameObject enemyObject)
+    {
+        Enemy enemy = enemyObject.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            enemy.Die();
         }
     }
 
