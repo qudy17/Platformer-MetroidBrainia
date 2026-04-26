@@ -14,6 +14,7 @@ public class MovableBlock : MonoBehaviour
     public LayerMask groundLayer;
     public LayerMask playerLayer;
     public LayerMask movableBlockLayer;
+    public LayerMask spikesLayer;
 
     [Header("Проверка земли")]
     public float groundCheckDistance = 0.1f;
@@ -131,7 +132,7 @@ public class MovableBlock : MonoBehaviour
 
     void CheckGround()
     {
-        LayerMask combinedMask = groundLayer | movableBlockLayer;
+        LayerMask combinedMask = groundLayer | movableBlockLayer | spikesLayer;
 
         Vector2 size;
         Vector2 center;
@@ -215,7 +216,6 @@ public class MovableBlock : MonoBehaviour
                 if (hit.collider.transform.IsChildOf(transform)) continue;
                 if (hit.collider.transform == transform) continue;
 
-                Debug.Log($"[MovableBlock] {gameObject.name}: Земля найдена: {hit.collider.gameObject.name}, дистанция: {hit.distance:F4}");
                 return true;
             }
         }

@@ -9,14 +9,21 @@ public class PlayerRespawn : MonoBehaviour
     [Tooltip("Задержка перед респавном")]
     public float respawnDelay = 0.5f;
 
+    [Header("Визуал смерти")]
+    [Tooltip("Эффект смерти (опционально)")]
+    public GameObject deathEffectPrefab;
+
     private Vector2 currentRespawnPoint;
     private Rigidbody2D rb;
     private PlayerMovement playerMovement;
+    private SpriteRenderer spriteRenderer;
+    private bool isDead = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         playerMovement = GetComponent<PlayerMovement>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         currentRespawnPoint = defaultSpawnPoint;
         transform.position = currentRespawnPoint;
@@ -31,21 +38,55 @@ public class PlayerRespawn : MonoBehaviour
 
     public void Respawn()
     {
+        // Защита от повторного вызова
+        if (isDead) return;
+
         StartCoroutine(RespawnCoroutine());
     }
 
     System.Collections.IEnumerator RespawnCoroutine()
     {
-        Debug.Log($"[PlayerRespawn] Возрождение через {respawnDelay} сек...");
+        isDead = true;
+        Debug.Log($"[PlayerRespawn] Игрок умер. Возрождение через {respawnDelay} сек...");
+
+        // Отключаем управление и визуал игрока
+        if (playerMovement != null)
+            playerMovement.enabled = false;
+
+        if (spriteRenderer != null)
+            spriteRenderer.enabled = false;
+
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.bodyType = RigidbodyType2D.Kinematic; // Отключаем физику
+        }
+
+        // Эффект смерти
+        if (deathEffectPrefab != null)
+        {
+            Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
+        }
+
+        // Ждём
         yield return new WaitForSeconds(respawnDelay);
 
+        // Возрождаем
         transform.position = currentRespawnPoint;
 
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
+            rb.bodyType = RigidbodyType2D.Dynamic; // Возвращаем физику
         }
 
+        if (spriteRenderer != null)
+            spriteRenderer.enabled = true;
+
+        if (playerMovement != null)
+            playerMovement.enabled = true;
+
+        isDead = false;
         Debug.Log($"[PlayerRespawn] Игрок возрождён в {currentRespawnPoint}");
     }
 
