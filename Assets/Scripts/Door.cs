@@ -1,18 +1,25 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine.Tilemaps;
+using System.Collections;
 
 public class Door : MonoBehaviour
 {
+    [Header("Идентификатор")]
+    public string doorID = "door_1";
+
     [Header("Состояние")]
     public bool startOpen = false;
 
-    [Header("Tilemap двери")]
-    [Tooltip("Компонент визуала на дочернем Tilemap-объекте")]
-    public DoorTilemapVisual tilemapVisual;
+    [Header("Ячейки этой двери в общем Tilemap")]
+    [Tooltip("Список ячеек которые принадлежат этой двери")]
+    public List<DoorCell> doorCells = new List<DoorCell>();
 
-    [Header("Отладка")]
+    [Header("Визуал (анимация прозрачности)")]
+    [Tooltip("Скорость появления/исчезновения")]
+    public float transitionSpeed = 5f;
+
     [SerializeField] private bool isOpen;
-
-    // Счётчик активаций для триггерных кнопок
     private int activationCount = 0;
 
     public bool IsOpen => isOpen;
@@ -23,37 +30,30 @@ public class Door : MonoBehaviour
     void Start()
     {
         isOpen = startOpen;
-        // Применяем начальное состояние без анимации
-        if (tilemapVisual != null)
-            tilemapVisual.SetStateInstant(isOpen);
-        else
-            Debug.LogWarning($"[Door] {gameObject.name}: tilemapVisual не назначен!");
+        ApplyStateInstant();
     }
 
     // ───────────────────────────────────────────
-    //  Публичные методы (вызываются кнопками)
+    //  Публичные методы
     // ───────────────────────────────────────────
-
-    // Для триггерной кнопки — встали на кнопку
     public void AddActivation()
     {
         activationCount++;
         UpdateFromCount();
     }
 
-    // Для триггерной кнопки — ушли с кнопки
     public void RemoveActivation()
     {
         activationCount = Mathf.Max(0, activationCount - 1);
         UpdateFromCount();
     }
 
-    // Для кнопки-переключателя
     public void Toggle()
     {
         isOpen = !isOpen;
         ApplyState();
-        Debug.Log($"[Door] {gameObject.name}: → {(isOpen ? "ОТКРЫТА" : "ЗАКРЫТА")}");
+        Debug.Log($"[Door] {gameObject.name} (ID:{doorID}): " +
+                  $"→ {(isOpen ? "ОТКРЫТА" : "ЗАКРЫТА")}");
     }
 
     public void Open()
@@ -76,35 +76,71 @@ public class Door : MonoBehaviour
     void UpdateFromCount()
     {
         bool shouldBeOpen = activationCount > 0;
-
         if (shouldBeOpen != isOpen)
         {
             isOpen = shouldBeOpen;
             ApplyState();
-            Debug.Log($"[Door] {gameObject.name}: " +
-                      $"активаций={activationCount} → " +
-                      $"{(isOpen ? "ОТКРЫТА" : "ЗАКРЫТА")}");
         }
     }
 
+    // Мгновенное применение при старте
+    void ApplyStateInstant()
+    {
+        if (DoorsManager.Instance == null)
+        {
+            Debug.LogError($"[Door] {gameObject.name}: DoorsManager не найден!");
+            return;
+        }
+
+        if (isOpen)
+            DoorsManager.Instance.OpenCells(doorCells);
+        else
+            DoorsManager.Instance.CloseCells(doorCells);
+    }
+
+    // Анимированное применение
     void ApplyState()
     {
-        if (tilemapVisual != null)
-            tilemapVisual.SetState(isOpen);
+        if (DoorsManager.Instance == null) return;
+
+        if (isOpen)
+            DoorsManager.Instance.OpenCells(doorCells);
+        else
+            DoorsManager.Instance.CloseCells(doorCells);
     }
 
     // ───────────────────────────────────────────
-    //  Гизмо
+    //  Гизмо — показывает ячейки двери в редакторе
     // ───────────────────────────────────────────
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = isOpen ? Color.green : Color.red;
-        Gizmos.DrawWireCube(transform.position, Vector3.one);
+        // Ищем DoorsManager чтобы получить Tilemap
+        DoorsManager manager = FindFirstObjectByType<DoorsManager>();
+        if (manager == null || manager.doorsTilemap == null) return;
 
-        if (tilemapVisual != null)
+        Tilemap tilemap = manager.doorsTilemap;
+
+        Gizmos.color = isOpen
+            ? new Color(0f, 1f, 0f, 0.3f)
+            : new Color(1f, 0f, 0f, 0.3f);
+
+        foreach (DoorCell cell in doorCells)
         {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(transform.position, tilemapVisual.transform.position);
+            // Переводим координаты ячейки в мировые координаты
+            Vector3 worldPos = tilemap.GetCellCenterWorld(cell.cellPosition);
+            Gizmos.DrawCube(worldPos, Vector3.one * 0.9f);
+        }
+
+        // Рисуем ID рядом с первой ячейкой
+        if (doorCells.Count > 0)
+        {
+            Vector3 labelPos = tilemap.GetCellCenterWorld(
+                doorCells[0].cellPosition
+            ) + Vector3.up * 0.5f;
+
+#if UNITY_EDITOR
+            UnityEditor.Handles.Label(labelPos, $"ID: {doorID}");
+#endif
         }
     }
 }

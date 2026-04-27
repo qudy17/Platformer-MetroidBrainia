@@ -176,23 +176,34 @@ public class SoundWave : MonoBehaviour
         // ── ПРЕГРАДА ───────────────────────────────────
         if ((otherLayer & barrierLayer) != 0)
         {
-            // Ищем компонент визуала на объекте или его родителе
-            BarrierTilemapVisual barrier = other.GetComponent<BarrierTilemapVisual>();
-            if (barrier == null)
-                barrier = other.GetComponentInParent<BarrierTilemapVisual>();
-
-            // Преграда материальна или компонент не найден — останавливаем волну
-            if (barrier == null || barrier.IsSolid)
+            // Получаем позицию ячейки из мировых координат
+            if (BarriersManager.Instance != null &&
+                BarriersManager.Instance.barriersTilemap != null)
             {
-                hasCollided = true;
-                Debug.Log($"[SoundWave] Попал в материальную преграду");
-                TryApplyRecoilToPlayer();
-                DestroyWave();
-                return;
+                Vector3Int cellPos = BarriersManager.Instance.barriersTilemap
+                    .WorldToCell(transform.position);
+
+                bool isSolid = BarriersManager.Instance.IsCellSolid(cellPos);
+
+                if (isSolid)
+                {
+                    hasCollided = true;
+                    Debug.Log($"[SoundWave] Попал в материальный барьер");
+                    TryApplyRecoilToPlayer();
+                    DestroyWave();
+                    return;
+                }
+                else
+                {
+                    Debug.Log($"[SoundWave] Барьер нематериален — волна проходит");
+                    return;
+                }
             }
 
-            // Нематериальная — проходим насквозь
-            Debug.Log($"[SoundWave] Преграда нематериальна — волна проходит");
+            // Если менеджер не найден — останавливаем волну на всякий случай
+            hasCollided = true;
+            TryApplyRecoilToPlayer();
+            DestroyWave();
             return;
         }
 

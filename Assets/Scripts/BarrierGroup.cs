@@ -4,12 +4,10 @@ using System.Collections.Generic;
 public class BarrierGroup : MonoBehaviour
 {
     [Header("Группа A (начально материальна)")]
-    [Tooltip("Tilemap-объекты преград группы A")]
-    public List<BarrierTilemapVisual> groupA = new List<BarrierTilemapVisual>();
+    public List<BarrierCell> groupACells = new List<BarrierCell>();
 
     [Header("Группа B (начально нематериальна)")]
-    [Tooltip("Tilemap-объекты преград группы B")]
-    public List<BarrierTilemapVisual> groupB = new List<BarrierTilemapVisual>();
+    public List<BarrierCell> groupBCells = new List<BarrierCell>();
 
     [Header("Состояние")]
     [SerializeField] private bool isGroupAActive = true;
@@ -19,7 +17,6 @@ public class BarrierGroup : MonoBehaviour
     // ───────────────────────────────────────────
     void Start()
     {
-        // Применяем начальные состояния без анимации
         ApplyStatesInstant();
     }
 
@@ -47,32 +44,24 @@ public class BarrierGroup : MonoBehaviour
     // ───────────────────────────────────────────
     void ApplyStatesInstant()
     {
-        foreach (var visual in groupA)
-        {
-            if (visual == null) continue;
-            visual.SetStateInstant(isGroupAActive);
-        }
+        if (BarriersManager.Instance == null) return;
 
-        foreach (var visual in groupB)
+        if (isGroupAActive)
         {
-            if (visual == null) continue;
-            visual.SetStateInstant(!isGroupAActive);
+            BarriersManager.Instance.SetCellsSolid(groupACells);
+            BarriersManager.Instance.SetCellsPhantom(groupBCells);
+        }
+        else
+        {
+            BarriersManager.Instance.SetCellsPhantom(groupACells);
+            BarriersManager.Instance.SetCellsSolid(groupBCells);
         }
     }
 
     void ApplyStatesAnimated()
     {
-        foreach (var visual in groupA)
-        {
-            if (visual == null) continue;
-            visual.SetState(isGroupAActive);
-        }
-
-        foreach (var visual in groupB)
-        {
-            if (visual == null) continue;
-            visual.SetState(!isGroupAActive);
-        }
+        // Сейчас без анимации, просто переключаем
+        ApplyStatesInstant();
     }
 
     // ───────────────────────────────────────────
@@ -80,20 +69,37 @@ public class BarrierGroup : MonoBehaviour
     // ───────────────────────────────────────────
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = new Color(0f, 0.5f, 1f, 0.8f);
-        foreach (var v in groupA)
+        BarriersManager manager = FindFirstObjectByType<BarriersManager>();
+        if (manager == null || manager.barriersTilemap == null) return;
+
+        // Группа A — синий
+        Gizmos.color = new Color(0f, 0.5f, 1f, 0.6f);
+        foreach (BarrierCell cell in groupACells)
         {
-            if (v == null) continue;
-            Gizmos.DrawLine(transform.position, v.transform.position);
-            Gizmos.DrawWireCube(v.transform.position, Vector3.one);
+            Vector3 worldPos = manager.barriersTilemap
+                .GetCellCenterWorld(cell.cellPosition);
+            Gizmos.DrawCube(worldPos, Vector3.one * 0.9f);
+
+#if UNITY_EDITOR
+            UnityEditor.Handles.Label(
+                worldPos + Vector3.up * 0.3f, "A"
+            );
+#endif
         }
 
+        // Группа B — голубой
         Gizmos.color = new Color(0f, 0.8f, 1f, 0.3f);
-        foreach (var v in groupB)
+        foreach (BarrierCell cell in groupBCells)
         {
-            if (v == null) continue;
-            Gizmos.DrawLine(transform.position, v.transform.position);
-            Gizmos.DrawWireCube(v.transform.position, Vector3.one);
+            Vector3 worldPos = manager.barriersTilemap
+                .GetCellCenterWorld(cell.cellPosition);
+            Gizmos.DrawCube(worldPos, Vector3.one * 0.9f);
+
+#if UNITY_EDITOR
+            UnityEditor.Handles.Label(
+                worldPos + Vector3.up * 0.3f, "B"
+            );
+#endif
         }
     }
 }
