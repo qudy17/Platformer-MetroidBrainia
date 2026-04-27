@@ -3,70 +3,78 @@
 public class Door : MonoBehaviour
 {
     [Header("Состояние")]
-    [Tooltip("Открыта ли дверь в начале")]
     public bool startOpen = false;
 
-    [Header("Компоненты")]
-    [Tooltip("Коллайдер который блокирует проход (отключается когда открыта)")]
-    public Collider2D doorCollider;
-
-    [Tooltip("Визуальный объект двери (скрывается когда открыта)")]
-    public GameObject doorVisual;
+    [Header("Tilemap двери")]
+    [Tooltip("Компонент визуала на дочернем Tilemap-объекте")]
+    public DoorTilemapVisual tilemapVisual;
 
     [Header("Отладка")]
     [SerializeField] private bool isOpen;
 
-    // Сколько кнопок сейчас держат дверь открытой (для триггерных кнопок)
+    // Счётчик активаций для триггерных кнопок
     private int activationCount = 0;
 
+    public bool IsOpen => isOpen;
+
+    // ───────────────────────────────────────────
+    //  Unity lifecycle
+    // ───────────────────────────────────────────
     void Start()
     {
-        // Устанавливаем начальное состояние
         isOpen = startOpen;
-        ApplyState();
+        // Применяем начальное состояние без анимации
+        if (tilemapVisual != null)
+            tilemapVisual.SetStateInstant(isOpen);
+        else
+            Debug.LogWarning($"[Door] {gameObject.name}: tilemapVisual не назначен!");
     }
 
-    // Вызывается триггерной кнопкой когда на неё встали
+    // ───────────────────────────────────────────
+    //  Публичные методы (вызываются кнопками)
+    // ───────────────────────────────────────────
+
+    // Для триггерной кнопки — встали на кнопку
     public void AddActivation()
     {
         activationCount++;
         UpdateFromCount();
     }
 
-    // Вызывается триггерной кнопкой когда с неё ушли
+    // Для триггерной кнопки — ушли с кнопки
     public void RemoveActivation()
     {
         activationCount = Mathf.Max(0, activationCount - 1);
         UpdateFromCount();
     }
 
-    // Вызывается кнопкой-переключателем
+    // Для кнопки-переключателя
     public void Toggle()
     {
         isOpen = !isOpen;
         ApplyState();
-        Debug.Log($"[Door] {gameObject.name}: переключено → {(isOpen ? "ОТКРЫТА" : "ЗАКРЫТА")}");
+        Debug.Log($"[Door] {gameObject.name}: → {(isOpen ? "ОТКРЫТА" : "ЗАКРЫТА")}");
     }
 
-    // Принудительно открыть (используется извне если нужно)
     public void Open()
     {
+        if (isOpen) return;
         isOpen = true;
         ApplyState();
     }
 
-    // Принудительно закрыть
     public void Close()
     {
+        if (!isOpen) return;
         isOpen = false;
         ApplyState();
     }
 
-    public bool IsOpen => isOpen;
-
+    // ───────────────────────────────────────────
+    //  Внутренняя логика
+    // ───────────────────────────────────────────
     void UpdateFromCount()
     {
-        // Дверь открыта пока хотя бы одна триггерная кнопка активна
         bool shouldBeOpen = activationCount > 0;
 
         if (shouldBeOpen != isOpen)
@@ -74,25 +82,29 @@ public class Door : MonoBehaviour
             isOpen = shouldBeOpen;
             ApplyState();
             Debug.Log($"[Door] {gameObject.name}: " +
-                      $"активаций={activationCount} → {(isOpen ? "ОТКРЫТА" : "ЗАКРЫТА")}");
+                      $"активаций={activationCount} → " +
+                      $"{(isOpen ? "ОТКРЫТА" : "ЗАКРЫТА")}");
         }
     }
 
     void ApplyState()
     {
-        // Включаем/выключаем коллайдер
-        if (doorCollider != null)
-            doorCollider.enabled = !isOpen;
-
-        // Показываем/скрываем визуал
-        if (doorVisual != null)
-            doorVisual.SetActive(!isOpen);
+        if (tilemapVisual != null)
+            tilemapVisual.SetState(isOpen);
     }
 
+    // ───────────────────────────────────────────
+    //  Гизмо
+    // ───────────────────────────────────────────
     void OnDrawGizmosSelected()
     {
-        // Показываем состояние в редакторе
         Gizmos.color = isOpen ? Color.green : Color.red;
         Gizmos.DrawWireCube(transform.position, Vector3.one);
+
+        if (tilemapVisual != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(transform.position, tilemapVisual.transform.position);
+        }
     }
 }

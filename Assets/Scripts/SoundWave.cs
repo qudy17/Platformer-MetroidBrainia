@@ -176,21 +176,22 @@ public class SoundWave : MonoBehaviour
         // ── ПРЕГРАДА ───────────────────────────────────
         if ((otherLayer & barrierLayer) != 0)
         {
-            Barrier barrier = other.GetComponent<Barrier>();
+            // Ищем компонент визуала на объекте или его родителе
+            BarrierTilemapVisual barrier = other.GetComponent<BarrierTilemapVisual>();
             if (barrier == null)
-                barrier = other.GetComponentInParent<Barrier>();
+                barrier = other.GetComponentInParent<BarrierTilemapVisual>();
 
-            // Если преграда материальна — останавливаем волну
+            // Преграда материальна или компонент не найден — останавливаем волну
             if (barrier == null || barrier.IsSolid)
             {
                 hasCollided = true;
-                Debug.Log($"[SoundWave] Попал в материальную преграду: {other.gameObject.name}");
+                Debug.Log($"[SoundWave] Попал в материальную преграду");
                 TryApplyRecoilToPlayer();
                 DestroyWave();
                 return;
             }
 
-            // Нематериальная — волна проходит насквозь
+            // Нематериальная — проходим насквозь
             Debug.Log($"[SoundWave] Преграда нематериальна — волна проходит");
             return;
         }

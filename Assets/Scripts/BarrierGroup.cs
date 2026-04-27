@@ -1,23 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-// Группа преград которые переключаются вместе
-// Группа A активна → Группа B неактивна, и наоборот
 public class BarrierGroup : MonoBehaviour
 {
-    // ───────────────────────────────────────────
-    //  Инспектор
-    // ───────────────────────────────────────────
-    [Header("Группа A (начально активна)")]
-    [Tooltip("Преграды которые начинают в материальном состоянии")]
-    public List<Barrier> groupA = new List<Barrier>();
+    [Header("Группа A (начально материальна)")]
+    [Tooltip("Tilemap-объекты преград группы A")]
+    public List<BarrierTilemapVisual> groupA = new List<BarrierTilemapVisual>();
 
-    [Header("Группа B (начально неактивна)")]
-    [Tooltip("Преграды которые начинают в нематериальном состоянии")]
-    public List<Barrier> groupB = new List<Barrier>();
+    [Header("Группа B (начально нематериальна)")]
+    [Tooltip("Tilemap-объекты преград группы B")]
+    public List<BarrierTilemapVisual> groupB = new List<BarrierTilemapVisual>();
 
     [Header("Состояние")]
-    [Tooltip("Если true — Группа A активна, Группа B нет. И наоборот.")]
     [SerializeField] private bool isGroupAActive = true;
 
     // ───────────────────────────────────────────
@@ -25,79 +19,81 @@ public class BarrierGroup : MonoBehaviour
     // ───────────────────────────────────────────
     void Start()
     {
-        // Применяем начальные состояния
-        ApplyGroupStates();
+        // Применяем начальные состояния без анимации
+        ApplyStatesInstant();
     }
 
     // ───────────────────────────────────────────
     //  Публичные методы
     // ───────────────────────────────────────────
-
-    // Переключить группы (вызывается синей кнопкой)
     public void Toggle()
     {
         isGroupAActive = !isGroupAActive;
-        ApplyGroupStates();
+        ApplyStatesAnimated();
 
-        Debug.Log($"[BarrierGroup] {gameObject.name}: переключено → " +
-                  $"Группа A {(isGroupAActive ? "ACTIVE" : "PHANTOM")}, " +
-                  $"Группа B {(!isGroupAActive ? "ACTIVE" : "PHANTOM")}");
+        Debug.Log($"[BarrierGroup] {gameObject.name}: " +
+                  $"A={(isGroupAActive ? "SOLID" : "PHANTOM")}, " +
+                  $"B={(!isGroupAActive ? "SOLID" : "PHANTOM")}");
     }
 
-    // Сбросить до начального состояния
     public void ResetGroup()
     {
         isGroupAActive = true;
-        ApplyGroupStates();
-        Debug.Log($"[BarrierGroup] {gameObject.name}: сброс до начального состояния");
+        ApplyStatesInstant();
     }
 
     // ───────────────────────────────────────────
-    //  Логика переключения
+    //  Применение состояний
     // ───────────────────────────────────────────
-    void ApplyGroupStates()
+    void ApplyStatesInstant()
     {
-        // Группа A
-        foreach (Barrier barrier in groupA)
+        foreach (var visual in groupA)
         {
-            if (barrier == null) continue;
-
-            if (isGroupAActive)
-                barrier.SetSolid();
-            else
-                barrier.SetPhantom();
+            if (visual == null) continue;
+            visual.SetStateInstant(isGroupAActive);
         }
 
-        // Группа B — всегда противоположна группе A
-        foreach (Barrier barrier in groupB)
+        foreach (var visual in groupB)
         {
-            if (barrier == null) continue;
-
-            if (isGroupAActive)
-                barrier.SetPhantom();
-            else
-                barrier.SetSolid();
+            if (visual == null) continue;
+            visual.SetStateInstant(!isGroupAActive);
         }
     }
 
+    void ApplyStatesAnimated()
+    {
+        foreach (var visual in groupA)
+        {
+            if (visual == null) continue;
+            visual.SetState(isGroupAActive);
+        }
+
+        foreach (var visual in groupB)
+        {
+            if (visual == null) continue;
+            visual.SetState(!isGroupAActive);
+        }
+    }
+
+    // ───────────────────────────────────────────
+    //  Гизмо
+    // ───────────────────────────────────────────
     void OnDrawGizmosSelected()
     {
-        // Рисуем связи с преградами группы A
         Gizmos.color = new Color(0f, 0.5f, 1f, 0.8f);
-        foreach (Barrier b in groupA)
+        foreach (var v in groupA)
         {
-            if (b == null) continue;
-            Gizmos.DrawLine(transform.position, b.transform.position);
-            Gizmos.DrawWireCube(b.transform.position, Vector3.one * 0.8f);
+            if (v == null) continue;
+            Gizmos.DrawLine(transform.position, v.transform.position);
+            Gizmos.DrawWireCube(v.transform.position, Vector3.one);
         }
 
-        // Рисуем связи с преградами группы B
-        Gizmos.color = new Color(0f, 0.8f, 1f, 0.4f);
-        foreach (Barrier b in groupB)
+        Gizmos.color = new Color(0f, 0.8f, 1f, 0.3f);
+        foreach (var v in groupB)
         {
-            if (b == null) continue;
-            Gizmos.DrawLine(transform.position, b.transform.position);
-            Gizmos.DrawWireCube(b.transform.position, Vector3.one * 0.8f);
+            if (v == null) continue;
+            Gizmos.DrawLine(transform.position, v.transform.position);
+            Gizmos.DrawWireCube(v.transform.position, Vector3.one);
         }
     }
 }
