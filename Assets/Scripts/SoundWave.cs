@@ -22,6 +22,7 @@ public class SoundWave : MonoBehaviour
     public LayerMask enemyLayer;
     public LayerMask acousticMirrorLayer;
     public LayerMask resonancePipeLayer;
+    public LayerMask doorLayer;
 
     [Header("Параметры удара по блоку")]
     public float blockImpactForceMultiplier = 1.2f;
@@ -149,6 +150,29 @@ public class SoundWave : MonoBehaviour
         }
 
         // Подвижный блок
+        if ((otherLayer & doorLayer) != 0)
+        {
+            // Получаем компонент двери
+            Door door = other.GetComponent<Door>();
+            if (door == null)
+                door = other.GetComponentInParent<Door>();
+
+            // Если дверь ЗАКРЫТА — волна останавливается
+            if (door == null || !door.IsOpen)
+            {
+                hasCollided = true;
+                Debug.Log($"[SoundWave] Попал в закрытую дверь: {other.gameObject.name}");
+                TryApplyRecoilToPlayer();
+                DestroyWave();
+                return;
+            }
+
+            // Если дверь ОТКРЫТА — волна проходит насквозь
+            Debug.Log($"[SoundWave] Дверь открыта — волна проходит: {other.gameObject.name}");
+            return;
+        }
+        // ───────────────────────────────────────────────────────
+
         if ((otherLayer & movableBlockLayer) != 0)
         {
             hasCollided = true;

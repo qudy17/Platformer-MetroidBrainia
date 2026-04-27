@@ -131,6 +131,9 @@ MonoBehaviour:
   resonancePipeLayer:
     serializedVersion: 2
     m_Bits: 16384
+  doorLayer:
+    serializedVersion: 2
+    m_Bits: 32768
   blockImpactForceMultiplier: 1.2
   destroyOnBlockHit: 1
   applyRecoilOnBlockHit: 1
