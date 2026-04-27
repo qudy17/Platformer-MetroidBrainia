@@ -3,116 +3,85 @@ using System.Collections.Generic;
 
 public class PressurePlate : MonoBehaviour
 {
-    // ───────────────────────────────────────────
-    //  Типы кнопок
-    // ───────────────────────────────────────────
     public enum PlateType
     {
-        Trigger,    // Нужно стоять / держать блок
-        Switch      // Одно нажатие меняет состояние навсегда
+        Trigger,
+        Switch
     }
 
     public enum PlateColor
     {
-        Green,  // Управляет дверями
-        Red,    // Управляет платформами (позже)
-        Blue    // Управляет преградами (позже)
+        Green,
+        Red,
+        Blue    // ← управляет преградами
     }
 
-    // ───────────────────────────────────────────
-    //  Инспектор
-    // ───────────────────────────────────────────
     [Header("Тип кнопки")]
     public PlateType plateType = PlateType.Trigger;
     public PlateColor plateColor = PlateColor.Green;
 
-    [Header("Связанные двери")]
-    [Tooltip("Список дверей которыми управляет эта кнопка")]
+    [Header("Связанные двери (зелёная кнопка)")]
     public List<Door> linkedDoors = new List<Door>();
 
+    // ── НОВОЕ ──────────────────────────────────
+    [Header("Связанные группы преград (синяя кнопка)")]
+    public List<BarrierGroup> linkedBarrierGroups = new List<BarrierGroup>();
+    // ───────────────────────────────────────────
+
     [Header("Слои которые активируют кнопку")]
-    public LayerMask activatorLayers; // Игрок + блоки
+    public LayerMask activatorLayers;
 
     [Header("Визуал кнопки")]
-    [Tooltip("Спрайт когда кнопка НЕ нажата")]
     public Sprite spriteIdle;
-
-    [Tooltip("Спрайт когда кнопка нажата")]
     public Sprite spritePressed;
 
-    // ───────────────────────────────────────────
-    //  Приватные поля
-    // ───────────────────────────────────────────
     private SpriteRenderer spriteRenderer;
-    private bool isPressed = false;         // Текущее состояние кнопки
-    private bool switchActivated = false;   // Для Switch: был ли нажат хоть раз
-
-    // Считаем объекты на кнопке (для триггерного режима)
+    private bool isPressed = false;
+    private bool switchActivated = false;
     private int objectsOnPlate = 0;
 
-    // ───────────────────────────────────────────
-    //  Unity lifecycle
-    // ───────────────────────────────────────────
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         UpdateVisual();
     }
 
-    // Объект вошёл в триггер кнопки
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Проверяем что объект на нужном слое
         if (!IsActivator(other)) return;
 
         objectsOnPlate++;
-
-        Debug.Log($"[PressurePlate] {gameObject.name}: объект зашёл ({other.name}), " +
-                  $"всего на кнопке: {objectsOnPlate}");
-
-        // Обрабатываем нажатие
         HandlePress();
     }
 
-    // Объект покинул триггер кнопки
     void OnTriggerExit2D(Collider2D other)
     {
         if (!IsActivator(other)) return;
 
         objectsOnPlate = Mathf.Max(0, objectsOnPlate - 1);
-
-        Debug.Log($"[PressurePlate] {gameObject.name}: объект ушёл ({other.name}), " +
-                  $"всего на кнопке: {objectsOnPlate}");
-
-        // Обрабатываем отпускание (только для триггерного типа)
         HandleRelease();
     }
 
-    // ───────────────────────────────────────────
-    //  Логика нажатия
-    // ───────────────────────────────────────────
     void HandlePress()
     {
         if (plateType == PlateType.Switch)
         {
-            // Switch: реагируем только на первое нажатие
             if (!switchActivated)
             {
                 switchActivated = true;
                 isPressed = true;
                 UpdateVisual();
-                ActivateDoors();
+                ActivateLinkedObjects();
                 Debug.Log($"[PressurePlate] {gameObject.name}: SWITCH активирован!");
             }
         }
-        else // Trigger
+        else
         {
-            // Trigger: нажимаем если это первый объект на кнопке
             if (objectsOnPlate == 1 && !isPressed)
             {
                 isPressed = true;
                 UpdateVisual();
-                NotifyDoorsPressed();
+                NotifyLinkedObjectsPressed();
                 Debug.Log($"[PressurePlate] {gameObject.name}: TRIGGER нажат!");
             }
         }
@@ -120,60 +89,72 @@ public class PressurePlate : MonoBehaviour
 
     void HandleRelease()
     {
-        // Switch не реагирует на уход объекта
         if (plateType == PlateType.Switch) return;
 
-        // Trigger: отпускаем когда никого нет на кнопке
         if (objectsOnPlate == 0 && isPressed)
         {
             isPressed = false;
             UpdateVisual();
-            NotifyDoorsReleased();
+            NotifyLinkedObjectsReleased();
             Debug.Log($"[PressurePlate] {gameObject.name}: TRIGGER отпущен!");
         }
     }
 
-    // ───────────────────────────────────────────
-    //  Взаимодействие с дверями
-    // ───────────────────────────────────────────
-
-    // Для Switch: переключаем двери
-    void ActivateDoors()
+    // ── Switch: одноразовое переключение ───────
+    void ActivateLinkedObjects()
     {
+        // Зелёная — переключаем двери
         foreach (Door door in linkedDoors)
         {
             if (door == null) continue;
             door.Toggle();
         }
+
+        // Синяя — переключаем группы преград
+        foreach (BarrierGroup group in linkedBarrierGroups)
+        {
+            if (group == null) continue;
+            group.Toggle();
+        }
     }
 
-    // Для Trigger: сообщаем дверям что кнопка нажата
-    void NotifyDoorsPressed()
+    // ── Trigger: нажатие ───────────────────────
+    void NotifyLinkedObjectsPressed()
     {
         foreach (Door door in linkedDoors)
         {
             if (door == null) continue;
             door.AddActivation();
         }
+
+        // Синяя триггерная: нажали — переключили
+        foreach (BarrierGroup group in linkedBarrierGroups)
+        {
+            if (group == null) continue;
+            group.Toggle();
+        }
     }
 
-    // Для Trigger: сообщаем дверям что кнопка отпущена
-    void NotifyDoorsReleased()
+    // ── Trigger: отпускание ────────────────────
+    void NotifyLinkedObjectsReleased()
     {
         foreach (Door door in linkedDoors)
         {
             if (door == null) continue;
             door.RemoveActivation();
         }
+
+        // Синяя триггерная: отпустили — переключили обратно
+        foreach (BarrierGroup group in linkedBarrierGroups)
+        {
+            if (group == null) continue;
+            group.Toggle();
+        }
     }
 
     // ───────────────────────────────────────────
-    //  Вспомогательные методы
-    // ───────────────────────────────────────────
-
     bool IsActivator(Collider2D other)
     {
-        // Проверяем слой объекта
         return (activatorLayers.value & (1 << other.gameObject.layer)) != 0;
     }
 
@@ -181,22 +162,16 @@ public class PressurePlate : MonoBehaviour
     {
         if (spriteRenderer == null) return;
 
-        // Меняем спрайт
         if (isPressed && spritePressed != null)
             spriteRenderer.sprite = spritePressed;
         else if (!isPressed && spriteIdle != null)
             spriteRenderer.sprite = spriteIdle;
 
-        // Меняем цвет по типу кнопки
-        // (если спрайты не назначены — цвет покажет состояние)
-        Color baseColor = GetPlateColor();
-
         if (spriteIdle == null && spritePressed == null)
         {
-            // Нет спрайтов — используем только цвет для отладки
             spriteRenderer.color = isPressed
-                ? baseColor * 1.5f  // Ярче когда нажата
-                : baseColor;
+                ? GetPlateColor() * 1.5f
+                : GetPlateColor();
         }
     }
 
@@ -211,7 +186,6 @@ public class PressurePlate : MonoBehaviour
         }
     }
 
-    // Сбросить состояние (вызывается при выходе из комнаты для Switch)
     public void ResetPlate()
     {
         switchActivated = false;
@@ -219,16 +193,20 @@ public class PressurePlate : MonoBehaviour
         objectsOnPlate = 0;
         UpdateVisual();
 
-        // Уведомляем двери о сбросе
         if (plateType == PlateType.Switch)
         {
-            // Если Switch был активен — переключаем обратно
             foreach (Door door in linkedDoors)
             {
                 if (door == null) continue;
-                // Возвращаем дверь в начальное состояние
                 if (door.startOpen) door.Open();
                 else door.Close();
+            }
+
+            // Сбрасываем группы преград
+            foreach (BarrierGroup group in linkedBarrierGroups)
+            {
+                if (group == null) continue;
+                group.ResetGroup();
             }
         }
     }
@@ -237,11 +215,20 @@ public class PressurePlate : MonoBehaviour
     {
         // Рисуем линии к связанным дверям
         Gizmos.color = GetPlateColor();
+
         foreach (Door door in linkedDoors)
         {
             if (door == null) continue;
             Gizmos.DrawLine(transform.position, door.transform.position);
-            Gizmos.DrawWireSphere(door.transform.position, 0.3f);
+        }
+
+        // Линии к группам преград
+        Gizmos.color = Color.cyan;
+        foreach (BarrierGroup group in linkedBarrierGroups)
+        {
+            if (group == null) continue;
+            Gizmos.DrawLine(transform.position, group.transform.position);
+            Gizmos.DrawWireSphere(group.transform.position, 0.4f);
         }
     }
 }

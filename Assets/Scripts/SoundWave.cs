@@ -23,6 +23,7 @@ public class SoundWave : MonoBehaviour
     public LayerMask acousticMirrorLayer;
     public LayerMask resonancePipeLayer;
     public LayerMask doorLayer;
+    public LayerMask barrierLayer;
 
     [Header("Параметры удара по блоку")]
     public float blockImpactForceMultiplier = 1.2f;
@@ -149,7 +150,7 @@ public class SoundWave : MonoBehaviour
             return;
         }
 
-        // Подвижный блок
+        // ── ДВЕРЬ ───────────────────────────────────
         if ((otherLayer & doorLayer) != 0)
         {
             // Получаем компонент двери
@@ -171,8 +172,30 @@ public class SoundWave : MonoBehaviour
             Debug.Log($"[SoundWave] Дверь открыта — волна проходит: {other.gameObject.name}");
             return;
         }
-        // ───────────────────────────────────────────────────────
 
+        // ── ПРЕГРАДА ───────────────────────────────────
+        if ((otherLayer & barrierLayer) != 0)
+        {
+            Barrier barrier = other.GetComponent<Barrier>();
+            if (barrier == null)
+                barrier = other.GetComponentInParent<Barrier>();
+
+            // Если преграда материальна — останавливаем волну
+            if (barrier == null || barrier.IsSolid)
+            {
+                hasCollided = true;
+                Debug.Log($"[SoundWave] Попал в материальную преграду: {other.gameObject.name}");
+                TryApplyRecoilToPlayer();
+                DestroyWave();
+                return;
+            }
+
+            // Нематериальная — волна проходит насквозь
+            Debug.Log($"[SoundWave] Преграда нематериальна — волна проходит");
+            return;
+        }
+
+        // Подвижный блок
         if ((otherLayer & movableBlockLayer) != 0)
         {
             hasCollided = true;
