@@ -721,7 +721,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 16.875
+  orthographic size: 8.4375
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -42604,7 +42604,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4080557844857294107, guid: 008395e7bb78a98418f0ce67b61fb46f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 23.38
+      value: 23.5
       objectReference: {fileID: 0}
     - target: {fileID: 4080557844857294107, guid: 008395e7bb78a98418f0ce67b61fb46f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -42912,9 +42912,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec57fab47a3e0004481bcfde4dfc8624, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScreamAbility
-  maxCharges: 1
-  currentCharges: 1
-  chargeRestoreTime: 0.8
+  maxCharges: 2
+  currentCharges: 2
+  chargeRestoreTime: 1.5
   soundWavePrefab: {fileID: 2189392241876459306, guid: 97d78bcf116a2f847afb429b8aa3ce67, type: 3}
   waveSpeed: 15
   waveMaxDistance: 5
@@ -45649,7 +45649,7 @@ Transform:
   m_GameObject: {fileID: 1259381617}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 60, y: 0, z: 0}
+  m_LocalPosition: {x: 30, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -45667,8 +45667,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7947bec09bf33b746a4aeafdb78f42fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  roomWidth: 60
-  roomHeight: 33.75
+  roomWidth: 30
+  roomHeight: 17
 --- !u!1001 &1329477010
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -46180,7 +46180,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4080557844857294107, guid: 008395e7bb78a98418f0ce67b61fb46f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.4755609
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4080557844857294107, guid: 008395e7bb78a98418f0ce67b61fb46f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -46394,8 +46394,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7947bec09bf33b746a4aeafdb78f42fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  roomWidth: 60
-  roomHeight: 33.75
+  roomWidth: 30
+  roomHeight: 17
 --- !u!1 &2141777082
 GameObject:
   m_ObjectHideFlags: 0
