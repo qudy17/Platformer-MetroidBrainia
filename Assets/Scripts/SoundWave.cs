@@ -25,6 +25,7 @@ public class SoundWave : MonoBehaviour
     public LayerMask resonancePipeLayer;
     public LayerMask doorLayer;
     public LayerMask barrierLayer;
+    public LayerMask movingPlatformLayer;
 
     [Header("Параметры удара по блоку")]
     public float blockImpactForceMultiplier = 1.2f;
@@ -148,6 +149,35 @@ public class SoundWave : MonoBehaviour
         if ((otherLayer & acousticMirrorLayer) != 0)
         {
             HandleMirrorReflection(other);
+            return;
+        }
+
+        // ── ДВИЖУЩАЯСЯ ПЛАТФОРМА ───────────────────
+        if ((otherLayer & movingPlatformLayer) != 0)
+        {
+            hasCollided = true;
+
+            // Получаем компонент платформы
+            MovingPlatform platform = other.GetComponent<MovingPlatform>();
+            if (platform == null)
+                platform = other.GetComponentInParent<MovingPlatform>();
+
+            if (platform != null)
+            {
+                Debug.Log($"[SoundWave] Попал в движущуюся платформу: {other.gameObject.name}");
+
+                // Можно добавить эффект: толкнуть платформу или просто уничтожить волну
+                // Например, передать импульс платформе
+                Rigidbody2D platformRb = other.attachedRigidbody;
+                if (platformRb != null)
+                {
+                    // Небольшой толчок платформе (опционально)
+                    platformRb.AddForce(direction * recoilForce * 0.1f, ForceMode2D.Impulse);
+                }
+            }
+
+            TryApplyRecoilToPlayer();
+            DestroyWave();
             return;
         }
 

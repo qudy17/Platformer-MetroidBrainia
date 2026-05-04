@@ -137,6 +137,9 @@ MonoBehaviour:
   barrierLayer:
     serializedVersion: 2
     m_Bits: 65536
+  movingPlatformLayer:
+    serializedVersion: 2
+    m_Bits: 131072
   blockImpactForceMultiplier: 1.2
   destroyOnBlockHit: 1
   applyRecoilOnBlockHit: 1

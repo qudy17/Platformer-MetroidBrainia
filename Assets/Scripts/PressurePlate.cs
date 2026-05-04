@@ -13,7 +13,7 @@ public class PressurePlate : MonoBehaviour
     {
         Green,
         Red,
-        Blue    // ← управляет преградами
+        Blue
     }
 
     [Header("Тип кнопки")]
@@ -23,10 +23,8 @@ public class PressurePlate : MonoBehaviour
     [Header("Связанные двери (зелёная кнопка)")]
     public List<Door> linkedDoors = new List<Door>();
 
-    // ── НОВОЕ ──────────────────────────────────
     [Header("Связанные группы преград (синяя кнопка)")]
     public List<BarrierGroup> linkedBarrierGroups = new List<BarrierGroup>();
-    // ───────────────────────────────────────────
 
     [Header("Слои которые активируют кнопку")]
     public LayerMask activatorLayers;
@@ -36,13 +34,19 @@ public class PressurePlate : MonoBehaviour
     public Sprite spritePressed;
 
     private SpriteRenderer spriteRenderer;
-    private bool isPressed = false;
+    private int objectsOnPlate = 0; // Простой счетчик
     private bool switchActivated = false;
-    private int objectsOnPlate = 0;
+
+    public System.Action<bool> OnPlateStateChanged;
 
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+        }
+
         UpdateVisual();
     }
 
@@ -50,67 +54,70 @@ public class PressurePlate : MonoBehaviour
     {
         if (!IsActivator(other)) return;
 
+        int oldCount = objectsOnPlate;
         objectsOnPlate++;
-        HandlePress();
+
+        if (oldCount == 0 && objectsOnPlate > 0)
+        {
+            // Кнопка была не нажата, стала нажата
+            OnPressed();
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
         if (!IsActivator(other)) return;
 
+        int oldCount = objectsOnPlate;
         objectsOnPlate = Mathf.Max(0, objectsOnPlate - 1);
-        HandleRelease();
+
+        if (oldCount > 0 && objectsOnPlate == 0)
+        {
+            // Кнопка была нажата, стала не нажата
+            OnReleased();
+        }
     }
 
-    void HandlePress()
+    void OnPressed()
     {
         if (plateType == PlateType.Switch)
         {
             if (!switchActivated)
             {
                 switchActivated = true;
-                isPressed = true;
                 UpdateVisual();
                 ActivateLinkedObjects();
+                OnPlateStateChanged?.Invoke(true);
                 Debug.Log($"[PressurePlate] {gameObject.name}: SWITCH активирован!");
             }
         }
-        else
+        else // Trigger
         {
-            if (objectsOnPlate == 1 && !isPressed)
-            {
-                isPressed = true;
-                UpdateVisual();
-                NotifyLinkedObjectsPressed();
-                Debug.Log($"[PressurePlate] {gameObject.name}: TRIGGER нажат!");
-            }
+            UpdateVisual();
+            NotifyLinkedObjectsPressed();
+            OnPlateStateChanged?.Invoke(true);
+            Debug.Log($"[PressurePlate] {gameObject.name}: TRIGGER нажат!");
         }
     }
 
-    void HandleRelease()
+    void OnReleased()
     {
         if (plateType == PlateType.Switch) return;
 
-        if (objectsOnPlate == 0 && isPressed)
-        {
-            isPressed = false;
-            UpdateVisual();
-            NotifyLinkedObjectsReleased();
-            Debug.Log($"[PressurePlate] {gameObject.name}: TRIGGER отпущен!");
-        }
+        UpdateVisual();
+        NotifyLinkedObjectsReleased();
+        OnPlateStateChanged?.Invoke(false);
+        Debug.Log($"[PressurePlate] {gameObject.name}: TRIGGER отпущен!");
     }
 
-    // ── Switch: одноразовое переключение ───────
     void ActivateLinkedObjects()
     {
-        // Зелёная — переключаем двери
         foreach (Door door in linkedDoors)
         {
             if (door == null) continue;
             door.Toggle();
         }
 
-        // Синяя — переключаем группы преград
         foreach (BarrierGroup group in linkedBarrierGroups)
         {
             if (group == null) continue;
@@ -118,7 +125,6 @@ public class PressurePlate : MonoBehaviour
         }
     }
 
-    // ── Trigger: нажатие ───────────────────────
     void NotifyLinkedObjectsPressed()
     {
         foreach (Door door in linkedDoors)
@@ -127,7 +133,6 @@ public class PressurePlate : MonoBehaviour
             door.AddActivation();
         }
 
-        // Синяя триггерная: нажали — переключили
         foreach (BarrierGroup group in linkedBarrierGroups)
         {
             if (group == null) continue;
@@ -135,7 +140,6 @@ public class PressurePlate : MonoBehaviour
         }
     }
 
-    // ── Trigger: отпускание ────────────────────
     void NotifyLinkedObjectsReleased()
     {
         foreach (Door door in linkedDoors)
@@ -144,7 +148,6 @@ public class PressurePlate : MonoBehaviour
             door.RemoveActivation();
         }
 
-        // Синяя триггерная: отпустили — переключили обратно
         foreach (BarrierGroup group in linkedBarrierGroups)
         {
             if (group == null) continue;
@@ -152,7 +155,6 @@ public class PressurePlate : MonoBehaviour
         }
     }
 
-    // ───────────────────────────────────────────
     bool IsActivator(Collider2D other)
     {
         return (activatorLayers.value & (1 << other.gameObject.layer)) != 0;
@@ -162,34 +164,61 @@ public class PressurePlate : MonoBehaviour
     {
         if (spriteRenderer == null) return;
 
-        if (isPressed && spritePressed != null)
-            spriteRenderer.sprite = spritePressed;
-        else if (!isPressed && spriteIdle != null)
-            spriteRenderer.sprite = spriteIdle;
+        bool isPressed = objectsOnPlate > 0 || switchActivated;
 
-        if (spriteIdle == null && spritePressed == null)
+        // Используем соответствующий спрайт
+        if (isPressed && spritePressed != null)
         {
-            spriteRenderer.color = isPressed
-                ? GetPlateColor() * 1.5f
-                : GetPlateColor();
+            spriteRenderer.sprite = spritePressed;
         }
+        else if (!isPressed && spriteIdle != null)
+        {
+            spriteRenderer.sprite = spriteIdle;
+        }
+
+        // ВАЖНО: Принудительно устанавливаем цвет
+        Color targetColor = GetPlateColor();
+
+        // Если кнопка нажата - делаем цвет ярче
+        if (isPressed)
+        {
+            targetColor = targetColor * 1.5f;
+        }
+
+        // Устанавливаем material.color для уверенности
+        spriteRenderer.color = targetColor;
+
+        // Если материал существует, тоже меняем его цвет
+        if (spriteRenderer.material != null)
+        {
+            spriteRenderer.material.color = targetColor;
+        }
+
+        Debug.Log($"[PressurePlate] UpdateVisual: sprite={spriteRenderer.sprite?.name}, color={spriteRenderer.color}, isPressed={isPressed}");
     }
 
     Color GetPlateColor()
     {
         switch (plateColor)
         {
-            case PlateColor.Green: return Color.green;
-            case PlateColor.Red: return Color.red;
-            case PlateColor.Blue: return Color.blue;
-            default: return Color.white;
+            case PlateColor.Green:
+                return Color.green;  // (0,1,0,1)
+            case PlateColor.Red:
+                return Color.red;    // (1,0,0,1)
+            case PlateColor.Blue:
+                return Color.blue;   // (0,0,1,1)
+            default:
+                return Color.white;
         }
+    }
+    public bool IsPressed()
+    {
+        return objectsOnPlate > 0 || switchActivated;
     }
 
     public void ResetPlate()
     {
         switchActivated = false;
-        isPressed = false;
         objectsOnPlate = 0;
         UpdateVisual();
 
@@ -202,18 +231,18 @@ public class PressurePlate : MonoBehaviour
                 else door.Close();
             }
 
-            // Сбрасываем группы преград
             foreach (BarrierGroup group in linkedBarrierGroups)
             {
                 if (group == null) continue;
                 group.ResetGroup();
             }
         }
+
+        OnPlateStateChanged?.Invoke(false);
     }
 
     void OnDrawGizmosSelected()
     {
-        // Рисуем линии к связанным дверям
         Gizmos.color = GetPlateColor();
 
         foreach (Door door in linkedDoors)
@@ -222,7 +251,6 @@ public class PressurePlate : MonoBehaviour
             Gizmos.DrawLine(transform.position, door.transform.position);
         }
 
-        // Линии к группам преград
         Gizmos.color = Color.cyan;
         foreach (BarrierGroup group in linkedBarrierGroups)
         {
