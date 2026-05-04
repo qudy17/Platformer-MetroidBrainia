@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Tilemaps;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CircleCollider2D))]
@@ -176,35 +177,98 @@ public class SoundWave : MonoBehaviour
         // ── ПРЕГРАДА ───────────────────────────────────
         if ((otherLayer & barrierLayer) != 0)
         {
-            // Получаем позицию ячейки из мировых координат
-            if (BarriersManager.Instance != null &&
-                BarriersManager.Instance.barriersTilemap != null)
-            {
-                Vector3Int cellPos = BarriersManager.Instance.barriersTilemap
-                    .WorldToCell(transform.position);
+            Debug.Log($"[SoundWave] Обнаружен барьер: {other.gameObject.name}, слой: {LayerMask.LayerToName(other.gameObject.layer)}");
 
-                bool isSolid = BarriersManager.Instance.IsCellSolid(cellPos);
+            if (BarriersManager.Instance != null &&
+                BarriersManager.Instance.barriersTilemap != null &&
+                BarriersManager.Instance.barriersCollider != null)
+            {
+                // Получаем точку контакта
+                Vector3 contactPoint = GetClosestPointOnCollider(other);
+
+                // Получаем ссылку на tilemap из менеджера
+                Tilemap barriersTilemap = BarriersManager.Instance.barriersTilemap;
+
+                // Пробуем разные методы получения позиции клетки
+                Vector3Int cellPos = barriersTilemap.WorldToCell(contactPoint);
+
+                // Проверяем соседние клетки тоже (из-за возможных погрешностей)
+                TileBase tile = barriersTilemap.GetTile(cellPos);
+
+                // Если тайл не найден, проверяем соседние клетки
+                if (tile == null)
+                {
+                    Vector3Int[] neighbors = new Vector3Int[]
+                    {
+                cellPos + new Vector3Int(1, 0, 0),
+                cellPos + new Vector3Int(-1, 0, 0),
+                cellPos + new Vector3Int(0, 1, 0),
+                cellPos + new Vector3Int(0, -1, 0),
+                cellPos + new Vector3Int(1, 1, 0),
+                cellPos + new Vector3Int(-1, -1, 0),
+                cellPos + new Vector3Int(1, -1, 0),
+                cellPos + new Vector3Int(-1, 1, 0)
+                    };
+
+                    foreach (Vector3Int neighbor in neighbors)
+                    {
+                        tile = barriersTilemap.GetTile(neighbor);
+                        if (tile != null)
+                        {
+                            cellPos = neighbor;
+                            Debug.Log($"[SoundWave] Тайл найден в соседней клетке: {cellPos}");
+                            break;
+                        }
+                    }
+                }
+
+                bool isSolid = tile != null && BarriersManager.Instance.IsCellSolid(cellPos);
+
+                Debug.Log($"[SoundWave] Барьер: позиция контакта={contactPoint}, клетка={cellPos}, " +
+                          $"тайл в основном tilemap={(tile != null ? tile.name : "NULL")}, solid={isSolid}");
 
                 if (isSolid)
                 {
                     hasCollided = true;
-                    Debug.Log($"[SoundWave] Попал в материальный барьер");
+                    Debug.Log($"[SoundWave] Попал в материальный барьер в клетке {cellPos}");
                     TryApplyRecoilToPlayer();
                     DestroyWave();
                     return;
                 }
                 else
                 {
-                    Debug.Log($"[SoundWave] Барьер нематериален — волна проходит");
+                    Debug.Log($"[SoundWave] Барьер нематериален в клетке {cellPos} — волна проходит");
+                    return; // Пропускаем волну через нематериальный барьер
+                }
+            }
+            else
+            {
+                // Если менеджер барьеров не найден, проверяем наличие тайла напрямую
+                Tilemap tilemap = other.GetComponent<Tilemap>();
+                if (tilemap != null)
+                {
+                    Vector3 contactPoint = GetClosestPointOnCollider(other);
+                    Vector3Int cellPos = tilemap.WorldToCell(contactPoint);
+                    TileBase tile = tilemap.GetTile(cellPos);
+
+                    if (tile != null)
+                    {
+                        hasCollided = true;
+                        Debug.Log($"[SoundWave] Попал в барьер (прямая проверка): {other.gameObject.name}");
+                        TryApplyRecoilToPlayer();
+                        DestroyWave();
+                        return;
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning("[SoundWave] BarriersManager не найден и нет Tilemap - считаем барьер твердым");
+                    hasCollided = true;
+                    TryApplyRecoilToPlayer();
+                    DestroyWave();
                     return;
                 }
             }
-
-            // Если менеджер не найден — останавливаем волну на всякий случай
-            hasCollided = true;
-            TryApplyRecoilToPlayer();
-            DestroyWave();
-            return;
         }
 
         // Подвижный блок
@@ -239,6 +303,31 @@ public class SoundWave : MonoBehaviour
             hasCollided = true;
             HandleEnemyHit(other);
             return;
+        }
+    }
+
+    private Vector3 GetClosestPointOnCollider(Collider2D collider)
+    {
+        if (collider is TilemapCollider2D)
+        {
+            // Для TilemapCollider2D используем позицию волны
+            // и находим ближайшую точку на коллайдере
+            Vector2 wavePosition = transform.position;
+            Vector2 closestPoint = collider.ClosestPoint(wavePosition);
+
+            // Если точка слишком далеко (например, за пределами коллайдера),
+            // используем позицию волны как fallback
+            if (Vector2.Distance(wavePosition, closestPoint) > 1f)
+            {
+                return transform.position;
+            }
+
+            return closestPoint;
+        }
+        else
+        {
+            // Для обычных коллайдеров используем ClosestPoint
+            return collider.ClosestPoint(transform.position);
         }
     }
 
