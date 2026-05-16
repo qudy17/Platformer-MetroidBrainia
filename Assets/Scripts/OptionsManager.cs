@@ -36,7 +36,8 @@ public class OptionsManager : MonoBehaviour
     public TextMeshProUGUI deathCountText;
 
     [Header("References")]
-    public MenuManager menuManager;
+    public MenuManager menuManager; // Для главного меню
+    public PauseManager pauseManager; // Для игровой сцены
 
     private const float VOLUME_STEP = 0.05f;
 
@@ -45,11 +46,9 @@ public class OptionsManager : MonoBehaviour
         LoadSettings();
         ShowSettings();
 
-        // Слушатели для слайдеров
         masterVolumeSlider.onValueChanged.AddListener(SetMasterVolume);
         musicVolumeSlider.onValueChanged.AddListener(SetMusicVolume);
 
-        // Слушатели для кнопок
         masterVolumeDecreaseButton.onClick.AddListener(DecreaseMasterVolume);
         masterVolumeIncreaseButton.onClick.AddListener(IncreaseMasterVolume);
         musicVolumeDecreaseButton.onClick.AddListener(DecreaseMusicVolume);
@@ -79,6 +78,12 @@ public class OptionsManager : MonoBehaviour
         }
     }
 
+    // Публичный метод для проверки состояния
+    public bool IsInSettingsPanel()
+    {
+        return currentState == OverlayState.Settings;
+    }
+
     void LoadSettings()
     {
         float masterVolume = PlayerPrefs.GetFloat("MasterVolume", 1f);
@@ -92,7 +97,6 @@ public class OptionsManager : MonoBehaviour
         UpdateVolumeText();
     }
 
-    // === Master Volume ===
     public void SetMasterVolume(float volume)
     {
         AudioListener.volume = volume;
@@ -112,7 +116,6 @@ public class OptionsManager : MonoBehaviour
         masterVolumeSlider.value = newValue;
     }
 
-    // === Music Volume ===
     public void SetMusicVolume(float volume)
     {
         PlayerPrefs.SetFloat("MusicVolume", volume);
@@ -147,17 +150,6 @@ public class OptionsManager : MonoBehaviour
         statisticsPanel.SetActive(false);
         teamPanel.SetActive(false);
     }
-
-    public void ShowStatistics()
-    {
-        currentState = OverlayState.Statistics;
-        settingsPanel.SetActive(false);
-        statisticsPanel.SetActive(true);
-        teamPanel.SetActive(false);
-
-        UpdateStatistics();
-    }
-
     public void ShowTeam()
     {
         currentState = OverlayState.Team;
@@ -166,22 +158,67 @@ public class OptionsManager : MonoBehaviour
         teamPanel.SetActive(true);
     }
 
+    public void ShowStatistics()
+    {
+        currentState = OverlayState.Statistics;
+        settingsPanel.SetActive(false);
+        statisticsPanel.SetActive(true);
+        teamPanel.SetActive(false);
+
+        Debug.Log("ShowStatistics called");
+        UpdateStatistics();
+    }
+
     void UpdateStatistics()
     {
         float gameTime = PlayerPrefs.GetFloat("GameTime", 0f);
         int deathCount = PlayerPrefs.GetInt("DeathCount", 0);
 
+        Debug.Log($"UpdateStatistics: GameTime={gameTime}, DeathCount={deathCount}");
+
         int hours = Mathf.FloorToInt(gameTime / 3600);
         int minutes = Mathf.FloorToInt((gameTime % 3600) / 60);
         int seconds = Mathf.FloorToInt(gameTime % 60);
 
-        gameTimeText.text = $"Время в игре: {hours:00}:{minutes:00}:{seconds:00}";
-        deathCountText.text = $"Количество смертей: {deathCount}";
+        string timeString = $"Время в игре: {hours:00}:{minutes:00}:{seconds:00}";
+        string deathString = $"Количество смертей: {deathCount}";
+
+        Debug.Log($"Time string: {timeString}");
+        Debug.Log($"Death string: {deathString}");
+
+        if (gameTimeText != null)
+        {
+            gameTimeText.text = timeString;
+            Debug.Log("GameTime text updated");
+        }
+        else
+        {
+            Debug.LogError("gameTimeText is NULL!");
+        }
+
+        if (deathCountText != null)
+        {
+            deathCountText.text = deathString;
+            Debug.Log("DeathCount text updated");
+        }
+        else
+        {
+            Debug.LogError("deathCountText is NULL!");
+        }
     }
 
     public void CloseOptions()
     {
         ShowSettings();
-        menuManager.CloseOptions();
+
+        // Проверяем, в какой сцене мы находимся
+        if (menuManager != null)
+        {
+            menuManager.CloseOptions();
+        }
+        else if (pauseManager != null)
+        {
+            pauseManager.Resume();
+        }
     }
 }

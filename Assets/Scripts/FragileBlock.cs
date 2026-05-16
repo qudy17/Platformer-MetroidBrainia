@@ -21,27 +21,44 @@ public class FragileBlock : MonoBehaviour
     private BoxCollider2D solidCollider;
     private BoxCollider2D triggerCollider;
     private SpriteRenderer spriteRenderer;
-    private Tilemap parentTilemap;
-    private Vector3Int cellPosition;
     private bool isDestroyed = false;
+    private bool isGroup = false;
+    private CompositeCollider2D compositeCollider;
 
     void Awake()
     {
         solidCollider = GetComponent<BoxCollider2D>();
-        solidCollider.isTrigger = false;
+        compositeCollider = GetComponent<CompositeCollider2D>();
 
-        triggerCollider = gameObject.AddComponent<BoxCollider2D>();
-        triggerCollider.isTrigger = true;
-        triggerCollider.size = solidCollider.size * 1.1f;
-        triggerCollider.offset = solidCollider.offset;
+        // Проверяем, является ли это группой
+        isGroup = compositeCollider != null;
+
+        if (!isGroup)
+        {
+            // Одиночный блок - работаем как раньше
+            solidCollider.isTrigger = false;
+
+            triggerCollider = gameObject.AddComponent<BoxCollider2D>();
+            triggerCollider.isTrigger = true;
+            triggerCollider.size = solidCollider.size * 1.1f;
+            triggerCollider.offset = solidCollider.offset;
+        }
+        else
+        {
+            // Группа - используем CompositeCollider
+            solidCollider = null; // У родителя нет BoxCollider2D
+
+            // Добавляем триггер-коллайдер для обнаружения волны
+            triggerCollider = gameObject.AddComponent<BoxCollider2D>();
+            triggerCollider.isTrigger = true;
+
+            // Размер триггера равен размеру композита + немного больше
+            Bounds bounds = compositeCollider.bounds;
+            triggerCollider.size = bounds.size * 1.1f;
+            triggerCollider.offset = transform.InverseTransformPoint(bounds.center);
+        }
 
         spriteRenderer = GetComponent<SpriteRenderer>();
-
-        parentTilemap = GetComponentInParent<Tilemap>();
-        if (parentTilemap != null)
-        {
-            cellPosition = parentTilemap.WorldToCell(transform.position);
-        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -51,15 +68,11 @@ public class FragileBlock : MonoBehaviour
         SoundWave wave = other.GetComponent<SoundWave>();
         if (wave != null)
         {
-            Debug.Log($"[FragileBlock] {gameObject.name}: Волна попала!");
+            Debug.Log($"[FragileBlock] {gameObject.name}: Волна попала! isGroup={isGroup}");
 
-            // ВАЖНО: Ставим флаг ДО вызова методов волны
             isDestroyed = true;
-
-            // ВАЖНО: СНАЧАЛА сообщаем волне (ставит её флаг hasCollided)
             wave.HitFragileBlock();
 
-            // ПОТОМ отдача и разрушение
             ApplyRecoilToNearbyPlayer();
             DestroyBlock();
         }
@@ -95,26 +108,48 @@ public class FragileBlock : MonoBehaviour
 
     public void DestroyBlock()
     {
-        Debug.Log($"[FragileBlock] {gameObject.name}: Разрушаюсь!");
+        Debug.Log($"[FragileBlock] {gameObject.name}: Разрушаюсь! isGroup={isGroup}");
 
         // МГНОВЕННО отключаем ВСЁ
         if (solidCollider != null) solidCollider.enabled = false;
         if (triggerCollider != null) triggerCollider.enabled = false;
+        if (compositeCollider != null) compositeCollider.enabled = false;
         if (spriteRenderer != null) spriteRenderer.enabled = false;
 
-        // Эффект
-        if (destroyEffectPrefab != null)
+        // Если это группа - создаём эффекты для каждого дочернего блока
+        if (isGroup)
         {
-            Instantiate(destroyEffectPrefab, transform.position, Quaternion.identity);
+            // Получаем все дочерние спрайты
+            SpriteRenderer[] childSprites = GetComponentsInChildren<SpriteRenderer>();
+
+            foreach (SpriteRenderer sprite in childSprites)
+            {
+                if (destroyEffectPrefab != null)
+                {
+                    Instantiate(destroyEffectPrefab, sprite.transform.position, Quaternion.identity);
+                }
+
+                // Отключаем спрайты
+                sprite.enabled = false;
+            }
+
+            // Отключаем все коллайдеры детей
+            BoxCollider2D[] childColliders = GetComponentsInChildren<BoxCollider2D>();
+            foreach (BoxCollider2D col in childColliders)
+            {
+                col.enabled = false;
+            }
+        }
+        else
+        {
+            // Одиночный блок - один эффект
+            if (destroyEffectPrefab != null)
+            {
+                Instantiate(destroyEffectPrefab, transform.position, Quaternion.identity);
+            }
         }
 
-        // Убираем тайл из Tilemap
-        if (parentTilemap != null)
-        {
-            parentTilemap.SetTile(cellPosition, null);
-        }
-
-        // Удаляем объект
+        // Удаляем объект (весь родительский, если группа)
         Destroy(gameObject, 0.05f);
     }
 
@@ -125,13 +160,22 @@ public class FragileBlock : MonoBehaviour
         Gizmos.color = new Color(1f, 0.5f, 0f, 0.2f);
         Gizmos.DrawSphere(transform.position, recoilRadius);
 
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position, spriteRenderer ?
-            spriteRenderer.bounds.size : Vector3.one);
+        if (isGroup && compositeCollider != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(compositeCollider.bounds.center, compositeCollider.bounds.size);
+        }
+        else if (spriteRenderer != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(transform.position, spriteRenderer.bounds.size);
+        }
 
+#if UNITY_EDITOR
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * 0.5f,
-            "FRAGILE"
+            isGroup ? $"FRAGILE GROUP\n{gameObject.name}" : $"FRAGILE\n{gameObject.name}"
         );
+#endif
     }
 }

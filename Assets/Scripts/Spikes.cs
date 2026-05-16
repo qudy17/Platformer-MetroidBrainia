@@ -31,6 +31,7 @@ public class Spikes : MonoBehaviour
         if ((otherLayer & playerLayer) != 0)
         {
             KillPlayer(collision.gameObject);
+            GameStatsTracker.RegisterDeath();
         }
 
         // Враг умирает от шипов

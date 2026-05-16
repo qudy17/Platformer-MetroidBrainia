@@ -119,6 +119,7 @@ public class Enemy : MonoBehaviour
         if ((otherLayer & playerLayer) != 0)
         {
             KillPlayer(collision.gameObject);
+            GameStatsTracker.RegisterDeath();
             return;
         }
 
