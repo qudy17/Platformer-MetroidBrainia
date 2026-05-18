@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
-// тест русского языка
+
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
@@ -8,10 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 7f;
 
     [Header("Ускорение и торможение")]
-    [Tooltip("Как быстро игрок разгоняется (выше = резче старт)")]
     public float acceleration = 50f;
-
-    [Tooltip("Как быстро игрок тормозит когда не нажата клавиша")]
     public float deceleration = 40f;
 
     [Header("Ограничение скорости падения")]
@@ -22,18 +19,23 @@ public class PlayerMovement : MonoBehaviour
     public float groundCheckRadius = 0.1f;
     public LayerMask groundLayer;
 
-    // Направление взгляда — читается из ScreamAbility
     public Vector2 FacingDirection { get; private set; } = Vector2.right;
 
     private Rigidbody2D rb;
     private float horizontalInput;
     private float verticalInput;
+    private Transform currentPlatform;
+    private Vector3 lastPlatformPosition;
 
     public bool IsGrounded { get; private set; }
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        // Важно для работы с платформами
+        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
 
     void Update()
@@ -42,12 +44,19 @@ public class PlayerMovement : MonoBehaviour
         UpdateFacingDirection();
         CheckGround();
         FlipCharacter();
+        CheckPlatformParent();
     }
 
     void FixedUpdate()
     {
         Move();
         ClampFallSpeed();
+
+        // Обновляем позицию платформы
+        if (currentPlatform != null)
+        {
+            lastPlatformPosition = currentPlatform.position;
+        }
     }
 
     void ReadInput()
@@ -55,18 +64,14 @@ public class PlayerMovement : MonoBehaviour
         horizontalInput = 0f;
         verticalInput = 0f;
 
-        if (Keyboard.current.dKey.isPressed ||
-            Keyboard.current.rightArrowKey.isPressed)
+        if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
             horizontalInput = 1f;
-        else if (Keyboard.current.aKey.isPressed ||
-                 Keyboard.current.leftArrowKey.isPressed)
+        else if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
             horizontalInput = -1f;
 
-        if (Keyboard.current.wKey.isPressed ||
-            Keyboard.current.upArrowKey.isPressed)
+        if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed)
             verticalInput = 1f;
-        else if (Keyboard.current.sKey.isPressed ||
-                 Keyboard.current.downArrowKey.isPressed)
+        else if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed)
             verticalInput = -1f;
     }
 
@@ -81,13 +86,23 @@ public class PlayerMovement : MonoBehaviour
     void Move()
     {
         float currentSpeedX = rb.linearVelocity.x;
-        float targetSpeedX = horizontalInput * moveSpeed;
 
+        // Если стоим на движущейся платформе, учитываем её скорость
+        float platformVelocityX = 0f;
+        if (currentPlatform != null && IsGrounded)
+        {
+            Rigidbody2D platformRb = currentPlatform.GetComponent<Rigidbody2D>();
+            if (platformRb != null)
+            {
+                platformVelocityX = platformRb.linearVelocity.x;
+            }
+        }
+
+        float targetSpeedX = horizontalInput * moveSpeed + platformVelocityX;
         float newSpeedX;
 
         if (horizontalInput != 0f)
         {
-            // Игрок нажал клавишу — разгоняемся к целевой скорости
             newSpeedX = Mathf.MoveTowards(
                 currentSpeedX,
                 targetSpeedX,
@@ -96,11 +111,10 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            // Клавиша не нажата — тормозим
-            // Но НЕ гасим импульс от отдачи резко — торможение постепенное
+            // Если клавиши не нажаты, тормозим до скорости платформы
             newSpeedX = Mathf.MoveTowards(
                 currentSpeedX,
-                0f,
+                platformVelocityX,
                 deceleration * Time.fixedDeltaTime
             );
         }
@@ -112,20 +126,32 @@ public class PlayerMovement : MonoBehaviour
     {
         if (rb.linearVelocity.y < -maxFallSpeed)
         {
-            rb.linearVelocity = new Vector2(
-                rb.linearVelocity.x,
-                -maxFallSpeed
-            );
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, -maxFallSpeed);
         }
     }
 
     void CheckGround()
     {
-        IsGrounded = Physics2D.OverlapCircle(
-            groundCheck.position,
-            groundCheckRadius,
-            groundLayer
-        );
+        IsGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+        // Определяем, на какой платформе стоим
+        if (IsGrounded)
+        {
+            Collider2D groundCollider = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+            if (groundCollider != null && groundCollider.CompareTag("MovingPlatform"))
+            {
+                currentPlatform = groundCollider.transform;
+            }
+        }
+        else
+        {
+            currentPlatform = null;
+        }
+    }
+
+    void CheckPlatformParent()
+    {
+        // Этот метод больше не нужен, так как не используем parenting
     }
 
     void FlipCharacter()
@@ -145,9 +171,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(
-            transform.position,
-            transform.position + (Vector3)FacingDirection
-        );
+        Gizmos.DrawLine(transform.position, transform.position + (Vector3)FacingDirection);
     }
 }

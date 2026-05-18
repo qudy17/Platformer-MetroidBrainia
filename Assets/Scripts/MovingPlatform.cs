@@ -1,38 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-// тест русского языка
+
 [RequireComponent(typeof(Rigidbody2D))]
 public class MovingPlatform : MonoBehaviour
 {
     [Header("Точки маршрута")]
-    [Tooltip("Начальная точка (позиция А)")]
     public Transform startPoint;
-
-    [Tooltip("Конечная точка (позиция Б)")]
     public Transform endPoint;
 
     [Header("Настройки движения")]
-    [Tooltip("Скорость движения платформы")]
     public float speed = 3f;
 
     [Header("Привязка к кнопке")]
-    [Tooltip("Красная кнопка, которая активирует платформу")]
     public PressurePlate redButton;
-
-    [Tooltip("Требуется ли постоянный вес на кнопке для удержания платформы")]
     public bool requiresConstantWeight = true;
 
     [Header("Настройки платформы")]
-    [Tooltip("Можно ли стоять на платформе")]
     public bool canCarryPlayer = true;
 
-    // Приватные переменные
     private Rigidbody2D rb;
     private Vector2 startPos;
     private Vector2 endPos;
-    private HashSet<Rigidbody2D> objectsOnPlatform = new HashSet<Rigidbody2D>();
     private Vector2 previousPosition;
     private bool buttonIsPressed = false;
+
+    // Словарь для хранения информации об объектах на платформе
+    private Dictionary<Rigidbody2D, Vector2> objectsOnPlatform = new Dictionary<Rigidbody2D, Vector2>();
 
     void Awake()
     {
@@ -46,30 +39,29 @@ public class MovingPlatform : MonoBehaviour
         if (col != null)
         {
             col.isTrigger = false;
+            // Важно: создаём физический материал с трением
+            if (col.sharedMaterial == null)
+            {
+                PhysicsMaterial2D material = new PhysicsMaterial2D("PlatformMaterial");
+                material.friction = 1f;
+                material.bounciness = 0f;
+                col.sharedMaterial = material;
+            }
         }
     }
 
     void Start()
     {
-        // Сохраняем позиции
         startPos = startPoint != null ? (Vector2)startPoint.position : (Vector2)transform.position;
         endPos = endPoint != null ? (Vector2)endPoint.position : startPos;
 
-        // Ставим платформу на начальную позицию
         transform.position = startPos;
         previousPosition = startPos;
 
-        // Подписываемся на события кнопки
         if (redButton != null)
         {
             redButton.OnPlateStateChanged += OnButtonStateChanged;
-            // Сразу проверяем текущее состояние кнопки
             buttonIsPressed = redButton.IsPressed();
-            Debug.Log($"[MovingPlatform] {gameObject.name}: Подписана на кнопку {redButton.name}. Начальное состояние: pressed={buttonIsPressed}");
-        }
-        else
-        {
-            Debug.LogWarning($"[MovingPlatform] {gameObject.name}: Красная кнопка не назначена!");
         }
     }
 
@@ -85,10 +77,8 @@ public class MovingPlatform : MonoBehaviour
     {
         previousPosition = rb.position;
         UpdateMovement();
-    }
 
-    void LateUpdate()
-    {
+        // Перемещаем объекты вместе с платформой
         if (canCarryPlayer)
         {
             MoveObjectsOnPlatform();
@@ -97,20 +87,17 @@ public class MovingPlatform : MonoBehaviour
 
     void OnButtonStateChanged(bool pressed)
     {
-        Debug.Log($"[MovingPlatform] {gameObject.name}: Кнопка изменила состояние: {buttonIsPressed} -> {pressed}");
         buttonIsPressed = pressed;
     }
 
     void UpdateMovement()
     {
-        // Определяем целевую позицию в зависимости от состояния кнопки
         Vector2 targetPos = buttonIsPressed ? endPos : startPos;
         Vector2 currentPos = rb.position;
 
         Vector2 direction = targetPos - currentPos;
         float distance = direction.magnitude;
 
-        // Если уже на месте - останавливаемся
         if (distance < 0.01f)
         {
             rb.position = targetPos;
@@ -118,7 +105,6 @@ public class MovingPlatform : MonoBehaviour
             return;
         }
 
-        // Двигаемся к цели
         Vector2 velocity = direction.normalized * speed;
         rb.linearVelocity = velocity;
     }
@@ -128,15 +114,28 @@ public class MovingPlatform : MonoBehaviour
         Vector2 displacement = rb.position - previousPosition;
         if (displacement.magnitude < 0.001f) return;
 
-        foreach (Rigidbody2D objRb in objectsOnPlatform)
+        // Создаём копию ключей для безопасной итерации
+        List<Rigidbody2D> keys = new List<Rigidbody2D>(objectsOnPlatform.Keys);
+
+        foreach (Rigidbody2D objRb in keys)
         {
             if (objRb != null)
             {
+                // Перемещаем объект
                 objRb.position += displacement;
+
+                // Корректируем скорость объекта, чтобы он не "скользил"
+                Vector2 currentVelocity = objRb.linearVelocity;
+                objRb.linearVelocity = new Vector2(
+                    currentVelocity.x + displacement.x / Time.fixedDeltaTime,
+                    currentVelocity.y
+                );
+            }
+            else
+            {
+                objectsOnPlatform.Remove(objRb);
             }
         }
-
-        objectsOnPlatform.RemoveWhere(rb => rb == null);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -145,12 +144,31 @@ public class MovingPlatform : MonoBehaviour
 
         foreach (ContactPoint2D contact in collision.contacts)
         {
-            if (contact.normal.y < -0.5f)
+            // Проверяем, что объект стоит сверху на платформе
+            if (contact.normal.y < -0.3f)
             {
                 Rigidbody2D otherRb = collision.rigidbody;
-                if (otherRb != null)
+                if (otherRb != null && !objectsOnPlatform.ContainsKey(otherRb))
                 {
-                    objectsOnPlatform.Add(otherRb);
+                    objectsOnPlatform.Add(otherRb, otherRb.position);
+                }
+                break;
+            }
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (!canCarryPlayer) return;
+
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            if (contact.normal.y < -0.3f)
+            {
+                Rigidbody2D otherRb = collision.rigidbody;
+                if (otherRb != null && !objectsOnPlatform.ContainsKey(otherRb))
+                {
+                    objectsOnPlatform.Add(otherRb, otherRb.position);
                 }
                 break;
             }
