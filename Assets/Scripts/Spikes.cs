@@ -1,15 +1,16 @@
-using UnityEngine;
+п»їusing UnityEngine;
 
-// тест русского языка
+// С‚РµСЃС‚ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
+// РїСЂРёРІРµС‚
 public class Spikes : MonoBehaviour
 {
-    [Header("Настройки урона")]
-    [Tooltip("Задержка перед респавном после смерти")]
+    [Header("РќР°СЃС‚СЂРѕР№РєРё СѓСЂРѕРЅР°")]
+    [Tooltip("Р—Р°РґРµСЂР¶РєР° РїРµСЂРµРґ СЂРµСЃРїР°РІРЅРѕРј РїРѕСЃР»Рµ СЃРјРµСЂС‚Рё")]
     public float deathDelay = 0.1f;
 
-    [Header("Слои")]
+    [Header("РЎР»РѕРё")]
     public LayerMask playerLayer;
-    public LayerMask enemyLayer; // ДОБАВЛЕНО
+    public LayerMask enemyLayer; // Р”РћР‘РђР’Р›Р•РќРћ
 
     private BoxCollider2D boxCollider;
 
@@ -28,14 +29,14 @@ public class Spikes : MonoBehaviour
     {
         int otherLayer = 1 << collision.gameObject.layer;
 
-        // Игрок умирает от шипов
+        // РРіСЂРѕРє СѓРјРёСЂР°РµС‚ РѕС‚ С€РёРїРѕРІ
         if ((otherLayer & playerLayer) != 0)
         {
             KillPlayer(collision.gameObject);
             GameStatsTracker.RegisterDeath();
         }
 
-        // Враг умирает от шипов
+        // Р’СЂР°Рі СѓРјРёСЂР°РµС‚ РѕС‚ С€РёРїРѕРІ
         if ((otherLayer & enemyLayer) != 0)
         {
             KillEnemy(collision.gameObject);
@@ -44,7 +45,7 @@ public class Spikes : MonoBehaviour
 
     void KillPlayer(GameObject player)
     {
-        Debug.Log($"[Spikes] Игрок коснулся шипов!");
+        Debug.Log($"[Spikes] РРіСЂРѕРє РєРѕСЃРЅСѓР»СЃСЏ С€РёРїРѕРІ!");
 
         PlayerRespawn playerRespawn = player.GetComponent<PlayerRespawn>();
         if (playerRespawn != null)
@@ -53,7 +54,7 @@ public class Spikes : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("[Spikes] PlayerRespawn не найден на игроке!");
+            Debug.LogWarning("[Spikes] PlayerRespawn РЅРµ РЅР°Р№РґРµРЅ РЅР° РёРіСЂРѕРєРµ!");
         }
     }
 
