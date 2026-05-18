@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 // тест русского языка
+//окококок пока
 // тест русского языка
 // привет
 public class Spikes : MonoBehaviour
