@@ -31902,7 +31902,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5ee7b9375547904c9ac2306b675fb58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRespawn
-  defaultSpawnPoint: {x: 166.5, y: -3.5}
+  defaultSpawnPoint: {x: -10, y: -3.5}
   respawnDelay: 0.5
   deathEffectPrefab: {fileID: 0}
 --- !u!1001 &952669795
