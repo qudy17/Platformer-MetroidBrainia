@@ -1,27 +1,28 @@
-using UnityEngine;
+п»їusing UnityEngine;
 using UnityEngine.Tilemaps;
 
+//1
 public class EnemySpawner : MonoBehaviour
 {
-    [Header("Ссылки")]
+    [Header("пїЅпїЅпїЅпїЅпїЅпїЅ")]
     public Tilemap markerTilemap;
     public GameObject enemyPrefab;
     public TileBase markerTile;
 
-    [Header("Выравнивание")]
+    [Header("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
     public Vector2 spawnOffset = Vector2.zero;
 
     void Awake()
     {
         if (markerTilemap == null)
         {
-            Debug.LogError("[EnemySpawner] markerTilemap не назначен!");
+            Debug.LogError("[EnemySpawner] markerTilemap пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
             return;
         }
 
         if (enemyPrefab == null)
         {
-            Debug.LogError("[EnemySpawner] enemyPrefab не назначен!");
+            Debug.LogError("[EnemySpawner] enemyPrefab пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
             return;
         }
 
@@ -33,7 +34,7 @@ public class EnemySpawner : MonoBehaviour
         BoundsInt bounds = markerTilemap.cellBounds;
         int spawnCount = 0;
 
-        // Получаем настройки из префаба
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         Enemy prefabEnemy = enemyPrefab.GetComponent<Enemy>();
 
         foreach (Vector3Int cellPos in bounds.allPositionsWithin)
@@ -43,14 +44,14 @@ public class EnemySpawner : MonoBehaviour
 
             if (!isMarkerTile) continue;
 
-            // Получаем мировую позицию
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             Vector3 worldPos = markerTilemap.GetCellCenterWorld(cellPos) + (Vector3)spawnOffset;
 
-            // Спавним врага
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
             GameObject enemy = Instantiate(enemyPrefab, worldPos, Quaternion.identity, transform);
             enemy.name = $"Enemy_{cellPos.x}_{cellPos.y}";
 
-            // Копируем настройки из префаба
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             if (prefabEnemy != null)
             {
                 Enemy enemyComponent = enemy.GetComponent<Enemy>();
@@ -69,11 +70,11 @@ public class EnemySpawner : MonoBehaviour
                 }
             }
 
-            // Удаляем маркер
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
             markerTilemap.SetTile(cellPos, null);
             spawnCount++;
         }
 
-        Debug.Log($"[EnemySpawner] Создано врагов: {spawnCount}");
+        Debug.Log($"[EnemySpawner] пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: {spawnCount}");
     }
 }
