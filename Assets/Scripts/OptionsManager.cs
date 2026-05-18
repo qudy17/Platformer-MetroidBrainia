@@ -1,8 +1,8 @@
-using UnityEngine;
+п»їusing UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
-
+// С‚РµСЃС‚ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
 public class OptionsManager : MonoBehaviour
 {
     private enum OverlayState
@@ -36,8 +36,8 @@ public class OptionsManager : MonoBehaviour
     public TextMeshProUGUI deathCountText;
 
     [Header("References")]
-    public MenuManager menuManager; // Для главного меню
-    public PauseManager pauseManager; // Для игровой сцены
+    public MenuManager menuManager; // Р”Р»СЏ РіР»Р°РІРЅРѕРіРѕ РјРµРЅСЋ
+    public PauseManager pauseManager; // Р”Р»СЏ РёРіСЂРѕРІРѕР№ СЃС†РµРЅС‹
 
     private const float VOLUME_STEP = 0.05f;
 
@@ -78,7 +78,7 @@ public class OptionsManager : MonoBehaviour
         }
     }
 
-    // Публичный метод для проверки состояния
+    // РџСѓР±Р»РёС‡РЅС‹Р№ РјРµС‚РѕРґ РґР»СЏ РїСЂРѕРІРµСЂРєРё СЃРѕСЃС‚РѕСЏРЅРёСЏ
     public bool IsInSettingsPanel()
     {
         return currentState == OverlayState.Settings;
@@ -180,8 +180,8 @@ public class OptionsManager : MonoBehaviour
         int minutes = Mathf.FloorToInt((gameTime % 3600) / 60);
         int seconds = Mathf.FloorToInt(gameTime % 60);
 
-        string timeString = $"Время в игре: {hours:00}:{minutes:00}:{seconds:00}";
-        string deathString = $"Количество смертей: {deathCount}";
+        string timeString = $"Р’СЂРµРјСЏ РІ РёРіСЂРµ: {hours:00}:{minutes:00}:{seconds:00}";
+        string deathString = $"РљРѕР»РёС‡РµСЃС‚РІРѕ СЃРјРµСЂС‚РµР№: {deathCount}";
 
         Debug.Log($"Time string: {timeString}");
         Debug.Log($"Death string: {deathString}");
@@ -211,7 +211,7 @@ public class OptionsManager : MonoBehaviour
     {
         ShowSettings();
 
-        // Проверяем, в какой сцене мы находимся
+        // РџСЂРѕРІРµСЂСЏРµРј, РІ РєР°РєРѕР№ СЃС†РµРЅРµ РјС‹ РЅР°С…РѕРґРёРјСЃСЏ
         if (menuManager != null)
         {
             menuManager.CloseOptions();

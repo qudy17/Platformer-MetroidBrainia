@@ -1,9 +1,9 @@
-using UnityEngine;
-
+п»їusing UnityEngine;
+// С‚РµСЃС‚ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
 public class AcousticMirror : MonoBehaviour
 {
-    [Header("Отладка")]
-    [Tooltip("Показывать нормаль в редакторе")]
+    [Header("РћС‚Р»Р°РґРєР°")]
+    [Tooltip("РџРѕРєР°Р·С‹РІР°С‚СЊ РЅРѕСЂРјР°Р»СЊ РІ СЂРµРґР°РєС‚РѕСЂРµ")]
     public bool showNormalGizmo = true;
 
     private BoxCollider2D boxCollider;
@@ -21,8 +21,8 @@ public class AcousticMirror : MonoBehaviour
 
     public Vector2 GetSurfaceNormal(Vector2 hitPoint)
     {
-        // Нормаль указывает вправо от локального направления объекта
-        // Если объект повёрнут на 45° — нормаль тоже будет под 45°
+        // РќРѕСЂРјР°Р»СЊ СѓРєР°Р·С‹РІР°РµС‚ РІРїСЂР°РІРѕ РѕС‚ Р»РѕРєР°Р»СЊРЅРѕРіРѕ РЅР°РїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚Р°
+        // Р•СЃР»Рё РѕР±СЉРµРєС‚ РїРѕРІС‘СЂРЅСѓС‚ РЅР° 45В° вЂ” РЅРѕСЂРјР°Р»СЊ С‚РѕР¶Рµ Р±СѓРґРµС‚ РїРѕРґ 45В°
         Vector2 rightDirection = transform.right;
         return rightDirection.normalized;
     }
@@ -33,15 +33,15 @@ public class AcousticMirror : MonoBehaviour
         {
             Vector2 normal = transform.right;
 
-            // Рисуем нормаль
+            // Р РёСЃСѓРµРј РЅРѕСЂРјР°Р»СЊ
             Gizmos.color = Color.cyan;
             Vector3 start = transform.position;
             Gizmos.DrawLine(start, start + (Vector3)(normal * 0.5f));
             Gizmos.DrawWireSphere(start + (Vector3)(normal * 0.5f), 0.05f);
 
-            // Рисуем саму поверхность (перпендикулярно нормали)
+            // Р РёСЃСѓРµРј СЃР°РјСѓ РїРѕРІРµСЂС…РЅРѕСЃС‚СЊ (РїРµСЂРїРµРЅРґРёРєСѓР»СЏСЂРЅРѕ РЅРѕСЂРјР°Р»Рё)
             Gizmos.color = new Color(0.5f, 0.8f, 1f, 0.8f);
-            Vector2 surfaceDir = new Vector2(-normal.y, normal.x); // Перпендикуляр
+            Vector2 surfaceDir = new Vector2(-normal.y, normal.x); // РџРµСЂРїРµРЅРґРёРєСѓР»СЏСЂ
             float surfaceLength = boxCollider.bounds.size.magnitude * 0.5f;
             Gizmos.DrawLine(start + (Vector3)(surfaceDir * surfaceLength),
                            start - (Vector3)(surfaceDir * surfaceLength));
@@ -56,7 +56,7 @@ public class AcousticMirror : MonoBehaviour
 
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * 0.7f,
-            $"MIRROR\nRotation: {transform.rotation.eulerAngles.z:F0}°"
+            $"MIRROR\nRotation: {transform.rotation.eulerAngles.z:F0}В°"
         );
     }
 }

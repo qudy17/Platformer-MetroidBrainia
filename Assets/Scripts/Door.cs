@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.Tilemaps;
 using System.Collections;
-
+// тест русского языка
 public class Door : MonoBehaviour
 {
     [Header("Идентификатор")]

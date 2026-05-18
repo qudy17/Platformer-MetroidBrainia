@@ -1,14 +1,14 @@
-using UnityEngine;
-
+п»їusing UnityEngine;
+// С‚РµСЃС‚ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
 public class Room : MonoBehaviour
 {
-    [Header("Размеры комнаты (в юнитах)")]
+    [Header("Р Р°Р·РјРµСЂС‹ РєРѕРјРЅР°С‚С‹ (РІ СЋРЅРёС‚Р°С…)")]
     public float roomWidth = 60f;
     public float roomHeight = 33.75f;
 
     public Vector3 RoomCenter => transform.position;
 
-    // Границы комнаты
+    // Р“СЂР°РЅРёС†С‹ РєРѕРјРЅР°С‚С‹
     public Bounds RoomBounds => new Bounds(
         transform.position,
         new Vector3(roomWidth, roomHeight, 0)
@@ -19,13 +19,13 @@ public class Room : MonoBehaviour
         return RoomBounds.Contains(new Vector3(point.x, point.y, 0));
     }
 
-    // Рисуем границы комнаты в редакторе
+    // Р РёСЃСѓРµРј РіСЂР°РЅРёС†С‹ РєРѕРјРЅР°С‚С‹ РІ СЂРµРґР°РєС‚РѕСЂРµ
     void OnDrawGizmos()
     {
         Gizmos.color = new Color(0f, 1f, 1f, 0.3f);
         Gizmos.DrawWireCube(transform.position, new Vector3(roomWidth, roomHeight, 0));
 
-        // Крестик в центре
+        // РљСЂРµСЃС‚РёРє РІ С†РµРЅС‚СЂРµ
         Gizmos.color = Color.cyan;
         Gizmos.DrawLine(
             transform.position + Vector3.left * 0.5f,

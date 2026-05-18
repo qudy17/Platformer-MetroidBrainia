@@ -1,21 +1,21 @@
-using UnityEngine;
+п»їusing UnityEngine;
 using UnityEngine.Tilemaps;
-
+// С‚РµСЃС‚ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
 [RequireComponent(typeof(BoxCollider2D))]
 public class FragileBlock : MonoBehaviour
 {
-    [Header("Эффекты разрушения")]
-    [Tooltip("Префаб эффекта разрушения (опционально)")]
+    [Header("Р­С„С„РµРєС‚С‹ СЂР°Р·СЂСѓС€РµРЅРёСЏ")]
+    [Tooltip("РџСЂРµС„Р°Р± СЌС„С„РµРєС‚Р° СЂР°Р·СЂСѓС€РµРЅРёСЏ (РѕРїС†РёРѕРЅР°Р»СЊРЅРѕ)")]
     public GameObject destroyEffectPrefab;
 
-    [Header("Отдача игроку")]
-    [Tooltip("Радиус, в котором игрок получает отдачу при разрушении")]
+    [Header("РћС‚РґР°С‡Р° РёРіСЂРѕРєСѓ")]
+    [Tooltip("Р Р°РґРёСѓСЃ, РІ РєРѕС‚РѕСЂРѕРј РёРіСЂРѕРє РїРѕР»СѓС‡Р°РµС‚ РѕС‚РґР°С‡Сѓ РїСЂРё СЂР°Р·СЂСѓС€РµРЅРёРё")]
     public float recoilRadius = 3f;
 
-    [Tooltip("Сила отдачи игроку")]
+    [Tooltip("РЎРёР»Р° РѕС‚РґР°С‡Рё РёРіСЂРѕРєСѓ")]
     public float recoilForce = 10f;
 
-    [Header("Слои")]
+    [Header("РЎР»РѕРё")]
     public LayerMask playerLayer;
 
     private BoxCollider2D solidCollider;
@@ -30,12 +30,12 @@ public class FragileBlock : MonoBehaviour
         solidCollider = GetComponent<BoxCollider2D>();
         compositeCollider = GetComponent<CompositeCollider2D>();
 
-        // Проверяем, является ли это группой
+        // РџСЂРѕРІРµСЂСЏРµРј, СЏРІР»СЏРµС‚СЃСЏ Р»Рё СЌС‚Рѕ РіСЂСѓРїРїРѕР№
         isGroup = compositeCollider != null;
 
         if (!isGroup)
         {
-            // Одиночный блок - работаем как раньше
+            // РћРґРёРЅРѕС‡РЅС‹Р№ Р±Р»РѕРє - СЂР°Р±РѕС‚Р°РµРј РєР°Рє СЂР°РЅСЊС€Рµ
             solidCollider.isTrigger = false;
 
             triggerCollider = gameObject.AddComponent<BoxCollider2D>();
@@ -45,14 +45,14 @@ public class FragileBlock : MonoBehaviour
         }
         else
         {
-            // Группа - используем CompositeCollider
-            solidCollider = null; // У родителя нет BoxCollider2D
+            // Р“СЂСѓРїРїР° - РёСЃРїРѕР»СЊР·СѓРµРј CompositeCollider
+            solidCollider = null; // РЈ СЂРѕРґРёС‚РµР»СЏ РЅРµС‚ BoxCollider2D
 
-            // Добавляем триггер-коллайдер для обнаружения волны
+            // Р”РѕР±Р°РІР»СЏРµРј С‚СЂРёРіРіРµСЂ-РєРѕР»Р»Р°Р№РґРµСЂ РґР»СЏ РѕР±РЅР°СЂСѓР¶РµРЅРёСЏ РІРѕР»РЅС‹
             triggerCollider = gameObject.AddComponent<BoxCollider2D>();
             triggerCollider.isTrigger = true;
 
-            // Размер триггера равен размеру композита + немного больше
+            // Р Р°Р·РјРµСЂ С‚СЂРёРіРіРµСЂР° СЂР°РІРµРЅ СЂР°Р·РјРµСЂСѓ РєРѕРјРїРѕР·РёС‚Р° + РЅРµРјРЅРѕРіРѕ Р±РѕР»СЊС€Рµ
             Bounds bounds = compositeCollider.bounds;
             triggerCollider.size = bounds.size * 1.1f;
             triggerCollider.offset = transform.InverseTransformPoint(bounds.center);
@@ -68,7 +68,7 @@ public class FragileBlock : MonoBehaviour
         SoundWave wave = other.GetComponent<SoundWave>();
         if (wave != null)
         {
-            Debug.Log($"[FragileBlock] {gameObject.name}: Волна попала! isGroup={isGroup}");
+            Debug.Log($"[FragileBlock] {gameObject.name}: Р’РѕР»РЅР° РїРѕРїР°Р»Р°! isGroup={isGroup}");
 
             isDestroyed = true;
             wave.HitFragileBlock();
@@ -108,18 +108,18 @@ public class FragileBlock : MonoBehaviour
 
     public void DestroyBlock()
     {
-        Debug.Log($"[FragileBlock] {gameObject.name}: Разрушаюсь! isGroup={isGroup}");
+        Debug.Log($"[FragileBlock] {gameObject.name}: Р Р°Р·СЂСѓС€Р°СЋСЃСЊ! isGroup={isGroup}");
 
-        // МГНОВЕННО отключаем ВСЁ
+        // РњР“РќРћР’Р•РќРќРћ РѕС‚РєР»СЋС‡Р°РµРј Р’РЎРЃ
         if (solidCollider != null) solidCollider.enabled = false;
         if (triggerCollider != null) triggerCollider.enabled = false;
         if (compositeCollider != null) compositeCollider.enabled = false;
         if (spriteRenderer != null) spriteRenderer.enabled = false;
 
-        // Если это группа - создаём эффекты для каждого дочернего блока
+        // Р•СЃР»Рё СЌС‚Рѕ РіСЂСѓРїРїР° - СЃРѕР·РґР°С‘Рј СЌС„С„РµРєС‚С‹ РґР»СЏ РєР°Р¶РґРѕРіРѕ РґРѕС‡РµСЂРЅРµРіРѕ Р±Р»РѕРєР°
         if (isGroup)
         {
-            // Получаем все дочерние спрайты
+            // РџРѕР»СѓС‡Р°РµРј РІСЃРµ РґРѕС‡РµСЂРЅРёРµ СЃРїСЂР°Р№С‚С‹
             SpriteRenderer[] childSprites = GetComponentsInChildren<SpriteRenderer>();
 
             foreach (SpriteRenderer sprite in childSprites)
@@ -129,11 +129,11 @@ public class FragileBlock : MonoBehaviour
                     Instantiate(destroyEffectPrefab, sprite.transform.position, Quaternion.identity);
                 }
 
-                // Отключаем спрайты
+                // РћС‚РєР»СЋС‡Р°РµРј СЃРїСЂР°Р№С‚С‹
                 sprite.enabled = false;
             }
 
-            // Отключаем все коллайдеры детей
+            // РћС‚РєР»СЋС‡Р°РµРј РІСЃРµ РєРѕР»Р»Р°Р№РґРµСЂС‹ РґРµС‚РµР№
             BoxCollider2D[] childColliders = GetComponentsInChildren<BoxCollider2D>();
             foreach (BoxCollider2D col in childColliders)
             {
@@ -142,14 +142,14 @@ public class FragileBlock : MonoBehaviour
         }
         else
         {
-            // Одиночный блок - один эффект
+            // РћРґРёРЅРѕС‡РЅС‹Р№ Р±Р»РѕРє - РѕРґРёРЅ СЌС„С„РµРєС‚
             if (destroyEffectPrefab != null)
             {
                 Instantiate(destroyEffectPrefab, transform.position, Quaternion.identity);
             }
         }
 
-        // Удаляем объект (весь родительский, если группа)
+        // РЈРґР°Р»СЏРµРј РѕР±СЉРµРєС‚ (РІРµСЃСЊ СЂРѕРґРёС‚РµР»СЊСЃРєРёР№, РµСЃР»Рё РіСЂСѓРїРїР°)
         Destroy(gameObject, 0.05f);
     }
 

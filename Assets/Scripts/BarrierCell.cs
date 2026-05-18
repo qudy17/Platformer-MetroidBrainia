@@ -1,6 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System;
-
+// тест русского языка
 [Serializable]
 public struct BarrierCell
 {

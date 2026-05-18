@@ -1,16 +1,16 @@
-using UnityEngine;
-
+п»їusing UnityEngine;
+// С‚РµСЃС‚ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
 public class PlayerRespawn : MonoBehaviour
 {
-    [Header("Настройки респавна")]
-    [Tooltip("Начальная точка появления")]
+    [Header("РќР°СЃС‚СЂРѕР№РєРё СЂРµСЃРїР°РІРЅР°")]
+    [Tooltip("РќР°С‡Р°Р»СЊРЅР°СЏ С‚РѕС‡РєР° РїРѕСЏРІР»РµРЅРёСЏ")]
     public Vector2 defaultSpawnPoint;
 
-    [Tooltip("Задержка перед респавном")]
+    [Tooltip("Р—Р°РґРµСЂР¶РєР° РїРµСЂРµРґ СЂРµСЃРїР°РІРЅРѕРј")]
     public float respawnDelay = 0.5f;
 
-    [Header("Визуал смерти")]
-    [Tooltip("Эффект смерти (опционально)")]
+    [Header("Р’РёР·СѓР°Р» СЃРјРµСЂС‚Рё")]
+    [Tooltip("Р­С„С„РµРєС‚ СЃРјРµСЂС‚Рё (РѕРїС†РёРѕРЅР°Р»СЊРЅРѕ)")]
     public GameObject deathEffectPrefab;
 
     private Vector2 currentRespawnPoint;
@@ -27,18 +27,18 @@ public class PlayerRespawn : MonoBehaviour
 
         currentRespawnPoint = defaultSpawnPoint;
         transform.position = currentRespawnPoint;
-        Debug.Log($"[PlayerRespawn] Начальная точка возрождения: {currentRespawnPoint}");
+        Debug.Log($"[PlayerRespawn] РќР°С‡Р°Р»СЊРЅР°СЏ С‚РѕС‡РєР° РІРѕР·СЂРѕР¶РґРµРЅРёСЏ: {currentRespawnPoint}");
     }
 
     public void SetRespawnPoint(Vector2 newPoint)
     {
         currentRespawnPoint = newPoint;
-        Debug.Log($"[PlayerRespawn] Новая точка возрождения: {currentRespawnPoint}");
+        Debug.Log($"[PlayerRespawn] РќРѕРІР°СЏ С‚РѕС‡РєР° РІРѕР·СЂРѕР¶РґРµРЅРёСЏ: {currentRespawnPoint}");
     }
 
     public void Respawn()
     {
-        // Защита от повторного вызова
+        // Р—Р°С‰РёС‚Р° РѕС‚ РїРѕРІС‚РѕСЂРЅРѕРіРѕ РІС‹Р·РѕРІР°
         if (isDead) return;
 
         StartCoroutine(RespawnCoroutine());
@@ -47,9 +47,9 @@ public class PlayerRespawn : MonoBehaviour
     System.Collections.IEnumerator RespawnCoroutine()
     {
         isDead = true;
-        Debug.Log($"[PlayerRespawn] Игрок умер. Возрождение через {respawnDelay} сек...");
+        Debug.Log($"[PlayerRespawn] РРіСЂРѕРє СѓРјРµСЂ. Р’РѕР·СЂРѕР¶РґРµРЅРёРµ С‡РµСЂРµР· {respawnDelay} СЃРµРє...");
 
-        // Отключаем управление и визуал игрока
+        // РћС‚РєР»СЋС‡Р°РµРј СѓРїСЂР°РІР»РµРЅРёРµ Рё РІРёР·СѓР°Р» РёРіСЂРѕРєР°
         if (playerMovement != null)
             playerMovement.enabled = false;
 
@@ -59,25 +59,25 @@ public class PlayerRespawn : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
-            rb.bodyType = RigidbodyType2D.Kinematic; // Отключаем физику
+            rb.bodyType = RigidbodyType2D.Kinematic; // РћС‚РєР»СЋС‡Р°РµРј С„РёР·РёРєСѓ
         }
 
-        // Эффект смерти
+        // Р­С„С„РµРєС‚ СЃРјРµСЂС‚Рё
         if (deathEffectPrefab != null)
         {
             Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
         }
 
-        // Ждём
+        // Р–РґС‘Рј
         yield return new WaitForSeconds(respawnDelay);
 
-        // Возрождаем
+        // Р’РѕР·СЂРѕР¶РґР°РµРј
         transform.position = currentRespawnPoint;
 
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
-            rb.bodyType = RigidbodyType2D.Dynamic; // Возвращаем физику
+            rb.bodyType = RigidbodyType2D.Dynamic; // Р’РѕР·РІСЂР°С‰Р°РµРј С„РёР·РёРєСѓ
         }
 
         if (spriteRenderer != null)
@@ -87,7 +87,7 @@ public class PlayerRespawn : MonoBehaviour
             playerMovement.enabled = true;
 
         isDead = false;
-        Debug.Log($"[PlayerRespawn] Игрок возрождён в {currentRespawnPoint}");
+        Debug.Log($"[PlayerRespawn] РРіСЂРѕРє РІРѕР·СЂРѕР¶РґС‘РЅ РІ {currentRespawnPoint}");
     }
 
     void OnDrawGizmosSelected()

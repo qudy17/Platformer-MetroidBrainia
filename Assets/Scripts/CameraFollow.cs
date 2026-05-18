@@ -1,16 +1,16 @@
-using UnityEngine;
-
+п»їusing UnityEngine;
+// С‚РµСЃС‚ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
 public class CameraFollow : MonoBehaviour
 {
-    [Header("Настройки")]
+    [Header("РќР°СЃС‚СЂРѕР№РєРё")]
     public Transform player;
     public float transitionSpeed = 3f;
     public float transitionThreshold = 0.01f;
 
-    [Header("Текущая комната(только для просмотра)")]
+    [Header("РўРµРєСѓС‰Р°СЏ РєРѕРјРЅР°С‚Р°(С‚РѕР»СЊРєРѕ РґР»СЏ РїСЂРѕСЃРјРѕС‚СЂР°)")]
     [SerializeField] private Room currentRoom;
 
-    // Приватные переменные
+    // РџСЂРёРІР°С‚РЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ
     private Vector3 targetPosition;
     private bool isTransitioning = false;
     private float cameraZ = -10f;

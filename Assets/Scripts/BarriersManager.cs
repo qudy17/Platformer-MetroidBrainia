@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic;
-
+// тест русского языка
 public class BarriersManager : MonoBehaviour
 {
     public static BarriersManager Instance { get; private set; }

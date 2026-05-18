@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
-
+// тест русского языка
 public class ScreamAbility : MonoBehaviour
 {
     [Header("Заряды")]

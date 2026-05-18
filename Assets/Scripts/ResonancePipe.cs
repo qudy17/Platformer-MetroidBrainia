@@ -1,6 +1,6 @@
-using UnityEngine;
+п»їusing UnityEngine;
 using System.Collections;
-
+// С‚РµСЃС‚ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
 public class ResonancePipe : MonoBehaviour
 {
     public enum PipeType
@@ -9,23 +9,23 @@ public class ResonancePipe : MonoBehaviour
         Output
     }
 
-    [Header("Тип трубы")]
+    [Header("РўРёРї С‚СЂСѓР±С‹")]
     public PipeType pipeType = PipeType.Input;
 
-    [Header("Связь")]
-    [Tooltip("Уникальный ID пары труб. Должен совпадать у входа и выхода")]
+    [Header("РЎРІСЏР·СЊ")]
+    [Tooltip("РЈРЅРёРєР°Р»СЊРЅС‹Р№ ID РїР°СЂС‹ С‚СЂСѓР±. Р”РѕР»Р¶РµРЅ СЃРѕРІРїР°РґР°С‚СЊ Сѓ РІС…РѕРґР° Рё РІС‹С…РѕРґР°")]
     public string pipeID = "Pipe_1";
 
-    [Header("Настройки задержки")]
-    [Tooltip("Задержка перед излучением волны из выхода")]
+    [Header("РќР°СЃС‚СЂРѕР№РєРё Р·Р°РґРµСЂР¶РєРё")]
+    [Tooltip("Р—Р°РґРµСЂР¶РєР° РїРµСЂРµРґ РёР·Р»СѓС‡РµРЅРёРµРј РІРѕР»РЅС‹ РёР· РІС‹С…РѕРґР°")]
     public float delay = 0.5f;
 
-    [Header("Настройки выхода")]
-    [Tooltip("Направление излучения волны (только для Output)")]
+    [Header("РќР°СЃС‚СЂРѕР№РєРё РІС‹С…РѕРґР°")]
+    [Tooltip("РќР°РїСЂР°РІР»РµРЅРёРµ РёР·Р»СѓС‡РµРЅРёСЏ РІРѕР»РЅС‹ (С‚РѕР»СЊРєРѕ РґР»СЏ Output)")]
     public Vector2 outputDirection = Vector2.right;
 
-    [Header("Отладка")]
-    [Tooltip("Показывать связь в редакторе")]
+    [Header("РћС‚Р»Р°РґРєР°")]
+    [Tooltip("РџРѕРєР°Р·С‹РІР°С‚СЊ СЃРІСЏР·СЊ РІ СЂРµРґР°РєС‚РѕСЂРµ")]
     public bool showConnectionGizmo = true;
 
     private SpriteRenderer spriteRenderer;
@@ -49,14 +49,14 @@ public class ResonancePipe : MonoBehaviour
         SoundWave wave = other.GetComponent<SoundWave>();
         if (wave != null)
         {
-            // Проверяем, с правильной ли стороны пришла волна
+            // РџСЂРѕРІРµСЂСЏРµРј, СЃ РїСЂР°РІРёР»СЊРЅРѕР№ Р»Рё СЃС‚РѕСЂРѕРЅС‹ РїСЂРёС€Р»Р° РІРѕР»РЅР°
             if (IsCorrectDirection(wave))
             {
                 ReceiveWave(wave);
             }
             else
             {
-                Debug.Log($"[ResonancePipe] Вход '{pipeID}': Волна с неправильной стороны — уничтожаю.");
+                Debug.Log($"[ResonancePipe] Р’С…РѕРґ '{pipeID}': Р’РѕР»РЅР° СЃ РЅРµРїСЂР°РІРёР»СЊРЅРѕР№ СЃС‚РѕСЂРѕРЅС‹ вЂ” СѓРЅРёС‡С‚РѕР¶Р°СЋ.");
                 Destroy(wave.gameObject);
             }
         }
@@ -64,49 +64,49 @@ public class ResonancePipe : MonoBehaviour
 
     bool IsCorrectDirection(SoundWave wave)
     {
-        // Получаем направление волны
+        // РџРѕР»СѓС‡Р°РµРј РЅР°РїСЂР°РІР»РµРЅРёРµ РІРѕР»РЅС‹
         Vector2 waveDirection = wave.GetDirection();
 
-        // Вход должен быть СВЕРХУ-ВНИЗ относительно спрайта
-        // transform.up — это "верх" спрайта
-        // Нам нужно, чтобы волна летела ПРОТИВОПОЛОЖНО transform.up (т.е. вниз)
+        // Р’С…РѕРґ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РЎР’Р•Р РҐРЈ-Р’РќРР— РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ СЃРїСЂР°Р№С‚Р°
+        // transform.up вЂ” СЌС‚Рѕ "РІРµСЂС…" СЃРїСЂР°Р№С‚Р°
+        // РќР°Рј РЅСѓР¶РЅРѕ, С‡С‚РѕР±С‹ РІРѕР»РЅР° Р»РµС‚РµР»Р° РџР РћРўРР’РћРџРћР›РћР–РќРћ transform.up (С‚.Рµ. РІРЅРёР·)
         Vector2 inputAcceptDirection = -transform.up;
 
-        // Сравниваем направления
+        // РЎСЂР°РІРЅРёРІР°РµРј РЅР°РїСЂР°РІР»РµРЅРёСЏ
         float dotProduct = Vector2.Dot(waveDirection, inputAcceptDirection);
 
-        // Если dotProduct > 0.5f — волна летит примерно в правильном направлении
+        // Р•СЃР»Рё dotProduct > 0.5f вЂ” РІРѕР»РЅР° Р»РµС‚РёС‚ РїСЂРёРјРµСЂРЅРѕ РІ РїСЂР°РІРёР»СЊРЅРѕРј РЅР°РїСЂР°РІР»РµРЅРёРё
         bool isCorrect = dotProduct > 0.5f;
 
-        Debug.Log($"[ResonancePipe] Вход '{pipeID}': " +
-                  $"Волна: {waveDirection}, Ожидается: {inputAcceptDirection}, " +
-                  $"Dot: {dotProduct:F2}, Принято: {isCorrect}");
+        Debug.Log($"[ResonancePipe] Р’С…РѕРґ '{pipeID}': " +
+                  $"Р’РѕР»РЅР°: {waveDirection}, РћР¶РёРґР°РµС‚СЃСЏ: {inputAcceptDirection}, " +
+                  $"Dot: {dotProduct:F2}, РџСЂРёРЅСЏС‚Рѕ: {isCorrect}");
 
         return isCorrect;
     }
 
     void ReceiveWave(SoundWave wave)
     {
-        Debug.Log($"[ResonancePipe] Вход '{pipeID}': Волна получена!");
+        Debug.Log($"[ResonancePipe] Р’С…РѕРґ '{pipeID}': Р’РѕР»РЅР° РїРѕР»СѓС‡РµРЅР°!");
 
-        // СНАЧАЛА сохраняем параметры
+        // РЎРќРђР§РђР›Рђ СЃРѕС…СЂР°РЅСЏРµРј РїР°СЂР°РјРµС‚СЂС‹
         SaveWaveParameters(wave);
 
-        // ПОТОМ уничтожаем волну
+        // РџРћРўРћРњ СѓРЅРёС‡С‚РѕР¶Р°РµРј РІРѕР»РЅСѓ
         Destroy(wave.gameObject);
 
-        // Активируем визуал
+        // РђРєС‚РёРІРёСЂСѓРµРј РІРёР·СѓР°Р»
         isActive = true;
         if (spriteRenderer != null)
         {
             spriteRenderer.color = Color.yellow;
         }
 
-        // Запускаем таймер
+        // Р—Р°РїСѓСЃРєР°РµРј С‚Р°Р№РјРµСЂ
         StartCoroutine(DelayedEmit());
     }
 
-    // Сохраняем параметры волны
+    // РЎРѕС…СЂР°РЅСЏРµРј РїР°СЂР°РјРµС‚СЂС‹ РІРѕР»РЅС‹
     private Vector2 savedWaveDirection;
     private float savedWaveSpeed;
     private float savedWaveMaxDistance;
@@ -115,8 +115,8 @@ public class ResonancePipe : MonoBehaviour
 
     void SaveWaveParameters(SoundWave wave)
     {
-        // Получаем параметры через рефлексию или публичные методы
-        // Нужно добавить геттеры в SoundWave
+        // РџРѕР»СѓС‡Р°РµРј РїР°СЂР°РјРµС‚СЂС‹ С‡РµСЂРµР· СЂРµС„Р»РµРєСЃРёСЋ РёР»Рё РїСѓР±Р»РёС‡РЅС‹Рµ РјРµС‚РѕРґС‹
+        // РќСѓР¶РЅРѕ РґРѕР±Р°РІРёС‚СЊ РіРµС‚С‚РµСЂС‹ РІ SoundWave
         savedWaveDirection = wave.GetDirection();
         savedWaveSpeed = wave.GetSpeed();
         savedWaveMaxDistance = wave.GetMaxDistance();
@@ -126,7 +126,7 @@ public class ResonancePipe : MonoBehaviour
 
     IEnumerator DelayedEmit()
     {
-        Debug.Log($"[ResonancePipe] Вход '{pipeID}': Задержка {delay} сек...");
+        Debug.Log($"[ResonancePipe] Р’С…РѕРґ '{pipeID}': Р—Р°РґРµСЂР¶РєР° {delay} СЃРµРє...");
 
         yield return new WaitForSeconds(delay);
 
@@ -134,13 +134,13 @@ public class ResonancePipe : MonoBehaviour
 
         if (outputPipe != null && outputPipe != this)
         {
-            Debug.Log($"[ResonancePipe] Выход '{pipeID}': Излучаю волну!");
+            Debug.Log($"[ResonancePipe] Р’С‹С…РѕРґ '{pipeID}': РР·Р»СѓС‡Р°СЋ РІРѕР»РЅСѓ!");
             outputPipe.EmitWave(savedWaveDirection, savedWaveSpeed, savedWaveMaxDistance,
                                savedPlayerRb, savedRecoilForce);
         }
         else
         {
-            Debug.LogWarning($"[ResonancePipe] Выход с ID '{pipeID}' не найден!");
+            Debug.LogWarning($"[ResonancePipe] Р’С‹С…РѕРґ СЃ ID '{pipeID}' РЅРµ РЅР°Р№РґРµРЅ!");
         }
 
         isActive = false;
@@ -188,7 +188,7 @@ public class ResonancePipe : MonoBehaviour
                 screamAbility.recoilForce
             );
 
-            Debug.Log($"[ResonancePipe] Волна создана с дистанцией {screamAbility.waveMaxDistance}");
+            Debug.Log($"[ResonancePipe] Р’РѕР»РЅР° СЃРѕР·РґР°РЅР° СЃ РґРёСЃС‚Р°РЅС†РёРµР№ {screamAbility.waveMaxDistance}");
         }
 
         StartCoroutine(FlashOutput());
@@ -208,11 +208,11 @@ public class ResonancePipe : MonoBehaviour
     {
         if (pipeType == PipeType.Input)
         {
-            // Вход — показываем КУДА должна лететь волна
+            // Р’С…РѕРґ вЂ” РїРѕРєР°Р·С‹РІР°РµРј РљРЈР”Рђ РґРѕР»Р¶РЅР° Р»РµС‚РµС‚СЊ РІРѕР»РЅР°
             Gizmos.color = isActive ? Color.yellow : Color.green;
             Gizmos.DrawWireCube(transform.position, Vector3.one * 0.8f);
 
-            // Стрелка ПРИНИМАЕМОГО направления (противоположно transform.up)
+            // РЎС‚СЂРµР»РєР° РџР РРќРРњРђР•РњРћР“Рћ РЅР°РїСЂР°РІР»РµРЅРёСЏ (РїСЂРѕС‚РёРІРѕРїРѕР»РѕР¶РЅРѕ transform.up)
             Gizmos.color = Color.green;
             Vector3 acceptDir = transform.up;
             Gizmos.DrawLine(transform.position, transform.position + acceptDir * 1.5f);
@@ -220,7 +220,7 @@ public class ResonancePipe : MonoBehaviour
         }
         else
         {
-            // Выход — показываем направление излучения
+            // Р’С‹С…РѕРґ вЂ” РїРѕРєР°Р·С‹РІР°РµРј РЅР°РїСЂР°РІР»РµРЅРёРµ РёР·Р»СѓС‡РµРЅРёСЏ
             Gizmos.color = Color.blue;
             Gizmos.DrawWireCube(transform.position, Vector3.one * 0.8f);
 
@@ -230,7 +230,7 @@ public class ResonancePipe : MonoBehaviour
             Gizmos.DrawWireSphere(transform.position + dir * 1.5f, 0.1f);
         }
 
-        // Линия связи между трубами
+        // Р›РёРЅРёСЏ СЃРІСЏР·Рё РјРµР¶РґСѓ С‚СЂСѓР±Р°РјРё
         if (showConnectionGizmo)
         {
             ResonancePipe[] allPipes = FindObjectsByType<ResonancePipe>(FindObjectsSortMode.None);

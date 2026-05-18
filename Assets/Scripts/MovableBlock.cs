@@ -1,25 +1,25 @@
-using UnityEngine;
+п»їusing UnityEngine;
 using System.Collections;
-
+// С‚РµСЃС‚ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
 [RequireComponent(typeof(Rigidbody2D))]
 public class MovableBlock : MonoBehaviour
 {
-    [Header("Физика блока")]
+    [Header("Р¤РёР·РёРєР° Р±Р»РѕРєР°")]
     public float friction = 8f;
     public float maxSpeed = 20f;
     public float blockMass = 80f;
     public float waveForceMultiplier = 40f;
 
-    [Header("Слои")]
+    [Header("РЎР»РѕРё")]
     public LayerMask groundLayer;
     public LayerMask playerLayer;
     public LayerMask movableBlockLayer;
     public LayerMask spikesLayer;
 
-    [Header("Проверка земли")]
+    [Header("РџСЂРѕРІРµСЂРєР° Р·РµРјР»Рё")]
     public float groundCheckDistance = 0.1f;
 
-    [Tooltip("С какой силой игрок может толкать активированный блок. 0 = не может толкать")]
+    [Tooltip("РЎ РєР°РєРѕР№ СЃРёР»РѕР№ РёРіСЂРѕРє РјРѕР¶РµС‚ С‚РѕР»РєР°С‚СЊ Р°РєС‚РёРІРёСЂРѕРІР°РЅРЅС‹Р№ Р±Р»РѕРє. 0 = РЅРµ РјРѕР¶РµС‚ С‚РѕР»РєР°С‚СЊ")]
     public float playerPushForce = 0f;
 
     private Rigidbody2D rb;
@@ -67,13 +67,13 @@ public class MovableBlock : MonoBehaviour
 
         if (!IsGrounded)
         {
-            Debug.Log($"[MovableBlock] {gameObject.name}: в воздухе! Включаю гравитацию.");
+            Debug.Log($"[MovableBlock] {gameObject.name}: РІ РІРѕР·РґСѓС…Рµ! Р’РєР»СЋС‡Р°СЋ РіСЂР°РІРёС‚Р°С†РёСЋ.");
             rb.gravityScale = 3f;
             hasBeenHit = true;
         }
         else
         {
-            Debug.Log($"[MovableBlock] {gameObject.name}: на земле. Остаётся с нулевой гравитацией.");
+            Debug.Log($"[MovableBlock] {gameObject.name}: РЅР° Р·РµРјР»Рµ. РћСЃС‚Р°С‘С‚СЃСЏ СЃ РЅСѓР»РµРІРѕР№ РіСЂР°РІРёС‚Р°С†РёРµР№.");
         }
     }
 
@@ -92,7 +92,7 @@ public class MovableBlock : MonoBehaviour
         {
             hasBeenHit = true;
             rb.gravityScale = 3f;
-            Debug.Log($"[MovableBlock] {gameObject.name}: АКТИВИРОВАН!");
+            Debug.Log($"[MovableBlock] {gameObject.name}: РђРљРўРР’РР РћР’РђРќ!");
         }
     }
 
@@ -124,7 +124,7 @@ public class MovableBlock : MonoBehaviour
 
             if (otherBlock != null && otherBlock.hasBeenHit && !hasBeenHit)
             {
-                Debug.Log($"[MovableBlock] {gameObject.name}: активирован соседним блоком!");
+                Debug.Log($"[MovableBlock] {gameObject.name}: Р°РєС‚РёРІРёСЂРѕРІР°РЅ СЃРѕСЃРµРґРЅРёРј Р±Р»РѕРєРѕРј!");
                 ActivateBlock();
             }
         }
@@ -142,7 +142,7 @@ public class MovableBlock : MonoBehaviour
             Bounds bounds = compositeCollider.bounds;
             if (bounds.size == Vector3.zero)
             {
-                Debug.LogWarning($"[MovableBlock] {gameObject.name}: bounds compositeCollider = ZERO! Проверяю через детей.");
+                Debug.LogWarning($"[MovableBlock] {gameObject.name}: bounds compositeCollider = ZERO! РџСЂРѕРІРµСЂСЏСЋ С‡РµСЂРµР· РґРµС‚РµР№.");
                 IsGrounded = CheckGroundByChildren(combinedMask);
                 return;
             }
@@ -243,7 +243,7 @@ public class MovableBlock : MonoBehaviour
 
     public bool ReceiveWaveImpact(Vector2 waveDirection, float waveForce)
     {
-        Debug.Log($"[MovableBlock] {gameObject.name}: удар волной! Сила: {waveForce}");
+        Debug.Log($"[MovableBlock] {gameObject.name}: СѓРґР°СЂ РІРѕР»РЅРѕР№! РЎРёР»Р°: {waveForce}");
 
         ActivateBlock();
 

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
-
+// тест русского языка
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {

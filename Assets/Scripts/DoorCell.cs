@@ -1,9 +1,9 @@
-using UnityEngine;
+п»їusing UnityEngine;
 using System;
-
-// Просто контейнер для позиции тайла
+// С‚РµСЃС‚ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
+// РџСЂРѕСЃС‚Рѕ РєРѕРЅС‚РµР№РЅРµСЂ РґР»СЏ РїРѕР·РёС†РёРё С‚Р°Р№Р»Р°
 [Serializable]
 public struct DoorCell
 {
-    public Vector3Int cellPosition; // Позиция в координатах Tilemap
+    public Vector3Int cellPosition; // РџРѕР·РёС†РёСЏ РІ РєРѕРѕСЂРґРёРЅР°С‚Р°С… Tilemap
 }

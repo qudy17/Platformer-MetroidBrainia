@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic;
-
+// тест русского языка
 public class DoorsManager : MonoBehaviour
 {
     public static DoorsManager Instance { get; private set; }

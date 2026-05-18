@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
-
+// тест русского языка
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CircleCollider2D))]
 public class SoundWave : MonoBehaviour

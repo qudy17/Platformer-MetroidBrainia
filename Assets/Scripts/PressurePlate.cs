@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-
+// тест русского языка
 public class PressurePlate : MonoBehaviour
 {
     public enum PlateType

@@ -1,32 +1,32 @@
-using UnityEngine;
+п»їusing UnityEngine;
 using System.Collections.Generic;
-
+// С‚РµСЃС‚ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
 [RequireComponent(typeof(Rigidbody2D))]
 public class MovingPlatform : MonoBehaviour
 {
-    [Header("Точки маршрута")]
-    [Tooltip("Начальная точка (позиция А)")]
+    [Header("РўРѕС‡РєРё РјР°СЂС€СЂСѓС‚Р°")]
+    [Tooltip("РќР°С‡Р°Р»СЊРЅР°СЏ С‚РѕС‡РєР° (РїРѕР·РёС†РёСЏ Рђ)")]
     public Transform startPoint;
 
-    [Tooltip("Конечная точка (позиция Б)")]
+    [Tooltip("РљРѕРЅРµС‡РЅР°СЏ С‚РѕС‡РєР° (РїРѕР·РёС†РёСЏ Р‘)")]
     public Transform endPoint;
 
-    [Header("Настройки движения")]
-    [Tooltip("Скорость движения платформы")]
+    [Header("РќР°СЃС‚СЂРѕР№РєРё РґРІРёР¶РµРЅРёСЏ")]
+    [Tooltip("РЎРєРѕСЂРѕСЃС‚СЊ РґРІРёР¶РµРЅРёСЏ РїР»Р°С‚С„РѕСЂРјС‹")]
     public float speed = 3f;
 
-    [Header("Привязка к кнопке")]
-    [Tooltip("Красная кнопка, которая активирует платформу")]
+    [Header("РџСЂРёРІСЏР·РєР° Рє РєРЅРѕРїРєРµ")]
+    [Tooltip("РљСЂР°СЃРЅР°СЏ РєРЅРѕРїРєР°, РєРѕС‚РѕСЂР°СЏ Р°РєС‚РёРІРёСЂСѓРµС‚ РїР»Р°С‚С„РѕСЂРјСѓ")]
     public PressurePlate redButton;
 
-    [Tooltip("Требуется ли постоянный вес на кнопке для удержания платформы")]
+    [Tooltip("РўСЂРµР±СѓРµС‚СЃСЏ Р»Рё РїРѕСЃС‚РѕСЏРЅРЅС‹Р№ РІРµСЃ РЅР° РєРЅРѕРїРєРµ РґР»СЏ СѓРґРµСЂР¶Р°РЅРёСЏ РїР»Р°С‚С„РѕСЂРјС‹")]
     public bool requiresConstantWeight = true;
 
-    [Header("Настройки платформы")]
-    [Tooltip("Можно ли стоять на платформе")]
+    [Header("РќР°СЃС‚СЂРѕР№РєРё РїР»Р°С‚С„РѕСЂРјС‹")]
+    [Tooltip("РњРѕР¶РЅРѕ Р»Рё СЃС‚РѕСЏС‚СЊ РЅР° РїР»Р°С‚С„РѕСЂРјРµ")]
     public bool canCarryPlayer = true;
 
-    // Приватные переменные
+    // РџСЂРёРІР°С‚РЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ
     private Rigidbody2D rb;
     private Vector2 startPos;
     private Vector2 endPos;
@@ -51,25 +51,25 @@ public class MovingPlatform : MonoBehaviour
 
     void Start()
     {
-        // Сохраняем позиции
+        // РЎРѕС…СЂР°РЅСЏРµРј РїРѕР·РёС†РёРё
         startPos = startPoint != null ? (Vector2)startPoint.position : (Vector2)transform.position;
         endPos = endPoint != null ? (Vector2)endPoint.position : startPos;
 
-        // Ставим платформу на начальную позицию
+        // РЎС‚Р°РІРёРј РїР»Р°С‚С„РѕСЂРјСѓ РЅР° РЅР°С‡Р°Р»СЊРЅСѓСЋ РїРѕР·РёС†РёСЋ
         transform.position = startPos;
         previousPosition = startPos;
 
-        // Подписываемся на события кнопки
+        // РџРѕРґРїРёСЃС‹РІР°РµРјСЃСЏ РЅР° СЃРѕР±С‹С‚РёСЏ РєРЅРѕРїРєРё
         if (redButton != null)
         {
             redButton.OnPlateStateChanged += OnButtonStateChanged;
-            // Сразу проверяем текущее состояние кнопки
+            // РЎСЂР°Р·Сѓ РїСЂРѕРІРµСЂСЏРµРј С‚РµРєСѓС‰РµРµ СЃРѕСЃС‚РѕСЏРЅРёРµ РєРЅРѕРїРєРё
             buttonIsPressed = redButton.IsPressed();
-            Debug.Log($"[MovingPlatform] {gameObject.name}: Подписана на кнопку {redButton.name}. Начальное состояние: pressed={buttonIsPressed}");
+            Debug.Log($"[MovingPlatform] {gameObject.name}: РџРѕРґРїРёСЃР°РЅР° РЅР° РєРЅРѕРїРєСѓ {redButton.name}. РќР°С‡Р°Р»СЊРЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ: pressed={buttonIsPressed}");
         }
         else
         {
-            Debug.LogWarning($"[MovingPlatform] {gameObject.name}: Красная кнопка не назначена!");
+            Debug.LogWarning($"[MovingPlatform] {gameObject.name}: РљСЂР°СЃРЅР°СЏ РєРЅРѕРїРєР° РЅРµ РЅР°Р·РЅР°С‡РµРЅР°!");
         }
     }
 
@@ -97,20 +97,20 @@ public class MovingPlatform : MonoBehaviour
 
     void OnButtonStateChanged(bool pressed)
     {
-        Debug.Log($"[MovingPlatform] {gameObject.name}: Кнопка изменила состояние: {buttonIsPressed} -> {pressed}");
+        Debug.Log($"[MovingPlatform] {gameObject.name}: РљРЅРѕРїРєР° РёР·РјРµРЅРёР»Р° СЃРѕСЃС‚РѕСЏРЅРёРµ: {buttonIsPressed} -> {pressed}");
         buttonIsPressed = pressed;
     }
 
     void UpdateMovement()
     {
-        // Определяем целевую позицию в зависимости от состояния кнопки
+        // РћРїСЂРµРґРµР»СЏРµРј С†РµР»РµРІСѓСЋ РїРѕР·РёС†РёСЋ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ СЃРѕСЃС‚РѕСЏРЅРёСЏ РєРЅРѕРїРєРё
         Vector2 targetPos = buttonIsPressed ? endPos : startPos;
         Vector2 currentPos = rb.position;
 
         Vector2 direction = targetPos - currentPos;
         float distance = direction.magnitude;
 
-        // Если уже на месте - останавливаемся
+        // Р•СЃР»Рё СѓР¶Рµ РЅР° РјРµСЃС‚Рµ - РѕСЃС‚Р°РЅР°РІР»РёРІР°РµРјСЃСЏ
         if (distance < 0.01f)
         {
             rb.position = targetPos;
@@ -118,7 +118,7 @@ public class MovingPlatform : MonoBehaviour
             return;
         }
 
-        // Двигаемся к цели
+        // Р”РІРёРіР°РµРјСЃСЏ Рє С†РµР»Рё
         Vector2 velocity = direction.normalized * speed;
         rb.linearVelocity = velocity;
     }

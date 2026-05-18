@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
-
+// тест русского языка
 //1
 public class EnemySpawner : MonoBehaviour
 {

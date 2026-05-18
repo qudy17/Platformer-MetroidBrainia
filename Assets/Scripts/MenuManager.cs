@@ -1,7 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
-
+// тест русского языка
 public class MenuManager : MonoBehaviour
 {
     [Header("Panels")]

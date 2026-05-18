@@ -1,45 +1,45 @@
-using UnityEngine;
+п»їusing UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 using System;
-
+// С‚РµСЃС‚ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
 public class MainMenuController : MonoBehaviour
 {
     [Header("UI Document")]
-    [Tooltip("UIDocument компонент с главным меню")]
+    [Tooltip("UIDocument РєРѕРјРїРѕРЅРµРЅС‚ СЃ РіР»Р°РІРЅС‹Рј РјРµРЅСЋ")]
     public UIDocument uiDocument;
 
     [Header("Scene Settings")]
-    [Tooltip("Название сцены для загрузки при нажатии Start Game")]
+    [Tooltip("РќР°Р·РІР°РЅРёРµ СЃС†РµРЅС‹ РґР»СЏ Р·Р°РіСЂСѓР·РєРё РїСЂРё РЅР°Р¶Р°С‚РёРё Start Game")]
     public string gameSceneName = "GameScene";
 
     [Header("Audio Settings")]
-    [Tooltip("Шаг изменения громкости при нажатии +/-")]
+    [Tooltip("РЁР°Рі РёР·РјРµРЅРµРЅРёСЏ РіСЂРѕРјРєРѕСЃС‚Рё РїСЂРё РЅР°Р¶Р°С‚РёРё +/-")]
     [Range(1f, 10f)]
     public float volumeStep = 5f;
 
-    // Корневой элемент
+    // РљРѕСЂРЅРµРІРѕР№ СЌР»РµРјРµРЅС‚
     private VisualElement root;
 
-    // Главное меню
+    // Р“Р»Р°РІРЅРѕРµ РјРµРЅСЋ
     private Button startGameButton;
     private Button optionsButton;
 
-    // Меню настроек
+    // РњРµРЅСЋ РЅР°СЃС‚СЂРѕРµРє
     private VisualElement optionsMenu;
     private Button closeOptionsButton;
 
-    // Кнопки переключения вкладок
+    // РљРЅРѕРїРєРё РїРµСЂРµРєР»СЋС‡РµРЅРёСЏ РІРєР»Р°РґРѕРє
     private Button audioTabButton;
     private Button statisticsTabButton;
     private Button infoTabButton;
 
-    // Панели настроек
+    // РџР°РЅРµР»Рё РЅР°СЃС‚СЂРѕРµРє
     private VisualElement audioSettings;
     private VisualElement statisticsSettings;
     private VisualElement infoSettings;
 
-    // Аудио элементы
+    // РђСѓРґРёРѕ СЌР»РµРјРµРЅС‚С‹
     private Slider masterVolumeSlider;
     private Slider musicVolumeSlider;
     private Button masterVolumeDown;
@@ -47,12 +47,12 @@ public class MainMenuController : MonoBehaviour
     private Button musicVolumeDown;
     private Button musicVolumeUp;
 
-    // Статистика элементы
+    // РЎС‚Р°С‚РёСЃС‚РёРєР° СЌР»РµРјРµРЅС‚С‹
     private Label timeStatText;
     private Label deathsStatText;
     private Label flasksStatText;
 
-    // Текущая активная вкладка
+    // РўРµРєСѓС‰Р°СЏ Р°РєС‚РёРІРЅР°СЏ РІРєР»Р°РґРєР°
     private enum OptionsTab { Audio, Statistics, Info }
     private OptionsTab currentTab = OptionsTab.Audio;
 
@@ -65,7 +65,7 @@ public class MainMenuController : MonoBehaviour
 
         if (uiDocument == null)
         {
-            Debug.LogError("[MainMenuController] UIDocument не найден!");
+            Debug.LogError("[MainMenuController] UIDocument РЅРµ РЅР°Р№РґРµРЅ!");
             return;
         }
 
@@ -78,16 +78,16 @@ public class MainMenuController : MonoBehaviour
 
         SubscribeToEvents();
 
-        // Убеждаемся, что меню настроек скрыто
+        // РЈР±РµР¶РґР°РµРјСЃСЏ, С‡С‚Рѕ РјРµРЅСЋ РЅР°СЃС‚СЂРѕРµРє СЃРєСЂС‹С‚Рѕ
         if (optionsMenu != null)
         {
             optionsMenu.AddToClassList("hidden");
         }
 
-        // Устанавливаем начальные значения
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РЅР°С‡Р°Р»СЊРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ
         LoadAudioSettings();
 
-        Debug.Log("[MainMenuController] Главное меню инициализировано");
+        Debug.Log("[MainMenuController] Р“Р»Р°РІРЅРѕРµ РјРµРЅСЋ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅРѕ");
     }
 
     void OnDisable()
@@ -97,7 +97,7 @@ public class MainMenuController : MonoBehaviour
 
     void Update()
     {
-        // Обновляем статистику в реальном времени (если меню настроек открыто)
+        // РћР±РЅРѕРІР»СЏРµРј СЃС‚Р°С‚РёСЃС‚РёРєСѓ РІ СЂРµР°Р»СЊРЅРѕРј РІСЂРµРјРµРЅРё (РµСЃР»Рё РјРµРЅСЋ РЅР°СЃС‚СЂРѕРµРє РѕС‚РєСЂС‹С‚Рѕ)
         if (optionsMenu != null && !optionsMenu.ClassListContains("hidden"))
         {
             UpdateStatistics();
@@ -112,10 +112,10 @@ public class MainMenuController : MonoBehaviour
         optionsButton = root.Q<Button>("OptionsButton");
 
         if (startGameButton == null)
-            Debug.LogError("[MainMenuController] StartGameButton не найдена!");
+            Debug.LogError("[MainMenuController] StartGameButton РЅРµ РЅР°Р№РґРµРЅР°!");
 
         if (optionsButton == null)
-            Debug.LogError("[MainMenuController] OptionsButton не найдена!");
+            Debug.LogError("[MainMenuController] OptionsButton РЅРµ РЅР°Р№РґРµРЅР°!");
     }
 
     void InitializeOptionsElements()
@@ -123,27 +123,27 @@ public class MainMenuController : MonoBehaviour
         optionsMenu = root.Q<VisualElement>("OptionsMenu");
         closeOptionsButton = root.Q<Button>("CloseOptionsButton");
 
-        // Кнопки переключения вкладок
+        // РљРЅРѕРїРєРё РїРµСЂРµРєР»СЋС‡РµРЅРёСЏ РІРєР»Р°РґРѕРє
         audioTabButton = root.Q<Button>("AudioTabButton");
         statisticsTabButton = root.Q<Button>("StatisticsTabButton");
         infoTabButton = root.Q<Button>("InfoTabButton");
 
-        // Панели настроек
+        // РџР°РЅРµР»Рё РЅР°СЃС‚СЂРѕРµРє
         audioSettings = root.Q<VisualElement>("AudioSettings");
         statisticsSettings = root.Q<VisualElement>("StatisticsSettings");
         infoSettings = root.Q<VisualElement>("InfoSettings");
 
         if (optionsMenu == null)
-            Debug.LogError("[MainMenuController] OptionsMenu не найдено!");
+            Debug.LogError("[MainMenuController] OptionsMenu РЅРµ РЅР°Р№РґРµРЅРѕ!");
     }
 
     void InitializeAudioElements()
     {
-        // Слайдеры
+        // РЎР»Р°Р№РґРµСЂС‹
         masterVolumeSlider = root.Q<Slider>("MasterVolumeSlider");
         musicVolumeSlider = root.Q<Slider>("MusicVolumeSlider");
 
-        // Кнопки +/-
+        // РљРЅРѕРїРєРё +/-
         masterVolumeDown = root.Q<Button>("MasterVolumeDown");
         masterVolumeUp = root.Q<Button>("MasterVolumeUp");
         musicVolumeDown = root.Q<Button>("MusicVolumeDown");
@@ -163,18 +163,18 @@ public class MainMenuController : MonoBehaviour
 
     void SubscribeToEvents()
     {
-        // Главное меню
+        // Р“Р»Р°РІРЅРѕРµ РјРµРЅСЋ
         if (startGameButton != null)
             startGameButton.clicked += OnStartGameClicked;
 
         if (optionsButton != null)
             optionsButton.clicked += OnOptionsClicked;
 
-        // Закрытие настроек
+        // Р—Р°РєСЂС‹С‚РёРµ РЅР°СЃС‚СЂРѕРµРє
         if (closeOptionsButton != null)
             closeOptionsButton.clicked += OnCloseOptionsClicked;
 
-        // Переключение вкладок
+        // РџРµСЂРµРєР»СЋС‡РµРЅРёРµ РІРєР»Р°РґРѕРє
         if (audioTabButton != null)
             audioTabButton.clicked += () => SwitchTab(OptionsTab.Audio);
 
@@ -184,21 +184,21 @@ public class MainMenuController : MonoBehaviour
         if (infoTabButton != null)
             infoTabButton.clicked += () => SwitchTab(OptionsTab.Info);
 
-        // Слайдеры громкости
+        // РЎР»Р°Р№РґРµСЂС‹ РіСЂРѕРјРєРѕСЃС‚Рё
         if (masterVolumeSlider != null)
             masterVolumeSlider.RegisterValueChangedCallback(OnMasterVolumeChanged);
 
         if (musicVolumeSlider != null)
             musicVolumeSlider.RegisterValueChangedCallback(OnMusicVolumeChanged);
 
-        // Кнопки +/- для Master Volume
+        // РљРЅРѕРїРєРё +/- РґР»СЏ Master Volume
         if (masterVolumeDown != null)
             masterVolumeDown.clicked += () => AdjustVolume(masterVolumeSlider, -volumeStep);
 
         if (masterVolumeUp != null)
             masterVolumeUp.clicked += () => AdjustVolume(masterVolumeSlider, volumeStep);
 
-        // Кнопки +/- для Music Volume
+        // РљРЅРѕРїРєРё +/- РґР»СЏ Music Volume
         if (musicVolumeDown != null)
             musicVolumeDown.clicked += () => AdjustVolume(musicVolumeSlider, -volumeStep);
 
@@ -239,31 +239,31 @@ public class MainMenuController : MonoBehaviour
 
     void OnStartGameClicked()
     {
-        Debug.Log("[MainMenuController] Start Game нажата - загружаю сцену: " + gameSceneName);
+        Debug.Log("[MainMenuController] Start Game РЅР°Р¶Р°С‚Р° - Р·Р°РіСЂСѓР¶Р°СЋ СЃС†РµРЅСѓ: " + gameSceneName);
         SceneManager.LoadScene(gameSceneName);
     }
 
     void OnOptionsClicked()
     {
-        Debug.Log("[MainMenuController] Options нажата - открываю меню настроек");
+        Debug.Log("[MainMenuController] Options РЅР°Р¶Р°С‚Р° - РѕС‚РєСЂС‹РІР°СЋ РјРµРЅСЋ РЅР°СЃС‚СЂРѕРµРє");
 
         if (optionsMenu != null)
         {
             optionsMenu.RemoveFromClassList("hidden");
-            SwitchTab(OptionsTab.Audio); // Открываем вкладку Audio по умолчанию
+            SwitchTab(OptionsTab.Audio); // РћС‚РєСЂС‹РІР°РµРј РІРєР»Р°РґРєСѓ Audio РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
         }
     }
 
     void OnCloseOptionsClicked()
     {
-        Debug.Log("[MainMenuController] Закрываю меню настроек");
+        Debug.Log("[MainMenuController] Р—Р°РєСЂС‹РІР°СЋ РјРµРЅСЋ РЅР°СЃС‚СЂРѕРµРє");
 
         if (optionsMenu != null)
         {
             optionsMenu.AddToClassList("hidden");
         }
 
-        // Сохраняем настройки при закрытии
+        // РЎРѕС…СЂР°РЅСЏРµРј РЅР°СЃС‚СЂРѕР№РєРё РїСЂРё Р·Р°РєСЂС‹С‚РёРё
         SaveAudioSettings();
     }
 
@@ -275,7 +275,7 @@ public class MainMenuController : MonoBehaviour
     {
         currentTab = tab;
 
-        // Скрываем все панели
+        // РЎРєСЂС‹РІР°РµРј РІСЃРµ РїР°РЅРµР»Рё
         if (audioSettings != null)
             audioSettings.AddToClassList("hidden");
 
@@ -285,7 +285,7 @@ public class MainMenuController : MonoBehaviour
         if (infoSettings != null)
             infoSettings.AddToClassList("hidden");
 
-        // Убираем active класс со всех кнопок
+        // РЈР±РёСЂР°РµРј active РєР»Р°СЃСЃ СЃРѕ РІСЃРµС… РєРЅРѕРїРѕРє
         if (audioTabButton != null)
             audioTabButton.RemoveFromClassList("active");
 
@@ -295,7 +295,7 @@ public class MainMenuController : MonoBehaviour
         if (infoTabButton != null)
             infoTabButton.RemoveFromClassList("active");
 
-        // Показываем нужную панель и активируем кнопку
+        // РџРѕРєР°Р·С‹РІР°РµРј РЅСѓР¶РЅСѓСЋ РїР°РЅРµР»СЊ Рё Р°РєС‚РёРІРёСЂСѓРµРј РєРЅРѕРїРєСѓ
         switch (tab)
         {
             case OptionsTab.Audio:
@@ -303,7 +303,7 @@ public class MainMenuController : MonoBehaviour
                     audioSettings.RemoveFromClassList("hidden");
                 if (audioTabButton != null)
                     audioTabButton.AddToClassList("active");
-                Debug.Log("[MainMenuController] Переключено на вкладку Audio");
+                Debug.Log("[MainMenuController] РџРµСЂРµРєР»СЋС‡РµРЅРѕ РЅР° РІРєР»Р°РґРєСѓ Audio");
                 break;
 
             case OptionsTab.Statistics:
@@ -311,8 +311,8 @@ public class MainMenuController : MonoBehaviour
                     statisticsSettings.RemoveFromClassList("hidden");
                 if (statisticsTabButton != null)
                     statisticsTabButton.AddToClassList("active");
-                UpdateStatistics(); // Обновляем статистику при открытии
-                Debug.Log("[MainMenuController] Переключено на вкладку Statistics");
+                UpdateStatistics(); // РћР±РЅРѕРІР»СЏРµРј СЃС‚Р°С‚РёСЃС‚РёРєСѓ РїСЂРё РѕС‚РєСЂС‹С‚РёРё
+                Debug.Log("[MainMenuController] РџРµСЂРµРєР»СЋС‡РµРЅРѕ РЅР° РІРєР»Р°РґРєСѓ Statistics");
                 break;
 
             case OptionsTab.Info:
@@ -320,7 +320,7 @@ public class MainMenuController : MonoBehaviour
                     infoSettings.RemoveFromClassList("hidden");
                 if (infoTabButton != null)
                     infoTabButton.AddToClassList("active");
-                Debug.Log("[MainMenuController] Переключено на вкладку Info");
+                Debug.Log("[MainMenuController] РџРµСЂРµРєР»СЋС‡РµРЅРѕ РЅР° РІРєР»Р°РґРєСѓ Info");
                 break;
         }
     }
@@ -331,20 +331,20 @@ public class MainMenuController : MonoBehaviour
 
     void OnMasterVolumeChanged(ChangeEvent<float> evt)
     {
-        float volume = evt.newValue / 100f; // Конвертируем 0-100 в 0-1
+        float volume = evt.newValue / 100f; // РљРѕРЅРІРµСЂС‚РёСЂСѓРµРј 0-100 РІ 0-1
         AudioListener.volume = volume;
-        Debug.Log($"[MainMenuController] Master Volume изменен: {evt.newValue}%");
+        Debug.Log($"[MainMenuController] Master Volume РёР·РјРµРЅРµРЅ: {evt.newValue}%");
     }
 
     void OnMusicVolumeChanged(ChangeEvent<float> evt)
     {
         float volume = evt.newValue / 100f;
 
-        // TODO: Здесь можно управлять громкостью музыки через AudioSource
-        // Например, если у вас есть GameManager или AudioManager:
+        // TODO: Р—РґРµСЃСЊ РјРѕР¶РЅРѕ СѓРїСЂР°РІР»СЏС‚СЊ РіСЂРѕРјРєРѕСЃС‚СЊСЋ РјСѓР·С‹РєРё С‡РµСЂРµР· AudioSource
+        // РќР°РїСЂРёРјРµСЂ, РµСЃР»Рё Сѓ РІР°СЃ РµСЃС‚СЊ GameManager РёР»Рё AudioManager:
         // AudioManager.Instance.SetMusicVolume(volume);
 
-        Debug.Log($"[MainMenuController] Music Volume изменен: {evt.newValue}%");
+        Debug.Log($"[MainMenuController] Music Volume РёР·РјРµРЅРµРЅ: {evt.newValue}%");
     }
 
     void AdjustVolume(Slider slider, float delta)
@@ -357,7 +357,7 @@ public class MainMenuController : MonoBehaviour
 
     void LoadAudioSettings()
     {
-        // Загружаем сохраненные настройки из PlayerPrefs
+        // Р—Р°РіСЂСѓР¶Р°РµРј СЃРѕС…СЂР°РЅРµРЅРЅС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё РёР· PlayerPrefs
         float masterVolume = PlayerPrefs.GetFloat("MasterVolume", 100f);
         float musicVolume = PlayerPrefs.GetFloat("MusicVolume", 100f);
 
@@ -367,10 +367,10 @@ public class MainMenuController : MonoBehaviour
         if (musicVolumeSlider != null)
             musicVolumeSlider.value = musicVolume;
 
-        // Применяем громкость
+        // РџСЂРёРјРµРЅСЏРµРј РіСЂРѕРјРєРѕСЃС‚СЊ
         AudioListener.volume = masterVolume / 100f;
 
-        Debug.Log($"[MainMenuController] Настройки аудио загружены: Master={masterVolume}%, Music={musicVolume}%");
+        Debug.Log($"[MainMenuController] РќР°СЃС‚СЂРѕР№РєРё Р°СѓРґРёРѕ Р·Р°РіСЂСѓР¶РµРЅС‹: Master={masterVolume}%, Music={musicVolume}%");
     }
 
     void SaveAudioSettings()
@@ -383,7 +383,7 @@ public class MainMenuController : MonoBehaviour
 
         PlayerPrefs.Save();
 
-        Debug.Log("[MainMenuController] Настройки аудио сохранены");
+        Debug.Log("[MainMenuController] РќР°СЃС‚СЂРѕР№РєРё Р°СѓРґРёРѕ СЃРѕС…СЂР°РЅРµРЅС‹");
     }
 
     #endregion
@@ -392,7 +392,7 @@ public class MainMenuController : MonoBehaviour
 
     void UpdateStatistics()
     {
-        // Время игры
+        // Р’СЂРµРјСЏ РёРіСЂС‹
         if (timeStatText != null)
         {
             float playTime = PlayerPrefs.GetFloat("PlayTime", 0f);
@@ -400,14 +400,14 @@ public class MainMenuController : MonoBehaviour
             timeStatText.text = $"Time: {timeSpan.Hours:D2}:{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
         }
 
-        // Количество смертей
+        // РљРѕР»РёС‡РµСЃС‚РІРѕ СЃРјРµСЂС‚РµР№
         if (deathsStatText != null)
         {
             int deaths = PlayerPrefs.GetInt("Deaths", 0);
             deathsStatText.text = $"Deaths: {deaths}";
         }
 
-        // Количество колб (заглушка)
+        // РљРѕР»РёС‡РµСЃС‚РІРѕ РєРѕР»Р± (Р·Р°РіР»СѓС€РєР°)
         if (flasksStatText != null)
         {
             int flasksCollected = PlayerPrefs.GetInt("FlasksCollected", 0);

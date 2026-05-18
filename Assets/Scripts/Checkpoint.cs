@@ -1,22 +1,22 @@
-using UnityEngine;
+п»їusing UnityEngine;
 using UnityEngine.Tilemaps;
-
+// С‚РµСЃС‚ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
 public class Checkpoint : MonoBehaviour
 {
-    [Header("Визуал")]
-    [Tooltip("Спрайт активного чекпоинта")]
+    [Header("Р’РёР·СѓР°Р»")]
+    [Tooltip("РЎРїСЂР°Р№С‚ Р°РєС‚РёРІРЅРѕРіРѕ С‡РµРєРїРѕРёРЅС‚Р°")]
     public Sprite activeSprite;
 
-    [Tooltip("Спрайт неактивного чекпоинта")]
+    [Tooltip("РЎРїСЂР°Р№С‚ РЅРµР°РєС‚РёРІРЅРѕРіРѕ С‡РµРєРїРѕРёРЅС‚Р°")]
     public Sprite inactiveSprite;
 
-    [Tooltip("Цвет активного чекпоинта")]
+    [Tooltip("Р¦РІРµС‚ Р°РєС‚РёРІРЅРѕРіРѕ С‡РµРєРїРѕРёРЅС‚Р°")]
     public Color activeColor = Color.green;
 
-    [Tooltip("Цвет неактивного чекпоинта")]
+    [Tooltip("Р¦РІРµС‚ РЅРµР°РєС‚РёРІРЅРѕРіРѕ С‡РµРєРїРѕРёРЅС‚Р°")]
     public Color inactiveColor = Color.gray;
 
-    [Header("Слои")]
+    [Header("РЎР»РѕРё")]
     public LayerMask playerLayer;
 
     private SpriteRenderer spriteRenderer;
@@ -34,7 +34,7 @@ public class Checkpoint : MonoBehaviour
             spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         }
 
-        // Проверяем, является ли объект частью Tilemap
+        // РџСЂРѕРІРµСЂСЏРµРј, СЏРІР»СЏРµС‚СЃСЏ Р»Рё РѕР±СЉРµРєС‚ С‡Р°СЃС‚СЊСЋ Tilemap
         parentTilemap = GetComponentInParent<Tilemap>();
         if (parentTilemap != null)
         {
@@ -43,7 +43,7 @@ public class Checkpoint : MonoBehaviour
         }
 
         SetVisualState(false);
-        Debug.Log($"[Checkpoint] Инициализирован в позиции {transform.position}");
+        Debug.Log($"[Checkpoint] РРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ РІ РїРѕР·РёС†РёРё {transform.position}");
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -61,7 +61,7 @@ public class Checkpoint : MonoBehaviour
         if (isActivated) return;
 
         isActivated = true;
-        Debug.Log($"[Checkpoint] Активирован в позиции {transform.position}");
+        Debug.Log($"[Checkpoint] РђРєС‚РёРІРёСЂРѕРІР°РЅ РІ РїРѕР·РёС†РёРё {transform.position}");
 
         if (currentCheckpoint != null && currentCheckpoint != this)
         {
@@ -114,7 +114,7 @@ public class Checkpoint : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("[Checkpoint] PlayerRespawn не найден на сцене!");
+            Debug.LogWarning("[Checkpoint] PlayerRespawn РЅРµ РЅР°Р№РґРµРЅ РЅР° СЃС†РµРЅРµ!");
         }
     }
 

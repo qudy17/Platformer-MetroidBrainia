@@ -1,27 +1,27 @@
-using UnityEngine;
+п»їusing UnityEngine;
 using System.Collections;
-
+// С‚РµСЃС‚ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
 public class Enemy : MonoBehaviour
 {
-    [Header("Физика")]
+    [Header("Р¤РёР·РёРєР°")]
     public float friction = 8f;
     public float maxSpeed = 20f;
     public float enemyMass = 80f;
     public float waveForceMultiplier = 40f;
 
-    [Header("Слои")]
+    [Header("РЎР»РѕРё")]
     public LayerMask groundLayer;
     public LayerMask playerLayer;
     public LayerMask movableBlockLayer;
     public LayerMask spikesLayer;
 
-    [Header("Проверка земли")]
+    [Header("РџСЂРѕРІРµСЂРєР° Р·РµРјР»Рё")]
     public float groundCheckDistance = 0.1f;
 
-    [Header("Смерть")]
-    [Tooltip("Эффект смерти врага (опционально)")]
+    [Header("РЎРјРµСЂС‚СЊ")]
+    [Tooltip("Р­С„С„РµРєС‚ СЃРјРµСЂС‚Рё РІСЂР°РіР° (РѕРїС†РёРѕРЅР°Р»СЊРЅРѕ)")]
     public GameObject deathEffectPrefab;
 
     private Rigidbody2D rb;
@@ -46,7 +46,7 @@ public class Enemy : MonoBehaviour
         rb.sleepMode = RigidbodySleepMode2D.NeverSleep;
         rb.bodyType = RigidbodyType2D.Dynamic;
 
-        // ВАЖНО: Замораживаем позицию по X (не даём игроку толкать)
+        // Р’РђР–РќРћ: Р—Р°РјРѕСЂР°Р¶РёРІР°РµРј РїРѕР·РёС†РёСЋ РїРѕ X (РЅРµ РґР°С‘Рј РёРіСЂРѕРєСѓ С‚РѕР»РєР°С‚СЊ)
         rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
     }
 
@@ -71,15 +71,15 @@ public class Enemy : MonoBehaviour
 
         if (!IsGrounded)
         {
-            Debug.Log($"[Enemy] {gameObject.name}: в воздухе! Включаю гравитацию.");
+            Debug.Log($"[Enemy] {gameObject.name}: РІ РІРѕР·РґСѓС…Рµ! Р’РєР»СЋС‡Р°СЋ РіСЂР°РІРёС‚Р°С†РёСЋ.");
             rb.gravityScale = 3f;
             hasBeenHit = true;
-            // РАЗМОРАЖИВАЕМ позицию X для физики
+            // Р РђР—РњРћР РђР–РР’РђР•Рњ РїРѕР·РёС†РёСЋ X РґР»СЏ С„РёР·РёРєРё
             UnfreezePosition();
         }
         else
         {
-            Debug.Log($"[Enemy] {gameObject.name}: на земле. Остаётся с нулевой гравитацией.");
+            Debug.Log($"[Enemy] {gameObject.name}: РЅР° Р·РµРјР»Рµ. РћСЃС‚Р°С‘С‚СЃСЏ СЃ РЅСѓР»РµРІРѕР№ РіСЂР°РІРёС‚Р°С†РёРµР№.");
         }
     }
 
@@ -94,7 +94,7 @@ public class Enemy : MonoBehaviour
 
     void UnfreezePosition()
     {
-        // Размораживаем X, чтобы враг мог двигаться под действием физики
+        // Р Р°Р·РјРѕСЂР°Р¶РёРІР°РµРј X, С‡С‚РѕР±С‹ РІСЂР°Рі РјРѕРі РґРІРёРіР°С‚СЊСЃСЏ РїРѕРґ РґРµР№СЃС‚РІРёРµРј С„РёР·РёРєРё
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
@@ -105,7 +105,7 @@ public class Enemy : MonoBehaviour
             hasBeenHit = true;
             rb.gravityScale = 3f;
             UnfreezePosition();
-            Debug.Log($"[Enemy] {gameObject.name}: АКТИВИРОВАН!");
+            Debug.Log($"[Enemy] {gameObject.name}: РђРљРўРР’РР РћР’РђРќ!");
         }
     }
 
@@ -115,7 +115,7 @@ public class Enemy : MonoBehaviour
 
         int otherLayer = 1 << collision.gameObject.layer;
 
-        // Игрок касается врага — игрок умирает
+        // РРіСЂРѕРє РєР°СЃР°РµС‚СЃСЏ РІСЂР°РіР° вЂ” РёРіСЂРѕРє СѓРјРёСЂР°РµС‚
         if ((otherLayer & playerLayer) != 0)
         {
             KillPlayer(collision.gameObject);
@@ -123,14 +123,14 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        // Подвижный блок падает на врага — враг умирает
+        // РџРѕРґРІРёР¶РЅС‹Р№ Р±Р»РѕРє РїР°РґР°РµС‚ РЅР° РІСЂР°РіР° вЂ” РІСЂР°Рі СѓРјРёСЂР°РµС‚
         if ((otherLayer & movableBlockLayer) != 0)
         {
             HandleMovableBlockHit(collision);
             return;
         }
 
-        // Враг касается шипов — враг умирает
+        // Р’СЂР°Рі РєР°СЃР°РµС‚СЃСЏ С€РёРїРѕРІ вЂ” РІСЂР°Рі СѓРјРёСЂР°РµС‚
         if ((otherLayer & spikesLayer) != 0)
         {
             Die();
@@ -145,20 +145,20 @@ public class Enemy : MonoBehaviour
 
         if (block != null)
         {
-            // Проверяем скорость блока по Y — если падает, убиваем врага
+            // РџСЂРѕРІРµСЂСЏРµРј СЃРєРѕСЂРѕСЃС‚СЊ Р±Р»РѕРєР° РїРѕ Y вЂ” РµСЃР»Рё РїР°РґР°РµС‚, СѓР±РёРІР°РµРј РІСЂР°РіР°
             Rigidbody2D blockRb = collision.gameObject.GetComponent<Rigidbody2D>();
             if (blockRb == null)
                 blockRb = collision.gameObject.GetComponentInParent<Rigidbody2D>();
 
             if (blockRb != null && blockRb.linearVelocity.y < -0.5f)
             {
-                // Блок падает сверху — убиваем врага
-                Debug.Log($"[Enemy] {gameObject.name}: Подвижный блок упал на врага!");
+                // Р‘Р»РѕРє РїР°РґР°РµС‚ СЃРІРµСЂС…Сѓ вЂ” СѓР±РёРІР°РµРј РІСЂР°РіР°
+                Debug.Log($"[Enemy] {gameObject.name}: РџРѕРґРІРёР¶РЅС‹Р№ Р±Р»РѕРє СѓРїР°Р» РЅР° РІСЂР°РіР°!");
                 Die();
             }
             else
             {
-                // Блок просто касается — активируем врага
+                // Р‘Р»РѕРє РїСЂРѕСЃС‚Рѕ РєР°СЃР°РµС‚СЃСЏ вЂ” Р°РєС‚РёРІРёСЂСѓРµРј РІСЂР°РіР°
                 if (!hasBeenHit)
                 {
                     ActivateEnemy();
@@ -173,7 +173,7 @@ public class Enemy : MonoBehaviour
 
         int otherLayer = 1 << collision.gameObject.layer;
 
-        // Игрок продолжает касаться врага
+        // РРіСЂРѕРє РїСЂРѕРґРѕР»Р¶Р°РµС‚ РєР°СЃР°С‚СЊСЃСЏ РІСЂР°РіР°
         if ((otherLayer & playerLayer) != 0)
         {
 
@@ -182,12 +182,12 @@ public class Enemy : MonoBehaviour
 
     void KillPlayer(GameObject player)
     {
-        // Защита от повторного вызова
+        // Р—Р°С‰РёС‚Р° РѕС‚ РїРѕРІС‚РѕСЂРЅРѕРіРѕ РІС‹Р·РѕРІР°
         if (isDead || isKillingPlayer) return;
 
         isKillingPlayer = true;
 
-        Debug.Log($"[Enemy] Игрок коснулся врага!");
+        Debug.Log($"[Enemy] РРіСЂРѕРє РєРѕСЃРЅСѓР»СЃСЏ РІСЂР°РіР°!");
 
         PlayerRespawn playerRespawn = player.GetComponent<PlayerRespawn>();
         if (playerRespawn != null)
@@ -224,7 +224,7 @@ public class Enemy : MonoBehaviour
                 if (hit.collider.transform.IsChildOf(transform)) continue;
                 if (hit.collider.transform == transform) continue;
 
-                // Игрок не является опорой
+                // РРіСЂРѕРє РЅРµ СЏРІР»СЏРµС‚СЃСЏ РѕРїРѕСЂРѕР№
                 if (((1 << hit.collider.gameObject.layer) & playerLayer) != 0) continue;
 
                 IsGrounded = true;
@@ -271,7 +271,7 @@ public class Enemy : MonoBehaviour
     {
         if (isDead) return false;
 
-        Debug.Log($"[Enemy] {gameObject.name}: удар волной! Сила: {waveForce}");
+        Debug.Log($"[Enemy] {gameObject.name}: СѓРґР°СЂ РІРѕР»РЅРѕР№! РЎРёР»Р°: {waveForce}");
 
         ActivateEnemy();
 
@@ -286,21 +286,21 @@ public class Enemy : MonoBehaviour
         if (isDead) return;
 
         isDead = true;
-        Debug.Log($"[Enemy] {gameObject.name}: Враг умирает!");
+        Debug.Log($"[Enemy] {gameObject.name}: Р’СЂР°Рі СѓРјРёСЂР°РµС‚!");
 
-        // Отключаем коллайдер и спрайт
+        // РћС‚РєР»СЋС‡Р°РµРј РєРѕР»Р»Р°Р№РґРµСЂ Рё СЃРїСЂР°Р№С‚
         if (mainCollider != null) mainCollider.enabled = false;
         if (spriteRenderer != null) spriteRenderer.enabled = false;
         rb.bodyType = RigidbodyType2D.Kinematic;
         rb.linearVelocity = Vector2.zero;
 
-        // Эффект смерти
+        // Р­С„С„РµРєС‚ СЃРјРµСЂС‚Рё
         if (deathEffectPrefab != null)
         {
             Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
         }
 
-        // Удаляем объект
+        // РЈРґР°Р»СЏРµРј РѕР±СЉРµРєС‚
         Destroy(gameObject, 0.5f);
     }
 

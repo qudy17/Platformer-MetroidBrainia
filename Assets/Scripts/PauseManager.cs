@@ -1,12 +1,12 @@
-using UnityEngine;
+п»їusing UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
-
+// С‚РµСЃС‚ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
 public class PauseManager : MonoBehaviour
 {
     [Header("Pause Menu")]
     public GameObject pauseOverlay;
-    public GameObject gameUI; // Ваш игровой UI (опционально)
+    public GameObject gameUI; // Р’Р°С€ РёРіСЂРѕРІРѕР№ UI (РѕРїС†РёРѕРЅР°Р»СЊРЅРѕ)
 
     [Header("References")]
     public OptionsManager optionsManager;
@@ -15,7 +15,7 @@ public class PauseManager : MonoBehaviour
 
     void Start()
     {
-        // Убеждаемся, что игра не на паузе при старте
+        // РЈР±РµР¶РґР°РµРјСЃСЏ, С‡С‚Рѕ РёРіСЂР° РЅРµ РЅР° РїР°СѓР·Рµ РїСЂРё СЃС‚Р°СЂС‚Рµ
         Resume();
     }
 
@@ -23,13 +23,13 @@ public class PauseManager : MonoBehaviour
     {
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            // Если оверлей настроек открыт, пусть OptionsManager обработает ESC
+            // Р•СЃР»Рё РѕРІРµСЂР»РµР№ РЅР°СЃС‚СЂРѕРµРє РѕС‚РєСЂС‹С‚, РїСѓСЃС‚СЊ OptionsManager РѕР±СЂР°Р±РѕС‚Р°РµС‚ ESC
             if (pauseOverlay.activeSelf && !IsInMainPauseMenu())
             {
-                return; // OptionsManager сам обработает
+                return; // OptionsManager СЃР°Рј РѕР±СЂР°Р±РѕС‚Р°РµС‚
             }
 
-            // Переключаем паузу
+            // РџРµСЂРµРєР»СЋС‡Р°РµРј РїР°СѓР·Сѓ
             if (isPaused)
             {
                 Resume();
@@ -43,7 +43,7 @@ public class PauseManager : MonoBehaviour
 
     bool IsInMainPauseMenu()
     {
-        // Проверяем, находимся ли мы в главном меню паузы
+        // РџСЂРѕРІРµСЂСЏРµРј, РЅР°С…РѕРґРёРјСЃСЏ Р»Рё РјС‹ РІ РіР»Р°РІРЅРѕРј РјРµРЅСЋ РїР°СѓР·С‹
         return optionsManager != null && optionsManager.IsInSettingsPanel();
     }
 
@@ -55,9 +55,9 @@ public class PauseManager : MonoBehaviour
         if (gameUI != null)
             gameUI.SetActive(false);
 
-        Time.timeScale = 0f; // Останавливаем игру
+        Time.timeScale = 0f; // РћСЃС‚Р°РЅР°РІР»РёРІР°РµРј РёРіСЂСѓ
 
-        // Показываем панель настроек по умолчанию
+        // РџРѕРєР°Р·С‹РІР°РµРј РїР°РЅРµР»СЊ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
         if (optionsManager != null)
             optionsManager.ShowSettings();
     }
@@ -70,12 +70,12 @@ public class PauseManager : MonoBehaviour
         if (gameUI != null)
             gameUI.SetActive(true);
 
-        Time.timeScale = 1f; // Возобновляем игру
+        Time.timeScale = 1f; // Р’РѕР·РѕР±РЅРѕРІР»СЏРµРј РёРіСЂСѓ
     }
 
     public void ReturnToMainMenu()
     {
-        Time.timeScale = 1f; // Важно! Сбрасываем timeScale перед сменой сцены
+        Time.timeScale = 1f; // Р’Р°Р¶РЅРѕ! РЎР±СЂР°СЃС‹РІР°РµРј timeScale РїРµСЂРµРґ СЃРјРµРЅРѕР№ СЃС†РµРЅС‹
         SceneManager.LoadScene("MainMenu");
     }
 

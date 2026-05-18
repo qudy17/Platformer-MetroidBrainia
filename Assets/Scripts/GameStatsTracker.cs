@@ -1,8 +1,8 @@
-using UnityEngine;
-
+п»їusing UnityEngine;
+// С‚РµСЃС‚ СЂСѓСЃСЃРєРѕРіРѕ СЏР·С‹РєР°
 /// <summary>
-/// Отслеживает игровую статистику (время, смерти, колбы)
-/// Добавьте на любой GameObject в игровой сцене
+/// РћС‚СЃР»РµР¶РёРІР°РµС‚ РёРіСЂРѕРІСѓСЋ СЃС‚Р°С‚РёСЃС‚РёРєСѓ (РІСЂРµРјСЏ, СЃРјРµСЂС‚Рё, РєРѕР»Р±С‹)
+/// Р”РѕР±Р°РІСЊС‚Рµ РЅР° Р»СЋР±РѕР№ GameObject РІ РёРіСЂРѕРІРѕР№ СЃС†РµРЅРµ
 /// </summary>
 public class GameStatsTracker : MonoBehaviour
 {
@@ -35,7 +35,7 @@ public class GameStatsTracker : MonoBehaviour
     {
         if (isTracking)
         {
-            // Обновляем время игры каждый кадр
+            // РћР±РЅРѕРІР»СЏРµРј РІСЂРµРјСЏ РёРіСЂС‹ РєР°Р¶РґС‹Р№ РєР°РґСЂ
             float currentPlayTime = PlayerPrefs.GetFloat("PlayTime", 0f);
             currentPlayTime += Time.deltaTime;
             PlayerPrefs.SetFloat("PlayTime", currentPlayTime);
@@ -44,32 +44,32 @@ public class GameStatsTracker : MonoBehaviour
 
     void OnApplicationQuit()
     {
-        // Сохраняем при выходе
+        // РЎРѕС…СЂР°РЅСЏРµРј РїСЂРё РІС‹С…РѕРґРµ
         PlayerPrefs.Save();
     }
 
     /// <summary>
-    /// Начать отслеживание статистики
+    /// РќР°С‡Р°С‚СЊ РѕС‚СЃР»РµР¶РёРІР°РЅРёРµ СЃС‚Р°С‚РёСЃС‚РёРєРё
     /// </summary>
     public void StartTracking()
     {
         isTracking = true;
         sessionStartTime = Time.time;
-        Debug.Log("[GameStatsTracker] Отслеживание статистики начато");
+        Debug.Log("[GameStatsTracker] РћС‚СЃР»РµР¶РёРІР°РЅРёРµ СЃС‚Р°С‚РёСЃС‚РёРєРё РЅР°С‡Р°С‚Рѕ");
     }
 
     /// <summary>
-    /// Остановить отслеживание
+    /// РћСЃС‚Р°РЅРѕРІРёС‚СЊ РѕС‚СЃР»РµР¶РёРІР°РЅРёРµ
     /// </summary>
     public void StopTracking()
     {
         isTracking = false;
         PlayerPrefs.Save();
-        Debug.Log("[GameStatsTracker] Отслеживание статистики остановлено");
+        Debug.Log("[GameStatsTracker] РћС‚СЃР»РµР¶РёРІР°РЅРёРµ СЃС‚Р°С‚РёСЃС‚РёРєРё РѕСЃС‚Р°РЅРѕРІР»РµРЅРѕ");
     }
 
     /// <summary>
-    /// Зарегистрировать смерть игрока
+    /// Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ СЃРјРµСЂС‚СЊ РёРіСЂРѕРєР°
     /// </summary>
     public static void RegisterDeath()
     {
@@ -77,11 +77,11 @@ public class GameStatsTracker : MonoBehaviour
         deaths++;
         PlayerPrefs.SetInt("Deaths", deaths);
         PlayerPrefs.Save();
-        Debug.Log($"[GameStatsTracker] Смерть зарегистрирована. Всего: {deaths}");
+        Debug.Log($"[GameStatsTracker] РЎРјРµСЂС‚СЊ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅР°. Р’СЃРµРіРѕ: {deaths}");
     }
 
     /// <summary>
-    /// Зарегистрировать сбор колбы
+    /// Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ СЃР±РѕСЂ РєРѕР»Р±С‹
     /// </summary>
     public static void RegisterFlaskCollected()
     {
@@ -89,11 +89,11 @@ public class GameStatsTracker : MonoBehaviour
         flasks++;
         PlayerPrefs.SetInt("FlasksCollected", flasks);
         PlayerPrefs.Save();
-        Debug.Log($"[GameStatsTracker] Колба собрана. Всего: {flasks}");
+        Debug.Log($"[GameStatsTracker] РљРѕР»Р±Р° СЃРѕР±СЂР°РЅР°. Р’СЃРµРіРѕ: {flasks}");
     }
 
     /// <summary>
-    /// Установить общее количество колб на уровне
+    /// РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РѕР±С‰РµРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РєРѕР»Р± РЅР° СѓСЂРѕРІРЅРµ
     /// </summary>
     public static void SetTotalFlasks(int total)
     {
@@ -102,7 +102,7 @@ public class GameStatsTracker : MonoBehaviour
     }
 
     /// <summary>
-    /// Сбросить всю статистику
+    /// РЎР±СЂРѕСЃРёС‚СЊ РІСЃСЋ СЃС‚Р°С‚РёСЃС‚РёРєСѓ
     /// </summary>
     public static void ResetStats()
     {
@@ -110,6 +110,6 @@ public class GameStatsTracker : MonoBehaviour
         PlayerPrefs.SetInt("Deaths", 0);
         PlayerPrefs.SetInt("FlasksCollected", 0);
         PlayerPrefs.Save();
-        Debug.Log("[GameStatsTracker] Статистика сброшена");
+        Debug.Log("[GameStatsTracker] РЎС‚Р°С‚РёСЃС‚РёРєР° СЃР±СЂРѕС€РµРЅР°");
     }
 }
