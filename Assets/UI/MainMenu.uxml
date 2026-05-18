@@ -54,14 +54,6 @@
                         </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:VisualElement name="InfoSettings" class="settings-panel info-settings hidden">
-                        <ui:VisualElement name="RolesColumn" class="info-column">
-                            <ui:Label text="Unity - разработчик" class="info-item"/>
-                            <ui:Label text="Tech - дизайнер" class="info-item"/>
-                            <ui:Label text="Unity - разработчик" class="info-item"/>
-                            <ui:Label text="Props - художник" class="info-item"/>
-                            <ui:Label text="BG - художник" class="info-item"/>
-                            <ui:Label text="Гейм - дизайнер" class="info-item"/>
-                        </ui:VisualElement>
                         <ui:VisualElement name="NamesColumn" class="info-column">
                             <ui:Label text="Яруллина Алина" class="info-item"/>
                             <ui:Label text="Плотников Максим" class="info-item"/>
@@ -69,6 +61,14 @@
                             <ui:Label text="Гиззатуллина Регина " class="info-item"/>
                             <ui:Label text="Демидова Ирина" class="info-item"/>
                             <ui:Label text="Наврузов Алексей" class="info-item"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="RolesColumn" class="info-column">
+                            <ui:Label text="Unity - разработчик" class="info-item"/>
+                            <ui:Label text="Tech - дизайнер" class="info-item"/>
+                            <ui:Label text="Unity - разработчик" class="info-item"/>
+                            <ui:Label text="Props - художник" class="info-item"/>
+                            <ui:Label text="BG - художник" class="info-item"/>
+                            <ui:Label text="Гейм - дизайнер" class="info-item"/>
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>

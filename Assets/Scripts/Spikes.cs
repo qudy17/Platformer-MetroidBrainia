@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// тест русского языка
 public class Spikes : MonoBehaviour
 {
     [Header("Настройки урона")]
