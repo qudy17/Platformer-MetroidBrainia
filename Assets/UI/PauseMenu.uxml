@@ -1,0 +1,71 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/PauseMenu.uss?fileID=7433441132597879392&amp;guid=87eac8bbb58dba848b6b06c3b149c6a2&amp;type=3#PauseMenu"/>
+    <ui:VisualElement name="PauseMenuRoot" class="pause-menu-root hidden" style="flex-grow: 0;">
+        <ui:VisualElement name="PauseBackground" class="pause-background" style="flex-grow: 1;"/>
+        <ui:VisualElement name="PauseContent" class="pause-content" style="flex-grow: 0;">
+            <ui:VisualElement name="TitleContainer" class="title-container" style="flex-grow: 0;">
+                <ui:Label text="Paused" name="title-text" class="title-text"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="MainContainer" class="main-container" style="flex-grow: 1;">
+                <ui:VisualElement name="OptionsButtonsContainer" class="options-buttons-container" style="flex-grow: 1;">
+                    <ui:Button text="Button" name="ResumeTabButton" class="tab-button resume-tab-button active"/>
+                    <ui:Button text="Button" name="AudioTabButton" class="tab-button audio-tab-button"/>
+                    <ui:Button text="Button" name="StatisticsTabButton" class="tab-button statistics-tab-button"/>
+                    <ui:Button text="Button" name="InfoTabButton" class="tab-button info-tab-button"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="SettingsContainer" class="settings-container" style="flex-grow: 1;">
+                    <ui:VisualElement name="ResumePanel" class="settings-panel resume-panel" style="flex-grow: 1;">
+                        <ui:Button text="Resume Game" name="ResumeButton" class="big-action-button"/>
+                        <ui:Button text="Exit to Main Menu" name="ExitToMenuButton" class="big-action-button"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="AudioSettings" class="settings-panel audio-settings" style="flex-grow: 0;">
+                        <ui:VisualElement name="MasterVolumeRow" class="audio-row">
+                            <ui:Label text="Master Volume" name="MasterVolumeLabel" class="audio-label"/>
+                            <ui:Button text="-" name="MasterVolumeDown" class="volume-button"/>
+                            <ui:Slider label="" value="100" high-value="100" name="MasterVolumeSlider" class="volume-slider"/>
+                            <ui:Button text="+" name="MasterVolumeUp" class="volume-button"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="MusicVolumeRow" class="audio-row">
+                            <ui:Label text="Music Volume" name="MusicVolumeLabel" class="audio-label"/>
+                            <ui:Button text="-" name="MusicVolumeDown" class="volume-button"/>
+                            <ui:Slider label="" value="100" high-value="100" name="MusicVolumeSlider" class="volume-slider"/>
+                            <ui:Button text="+" name="MusicVolumeUp" class="volume-button"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="StatisticsSettings" class="settings-panel statistics-settings hidden">
+                        <ui:VisualElement name="TimeStatRow" class="stats-row">
+                            <ui:VisualElement name="TimerIcon" class="timer-icon stat-icon"/>
+                            <ui:Label text="Time: 00:00" name="TimeStatText" class="stat-text"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="DeathsStatRow" class="stats-row">
+                            <ui:VisualElement name="SkullIcon" class="stat-icon skull-icon"/>
+                            <ui:Label text="Deaths: 0" name="DeathsStatTex" class="stat-text"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="FlasksStatRow" class="stats-row">
+                            <ui:VisualElement name="FlaskIcon" class="stat-icon flask-icon"/>
+                            <ui:Label text="Flasks: 0/0" name="FlasksStatText" class="stat-text"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="InfoSettings" class="settings-panel info-settings hidden">
+                        <ui:VisualElement name="NamesColumn" class="info-column">
+                            <ui:Label text="Яруллина Алина" class="info-item"/>
+                            <ui:Label text="Плотников Максим" class="info-item"/>
+                            <ui:Label text="Нацибулин Денис" class="info-item"/>
+                            <ui:Label text="Гиззатуллина Регина " class="info-item"/>
+                            <ui:Label text="Демидова Ирина" class="info-item"/>
+                            <ui:Label text="Наврузов Алексей" class="info-item"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="RolesColumn" class="info-column">
+                            <ui:Label text="Unity - разработчик" class="info-item"/>
+                            <ui:Label text="Tech - дизайнер" class="info-item"/>
+                            <ui:Label text="Unity - разработчик" class="info-item"/>
+                            <ui:Label text="Props - художник" class="info-item"/>
+                            <ui:Label text="BG - художник" class="info-item"/>
+                            <ui:Label text="Гейм - дизайнер" class="info-item"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
