@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
-// тест русского языка
+using UnityEngine.SceneManagement;
+
 public class PlayerRespawn : MonoBehaviour
 {
     [Header("Настройки респавна")]
-    [Tooltip("Начальная точка появления")]
+    [Tooltip("Начальная точка появления (если нет сохранённого чекпоинта)")]
     public Vector2 defaultSpawnPoint;
 
     [Tooltip("Задержка перед респавном")]
@@ -19,15 +20,53 @@ public class PlayerRespawn : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private bool isDead = false;
 
-    void Start()
+    void Awake()
     {
+        // ВАЖНО: Устанавливаем позицию в Awake, ДО инициализации камеры
         rb = GetComponent<Rigidbody2D>();
         playerMovement = GetComponent<PlayerMovement>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
+        LoadLastCheckpoint();
+    }
+
+    void Start()
+    {
+        Debug.Log($"[PlayerRespawn] Точка возрождения: {currentRespawnPoint}");
+
+        // Принудительно обновляем камеру после загрузки
+        CameraFollow camera = FindFirstObjectByType<CameraFollow>();
+        if (camera != null)
+        {
+            camera.ForceSetToCurrentRoom();
+        }
+    }
+
+    void LoadLastCheckpoint()
+    {
+        string savedCheckpointID = Checkpoint.GetSavedCheckpointID();
+        string savedScene = Checkpoint.GetSavedCheckpointScene();
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        // Проверяем, есть ли сохранённый чекпоинт для текущей сцены
+        if (!string.IsNullOrEmpty(savedCheckpointID) && savedScene == currentScene)
+        {
+            Vector2 savedPosition = Checkpoint.GetSavedCheckpointPosition(savedCheckpointID);
+
+            // Проверяем, что позиция валидная
+            if (savedPosition != Vector2.zero)
+            {
+                currentRespawnPoint = savedPosition;
+                transform.position = currentRespawnPoint;
+                Debug.Log($"[PlayerRespawn] Загружен сохранённый чекпоинт: {savedCheckpointID.Substring(0, 8)} в {currentRespawnPoint}");
+                return;
+            }
+        }
+
+        // Если нет сохранённого чекпоинта, используем дефолтную позицию
         currentRespawnPoint = defaultSpawnPoint;
         transform.position = currentRespawnPoint;
-        Debug.Log($"[PlayerRespawn] Начальная точка возрождения: {currentRespawnPoint}");
+        Debug.Log($"[PlayerRespawn] Использована начальная точка: {currentRespawnPoint}");
     }
 
     public void SetRespawnPoint(Vector2 newPoint)
@@ -40,7 +79,6 @@ public class PlayerRespawn : MonoBehaviour
     {
         // Защита от повторного вызова
         if (isDead) return;
-
         StartCoroutine(RespawnCoroutine());
     }
 
@@ -48,6 +86,9 @@ public class PlayerRespawn : MonoBehaviour
     {
         isDead = true;
         Debug.Log($"[PlayerRespawn] Игрок умер. Возрождение через {respawnDelay} сек...");
+
+        // Регистрируем смерть в статистике
+        GameStatsTracker.RegisterDeath();
 
         // Отключаем управление и визуал игрока
         if (playerMovement != null)
@@ -59,7 +100,7 @@ public class PlayerRespawn : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
-            rb.bodyType = RigidbodyType2D.Kinematic; // Отключаем физику
+            rb.bodyType = RigidbodyType2D.Kinematic;
         }
 
         // Эффект смерти
@@ -77,7 +118,7 @@ public class PlayerRespawn : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
-            rb.bodyType = RigidbodyType2D.Dynamic; // Возвращаем физику
+            rb.bodyType = RigidbodyType2D.Dynamic;
         }
 
         if (spriteRenderer != null)
@@ -95,6 +136,7 @@ public class PlayerRespawn : MonoBehaviour
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(currentRespawnPoint, 0.3f);
 
+#if UNITY_EDITOR
         if (Application.isPlaying)
         {
             UnityEditor.Handles.Label(
@@ -102,5 +144,6 @@ public class PlayerRespawn : MonoBehaviour
                 "RESPAWN"
             );
         }
+#endif
     }
 }

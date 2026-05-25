@@ -138,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
         if (IsGrounded)
         {
             Collider2D groundCollider = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-            if (groundCollider != null && groundCollider.CompareTag("MovingPlatform"))
+            if (groundCollider != null) //&& groundCollider.CompareTag("MovingPlatform")
             {
                 currentPlatform = groundCollider.transform;
             }
