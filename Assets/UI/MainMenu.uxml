@@ -1,4 +1,4 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+﻿<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/MainMenuStyle.uss?fileID=7433441132597879392&amp;guid=0686efefc2819424db2a07dd694bc8b4&amp;type=3#MainMenuStyle"/>
     <ui:VisualElement name="Background" class="background"/>
     <ui:VisualElement name="MainMenuContainer" class="main-menu-container">
@@ -46,7 +46,7 @@
                         </ui:VisualElement>
                         <ui:VisualElement name="DeathsStatRow" class="stats-row">
                             <ui:VisualElement name="SkullIcon" class="stat-icon skull-icon"/>
-                            <ui:Label text="Deaths: 0" name="DeathsStatTex" class="stat-text"/>
+                            <ui:Label text="Deaths: 0" name="DeathsStatText" class="stat-text"/>
                         </ui:VisualElement>
                         <ui:VisualElement name="FlasksStatRow" class="stats-row">
                             <ui:VisualElement name="FlaskIcon" class="stat-icon flask-icon"/>

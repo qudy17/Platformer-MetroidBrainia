@@ -5,7 +5,7 @@ public class ScreamAbility : MonoBehaviour
 {
     [Header("Заряды")]
     public int maxCharges = 1;
-    [SerializeField] private int currentCharges = 1;
+    [SerializeField] public int currentCharges = 1;
 
     [Header("Восстановление заряда")]
     public float chargeRestoreTime = 0.8f;

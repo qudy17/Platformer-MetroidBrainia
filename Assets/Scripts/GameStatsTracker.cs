@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -25,6 +26,8 @@ public class GameStatsTracker : MonoBehaviour
 
             // Подписываемся на события смены сцены
             SceneManager.sceneLoaded += OnSceneLoaded;
+
+            Debug.Log($"[GameStatsTracker] Awake - Текущие сохранения: Deaths={PlayerPrefs.GetInt("Deaths", 0)}, Flasks={PlayerPrefs.GetInt("FlasksCollected", 0)}");
         }
         else
         {
