@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-// тест русского языка
+using UnityEngine.SceneManagement;
+
 /// <summary>
 /// Отслеживает игровую статистику (время, смерти, колбы)
 /// Добавьте на любой GameObject в игровой сцене
@@ -7,6 +8,9 @@
 public class GameStatsTracker : MonoBehaviour
 {
     private static GameStatsTracker instance;
+
+    [Header("Settings")]
+    [SerializeField] private string gameSceneName = "GameScene"; // Укажите имя вашей игровой сцены
 
     private float sessionStartTime;
     private bool isTracking = false;
@@ -18,6 +22,9 @@ public class GameStatsTracker : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+
+            // Подписываемся на события смены сцены
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
@@ -28,7 +35,8 @@ public class GameStatsTracker : MonoBehaviour
 
     void Start()
     {
-        StartTracking();
+        // Проверяем текущую сцену при старте
+        CheckCurrentScene();
     }
 
     void Update()
@@ -42,10 +50,41 @@ public class GameStatsTracker : MonoBehaviour
         }
     }
 
+    void OnDestroy()
+    {
+        // Отписываемся от событий
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
     void OnApplicationQuit()
     {
         // Сохраняем при выходе
-        PlayerPrefs.Save();
+        StopTracking();
+    }
+
+    /// <summary>
+    /// Обработчик загрузки сцены
+    /// </summary>
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        CheckCurrentScene();
+    }
+
+    /// <summary>
+    /// Проверяет текущую сцену и запускает/останавливает отслеживание
+    /// </summary>
+    private void CheckCurrentScene()
+    {
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        if (currentScene == gameSceneName)
+        {
+            StartTracking();
+        }
+        else
+        {
+            StopTracking();
+        }
     }
 
     /// <summary>
@@ -53,9 +92,12 @@ public class GameStatsTracker : MonoBehaviour
     /// </summary>
     public void StartTracking()
     {
-        isTracking = true;
-        sessionStartTime = Time.time;
-        Debug.Log("[GameStatsTracker] Отслеживание статистики начато");
+        if (!isTracking)
+        {
+            isTracking = true;
+            sessionStartTime = Time.time;
+            Debug.Log("[GameStatsTracker] Отслеживание статистики начато");
+        }
     }
 
     /// <summary>
@@ -63,9 +105,12 @@ public class GameStatsTracker : MonoBehaviour
     /// </summary>
     public void StopTracking()
     {
-        isTracking = false;
-        PlayerPrefs.Save();
-        Debug.Log("[GameStatsTracker] Отслеживание статистики остановлено");
+        if (isTracking)
+        {
+            isTracking = false;
+            PlayerPrefs.Save();
+            Debug.Log("[GameStatsTracker] Отслеживание статистики остановлено");
+        }
     }
 
     /// <summary>
