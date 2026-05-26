@@ -8,16 +8,11 @@
             </ui:VisualElement>
             <ui:VisualElement name="MainContainer" class="main-container" style="flex-grow: 1;">
                 <ui:VisualElement name="OptionsButtonsContainer" class="options-buttons-container" style="flex-grow: 1;">
-                    <ui:Button text="Button" name="ResumeTabButton" class="tab-button resume-tab-button active"/>
                     <ui:Button text="Button" name="AudioTabButton" class="tab-button audio-tab-button"/>
                     <ui:Button text="Button" name="StatisticsTabButton" class="tab-button statistics-tab-button"/>
                     <ui:Button text="Button" name="InfoTabButton" class="tab-button info-tab-button"/>
                 </ui:VisualElement>
                 <ui:VisualElement name="SettingsContainer" class="settings-container" style="flex-grow: 1;">
-                    <ui:VisualElement name="ResumePanel" class="settings-panel resume-panel" style="flex-grow: 1;">
-                        <ui:Button text="Resume Game" name="ResumeButton" class="big-action-button"/>
-                        <ui:Button text="Exit to Main Menu" name="ExitToMenuButton" class="big-action-button"/>
-                    </ui:VisualElement>
                     <ui:VisualElement name="AudioSettings" class="settings-panel audio-settings" style="flex-grow: 0;">
                         <ui:VisualElement name="MasterVolumeRow" class="audio-row">
                             <ui:Label text="Master Volume" name="MasterVolumeLabel" class="audio-label"/>
@@ -65,6 +60,14 @@
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Button text="X" name="MenuButton" class="menu-button-top-right"/>
+        <ui:VisualElement name="ExitOverlay" class="exit-overlay hidden" style="flex-grow: 0;">
+            <ui:VisualElement name="ExitOverlayBackground" class="exit-overlay-background" style="flex-grow: 0;"/>
+            <ui:VisualElement name="ExitOverlayPanel" class="exit-overlay-panel" style="flex-grow: 1;">
+                <ui:Button text="Resume" name="ResumeButton" class="exit-overlay-button resume-overlay-button"/>
+                <ui:Button text="Exit to Menu" name="ExitToMenuButton" class="exit-overlay-button exit-to-menu-button"/>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

@@ -19,24 +19,27 @@ public class PauseMenuController : MonoBehaviour
 
     // Состояние паузы
     private bool isPaused = false;
+    private bool isExitOverlayOpen = false;
 
     // UI элементы
     private VisualElement root;
     private VisualElement pauseMenuRoot;
 
+    // Кнопка меню
+    private Button menuButton;
+
     // Кнопки вкладок
-    private Button resumeTabButton;
     private Button audioTabButton;
     private Button statisticsTabButton;
     private Button infoTabButton;
 
     // Панели
-    private VisualElement resumePanel;
     private VisualElement audioSettings;
     private VisualElement statisticsSettings;
     private VisualElement infoSettings;
 
-    // Кнопки действий
+    // Exit Overlay
+    private VisualElement exitOverlay;
     private Button resumeButton;
     private Button exitToMenuButton;
 
@@ -54,8 +57,8 @@ public class PauseMenuController : MonoBehaviour
     private Label flasksStatText;
 
     // Текущая вкладка
-    private enum PauseTab { Resume, Audio, Statistics, Info }
-    private PauseTab currentTab = PauseTab.Resume;
+    private enum PauseTab { Audio, Statistics, Info }
+    private PauseTab currentTab = PauseTab.Audio;
 
     void OnEnable()
     {
@@ -77,6 +80,10 @@ public class PauseMenuController : MonoBehaviour
         if (pauseMenuRoot != null)
             pauseMenuRoot.AddToClassList("hidden");
 
+        // Скрываем оверлей при старте
+        if (exitOverlay != null)
+            exitOverlay.AddToClassList("hidden");
+
         LoadAudioSettings();
 
         Debug.Log("[PauseMenuController] Pause Menu инициализировано");
@@ -92,11 +99,25 @@ public class PauseMenuController : MonoBehaviour
         // Обработка нажатия ESC
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            TogglePause();
+            if (isExitOverlayOpen)
+            {
+                // Если оверлей открыт - закрываем его
+                CloseExitOverlay();
+            }
+            else if (isPaused)
+            {
+                // Если пауза открыта - возобновляем игру
+                ResumeGame();
+            }
+            else
+            {
+                // Иначе открываем паузу
+                PauseGame();
+            }
         }
 
         // Обновляем статистику если меню открыто
-        if (isPaused)
+        if (isPaused && !isExitOverlayOpen)
         {
             UpdateStatistics();
         }
@@ -108,19 +129,21 @@ public class PauseMenuController : MonoBehaviour
     {
         pauseMenuRoot = root.Q<VisualElement>("PauseMenuRoot");
 
+        // Кнопка меню
+        menuButton = root.Q<Button>("MenuButton");
+
         // Кнопки вкладок
-        resumeTabButton = root.Q<Button>("ResumeTabButton");
         audioTabButton = root.Q<Button>("AudioTabButton");
         statisticsTabButton = root.Q<Button>("StatisticsTabButton");
         infoTabButton = root.Q<Button>("InfoTabButton");
 
         // Панели
-        resumePanel = root.Q<VisualElement>("ResumePanel");
         audioSettings = root.Q<VisualElement>("AudioSettings");
         statisticsSettings = root.Q<VisualElement>("StatisticsSettings");
         infoSettings = root.Q<VisualElement>("InfoSettings");
 
-        // Кнопки действий
+        // Exit Overlay
+        exitOverlay = root.Q<VisualElement>("ExitOverlay");
         resumeButton = root.Q<Button>("ResumeButton");
         exitToMenuButton = root.Q<Button>("ExitToMenuButton");
 
@@ -144,10 +167,11 @@ public class PauseMenuController : MonoBehaviour
 
     void SubscribeToEvents()
     {
-        // Вкладки
-        if (resumeTabButton != null)
-            resumeTabButton.clicked += () => SwitchTab(PauseTab.Resume);
+        // Кнопка меню
+        if (menuButton != null)
+            menuButton.clicked += OnMenuButtonClicked;
 
+        // Вкладки
         if (audioTabButton != null)
             audioTabButton.clicked += () => SwitchTab(PauseTab.Audio);
 
@@ -157,7 +181,7 @@ public class PauseMenuController : MonoBehaviour
         if (infoTabButton != null)
             infoTabButton.clicked += () => SwitchTab(PauseTab.Info);
 
-        // Кнопки действий
+        // Кнопки Exit Overlay
         if (resumeButton != null)
             resumeButton.clicked += ResumeGame;
 
@@ -187,8 +211,8 @@ public class PauseMenuController : MonoBehaviour
 
     void UnsubscribeFromEvents()
     {
-        if (resumeTabButton != null)
-            resumeTabButton.clicked -= () => SwitchTab(PauseTab.Resume);
+        if (menuButton != null)
+            menuButton.clicked -= OnMenuButtonClicked;
 
         if (audioTabButton != null)
             audioTabButton.clicked -= () => SwitchTab(PauseTab.Audio);
@@ -236,7 +260,7 @@ public class PauseMenuController : MonoBehaviour
         if (pauseMenuRoot != null)
         {
             pauseMenuRoot.RemoveFromClassList("hidden");
-            SwitchTab(PauseTab.Resume);
+            SwitchTab(PauseTab.Audio); // Открываем Audio по умолчанию
         }
 
         Debug.Log("[PauseMenuController] Игра поставлена на паузу");
@@ -244,6 +268,12 @@ public class PauseMenuController : MonoBehaviour
 
     public void ResumeGame()
     {
+        // Закрываем оверлей если он был открыт
+        if (isExitOverlayOpen)
+        {
+            CloseExitOverlay();
+        }
+
         isPaused = false;
         Time.timeScale = 1f;
 
@@ -255,6 +285,36 @@ public class PauseMenuController : MonoBehaviour
         SaveAudioSettings();
 
         Debug.Log("[PauseMenuController] Игра продолжена");
+    }
+
+    void OnMenuButtonClicked()
+    {
+        Debug.Log("[PauseMenuController] Кнопка меню нажата");
+        OpenExitOverlay();
+    }
+
+    void OpenExitOverlay()
+    {
+        isExitOverlayOpen = true;
+
+        if (exitOverlay != null)
+        {
+            exitOverlay.RemoveFromClassList("hidden");
+        }
+
+        Debug.Log("[PauseMenuController] Exit Overlay открыт");
+    }
+
+    void CloseExitOverlay()
+    {
+        isExitOverlayOpen = false;
+
+        if (exitOverlay != null)
+        {
+            exitOverlay.AddToClassList("hidden");
+        }
+
+        Debug.Log("[PauseMenuController] Exit Overlay закрыт");
     }
 
     void ExitToMainMenu()
@@ -278,13 +338,11 @@ public class PauseMenuController : MonoBehaviour
         currentTab = tab;
 
         // Скрываем все панели
-        if (resumePanel != null) resumePanel.AddToClassList("hidden");
         if (audioSettings != null) audioSettings.AddToClassList("hidden");
         if (statisticsSettings != null) statisticsSettings.AddToClassList("hidden");
         if (infoSettings != null) infoSettings.AddToClassList("hidden");
 
         // Убираем active со всех кнопок
-        if (resumeTabButton != null) resumeTabButton.RemoveFromClassList("active");
         if (audioTabButton != null) audioTabButton.RemoveFromClassList("active");
         if (statisticsTabButton != null) statisticsTabButton.RemoveFromClassList("active");
         if (infoTabButton != null) infoTabButton.RemoveFromClassList("active");
@@ -292,11 +350,6 @@ public class PauseMenuController : MonoBehaviour
         // Показываем нужную панель
         switch (tab)
         {
-            case PauseTab.Resume:
-                if (resumePanel != null) resumePanel.RemoveFromClassList("hidden");
-                if (resumeTabButton != null) resumeTabButton.AddToClassList("active");
-                break;
-
             case PauseTab.Audio:
                 if (audioSettings != null) audioSettings.RemoveFromClassList("hidden");
                 if (audioTabButton != null) audioTabButton.AddToClassList("active");

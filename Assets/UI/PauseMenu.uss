@@ -1,17 +1,26 @@
-﻿/* ==================== ПЕРЕМЕННЫЕ ==================== */
+﻿/* ==================== ПЕРЕМЕННЫЕ (ПУТИ К РЕСУРСАМ) ==================== */
 :root {
-    /* Используем те же переменные что и в главном меню */
+    /* Фоны */
     --pause-background: url('project://database/Assets/UI/Sprites/PauseBackground.png');
     --title-container-bg: url('project://database/Assets/UI/Sprites/TitleContainerBG.png');
     --options-buttons-container-bg: url('project://database/Assets/UI/Sprites/OptionsButtonsContainerBG.png');
     --settings-container-bg: url('project://database/Assets/UI/Sprites/SettingsContainerBG.png');
     
-    /* Кнопка Resume */
+    /* Кнопка меню (правый верхний угол) */
+    --menu-button-default: url('project://database/Assets/UI/Sprites/MenuButton_Default.png');
+    --menu-button-hover: url('project://database/Assets/UI/Sprites/MenuButton_Hover.png');
+    
+    /* Exit Overlay */
+    --exit-overlay-panel-bg: url('project://database/Assets/UI/Sprites/ExitOverlayPanel.png');
+    
+    /* Exit Overlay кнопки (376x144) */
     --resume-button-default: url('project://database/Assets/UI/Png/button_start_normal.png');
     --resume-button-hover: url('project://database/Assets/UI/Sprites/ResumeButton_Hover.png');
-    --resume-button-active: url('project://database/Assets/UI/Sprites/ResumeButton_Active.png');
     
-    /* Кнопки вкладок (переиспользуем из главного меню) */
+    --exit-button-default: url('project://database/Assets/UI/Png/button_start_normal.png');
+    --exit-button-hover: url('project://database/Assets/UI/Sprites/ExitButton_Hover.png');
+    
+    /* Кнопки вкладок */
     --audio-button-default: url('project://database/Assets/UI/Png/button_start_normal.png');
     --audio-button-hover: url('project://database/Assets/UI/Sprites/AudioButton_Hover.png');
     --audio-button-active: url('project://database/Assets/UI/Sprites/AudioButton_Active.png');
@@ -56,7 +65,7 @@
     left: 0;
     background-image: var(--pause-background);
     -unity-background-scale-mode: scale-and-crop;
-    background-color: rgba(0, 0, 0, 0.8); /* Затемнение если нет картинки */
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 .pause-content {
@@ -97,7 +106,7 @@
     width: 100%;
 }
 
-/* ==================== КОНТЕЙНЕР КНОПОК ==================== */
+/* ==================== КОНТЕЙНЕР КНОПОК СЛЕВА ==================== */
 
 .options-buttons-container {
     width: 35%;
@@ -124,20 +133,6 @@
 
 .tab-button:active {
     scale: 0.98;
-}
-
-/* Resume Button */
-.resume-tab-button {
-    background-image: var(--resume-button-default);
-}
-
-.resume-tab-button:hover {
-    background-image: var(--resume-button-hover);
-    scale: 1.05;
-}
-
-.resume-tab-button.active {
-    background-image: var(--resume-button-active);
 }
 
 /* Audio Button */
@@ -182,7 +177,7 @@
     background-image: var(--info-button-active);
 }
 
-/* ==================== КОНТЕЙНЕР НАСТРОЕК ==================== */
+/* ==================== КОНТЕЙНЕР НАСТРОЕК СПРАВА ==================== */
 
 .settings-container {
     width: 60%;
@@ -200,38 +195,6 @@
 
 .settings-panel.hidden {
     display: none;
-}
-
-/* ==================== ПАНЕЛЬ RESUME ==================== */
-
-.resume-panel {
-    justify-content: center;
-    align-items: center;
-}
-
-.big-action-button {
-    width: 400px;
-    height: 80px;
-    font-size: 32px;
-    -unity-font-style: bold;
-    background-color: rgb(80, 120, 180);
-    color: white;
-    border-width: 3px;
-    border-color: white;
-    border-radius: 15px;
-    margin-bottom: 30px;
-    cursor: link;
-    transition-duration: 0.2s;
-}
-
-.big-action-button:hover {
-    background-color: rgb(100, 150, 220);
-    scale: 1.05;
-}
-
-.big-action-button:active {
-    background-color: rgb(60, 100, 150);
-    scale: 0.98;
 }
 
 /* ==================== АУДИО НАСТРОЙКИ ==================== */
@@ -287,6 +250,7 @@
     min-width: 200px;
 }
 
+/* Стилизация слайдера */
 .volume-slider .unity-base-slider__tracker {
     background-color: rgb(60, 60, 60);
     border-radius: 10px;
@@ -377,4 +341,177 @@
     color: var(--text-color);
     margin-bottom: 10px;
     text-shadow: 1px 1px 3px var(--text-shadow);
+}
+
+/* ==================== КНОПКА МЕНЮ (ПРАВЫЙ ВЕРХНИЙ УГОЛ) ==================== */
+
+.menu-button-top-right {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 64px;
+    height: 64px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: var(--menu-button-default);
+    -unity-background-scale-mode: scale-to-fit;
+    cursor: link;
+    transition-duration: 0.2s;
+}
+
+.menu-button-top-right:hover {
+    background-image: var(--menu-button-hover);
+    scale: 1.1;
+}
+
+.menu-button-top-right:active {
+    scale: 0.95;
+}
+
+/* ==================== EXIT OVERLAY (ПОВЕРХ НАСТРОЕК) ==================== */
+
+.exit-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.exit-overlay.hidden {
+    display: none;
+}
+
+/* Затемнённый фон 50% прозрачности */
+.exit-overlay-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Панель с кнопками (ТОЧНО 1104x362) */
+.exit-overlay-panel {
+    width: 1104px;
+    height: 362px;
+    min-width: 1104px;
+    min-height: 362px;
+    max-width: 1104px;
+    max-height: 362px;
+    background-image: var(--exit-overlay-panel-bg);
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgb(40, 40, 40);
+    border-width: 4px;
+    border-color: white;
+    border-radius: 20px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+/* Базовый стиль для кнопок в оверлее (376x144 как в настройках) */
+.exit-overlay-button {
+    width: 376px;
+    height: 144px;
+    margin-bottom: 20px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-scale-mode: scale-to-fit;
+    transition-duration: 0.2s;
+    cursor: link;
+    font-size: 0;
+    color: rgba(0, 0, 0, 0);
+}
+
+.exit-overlay-button:hover {
+    scale: 1.05;
+}
+
+.exit-overlay-button:active {
+    scale: 0.98;
+}
+
+/* Последняя кнопка без отступа снизу */
+.exit-overlay-button:last-child {
+    margin-bottom: 0;
+}
+
+/* Resume Button */
+.resume-overlay-button {
+    background-image: var(--resume-button-default);
+}
+
+.resume-overlay-button:hover {
+    background-image: var(--resume-button-hover);
+}
+
+/* Exit to Menu Button */
+.exit-to-menu-button {
+    background-image: var(--exit-button-default);
+}
+
+.exit-to-menu-button:hover {
+    background-image: var(--exit-button-hover);
+}
+
+/* ==================== АДАПТИВНОСТЬ ==================== */
+
+/* Для средних экранов */
+@media (max-width: 1600px) {
+    .exit-overlay-panel {
+        width: 900px;
+        height: 295px;
+        min-width: 900px;
+        min-height: 295px;
+        max-width: 900px;
+        max-height: 295px;
+    }
+    
+    .exit-overlay-button {
+        width: 306px;
+        height: 117px;
+    }
+}
+
+/* Для маленьких экранов */
+@media (max-width: 1280px) {
+    .title-container {
+        width: 300px;
+        height: 80px;
+    }
+    
+    .title-text {
+        font-size: 36px;
+    }
+    
+    .options-buttons-container {
+        width: 30%;
+        min-width: 250px;
+    }
+    
+    .tab-button {
+        height: 60px;
+    }
+    
+    .exit-overlay-panel {
+        width: 700px;
+        height: 229px;
+        min-width: 700px;
+        min-height: 229px;
+        max-width: 700px;
+        max-height: 229px;
+        padding: 30px;
+    }
+    
+    .exit-overlay-button {
+        width: 238px;
+        height: 91px;
+        margin-bottom: 15px;
+    }
 }
