@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-// тест русского языка
+
 public class FragileBlockSpawner : MonoBehaviour
 {
     [Header("Ссылки")]
@@ -11,6 +11,8 @@ public class FragileBlockSpawner : MonoBehaviour
 
     [Header("Выравнивание")]
     public Vector2 spawnOffset = Vector2.zero;
+
+    private List<Vector3Int> originalMarkerPositions = new List<Vector3Int>();
 
     void Awake()
     {
@@ -26,7 +28,51 @@ public class FragileBlockSpawner : MonoBehaviour
             return;
         }
 
+        SaveOriginalMarkers();
         SpawnBlocksAsGroups();
+    }
+
+    void SaveOriginalMarkers()
+    {
+        originalMarkerPositions.Clear();
+        BoundsInt bounds = markerTilemap.cellBounds;
+
+        foreach (Vector3Int cellPos in bounds.allPositionsWithin)
+        {
+            TileBase tile = markerTilemap.GetTile(cellPos);
+            bool isMarkerTile = (markerTile == null) ? tile != null : tile == markerTile;
+
+            if (isMarkerTile)
+            {
+                originalMarkerPositions.Add(cellPos);
+            }
+        }
+
+        Debug.Log($"[FragileBlockSpawner] Сохранено маркеров: {originalMarkerPositions.Count}");
+    }
+
+    public void RespawnBlocks()
+    {
+        Debug.Log("[FragileBlockSpawner] Начинается респавн блоков...");
+        RestoreMarkers();
+        SpawnBlocksAsGroups();
+        Debug.Log("[FragileBlockSpawner] Респавн блоков завершен");
+    }
+
+    void RestoreMarkers()
+    {
+        if (markerTile == null)
+        {
+            Debug.LogWarning("[FragileBlockSpawner] markerTile не задан, пропускаю восстановление");
+            return;
+        }
+
+        foreach (Vector3Int pos in originalMarkerPositions)
+        {
+            markerTilemap.SetTile(pos, markerTile);
+        }
+
+        Debug.Log($"[FragileBlockSpawner] Восстановлено маркеров: {originalMarkerPositions.Count}");
     }
 
     void SpawnBlocksAsGroups()

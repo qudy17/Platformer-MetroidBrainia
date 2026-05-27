@@ -28,6 +28,9 @@ public class PauseMenuController : MonoBehaviour
     // Кнопка меню
     private Button menuButton;
 
+    // Кнопка перезагрузки уровня
+    private Button reloadButton;
+
     // Кнопки вкладок
     private Button audioTabButton;
     private Button statisticsTabButton;
@@ -132,6 +135,9 @@ public class PauseMenuController : MonoBehaviour
         // Кнопка меню
         menuButton = root.Q<Button>("MenuButton");
 
+        // Кнопка перезагрузки уровня
+        reloadButton = root.Q<Button>("ReloadButton");
+
         // Кнопки вкладок
         audioTabButton = root.Q<Button>("AudioTabButton");
         statisticsTabButton = root.Q<Button>("StatisticsTabButton");
@@ -170,6 +176,10 @@ public class PauseMenuController : MonoBehaviour
         // Кнопка меню
         if (menuButton != null)
             menuButton.clicked += OnMenuButtonClicked;
+
+        // Кнопка перезагрузки
+        if (reloadButton != null)
+            reloadButton.clicked += OnReloadButtonClicked;
 
         // Вкладки
         if (audioTabButton != null)
@@ -213,6 +223,9 @@ public class PauseMenuController : MonoBehaviour
     {
         if (menuButton != null)
             menuButton.clicked -= OnMenuButtonClicked;
+
+        if (reloadButton != null)
+            reloadButton.clicked -= OnReloadButtonClicked;
 
         if (audioTabButton != null)
             audioTabButton.clicked -= () => SwitchTab(PauseTab.Audio);
@@ -291,6 +304,17 @@ public class PauseMenuController : MonoBehaviour
     {
         Debug.Log("[PauseMenuController] Кнопка меню нажата");
         OpenExitOverlay();
+    }
+
+    void OnReloadButtonClicked()
+    {
+        Debug.Log("[PauseMenuController] Кнопка перезагрузки нажата");
+
+        // Закрываем меню паузы
+        ResumeGame();
+
+        // Перезагружаем уровень
+        LevelReloader.ReloadLevel();
     }
 
     void OpenExitOverlay()

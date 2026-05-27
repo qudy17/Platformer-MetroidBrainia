@@ -1,4 +1,4 @@
-﻿<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/PauseMenu.uss?fileID=7433441132597879392&amp;guid=87eac8bbb58dba848b6b06c3b149c6a2&amp;type=3#PauseMenu"/>
     <ui:VisualElement name="PauseMenuRoot" class="pause-menu-root hidden" style="flex-grow: 0;">
         <ui:VisualElement name="PauseBackground" class="pause-background" style="flex-grow: 1;"/>
@@ -63,6 +63,7 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:Button text="X" name="MenuButton" class="menu-button-top-right"/>
+        <ui:Button text="R" name="ReloadButton" class="reload-button-top-left"/>
         <ui:VisualElement name="ExitOverlay" class="exit-overlay hidden" style="flex-grow: 0;">
             <ui:VisualElement name="ExitOverlayBackground" class="exit-overlay-background" style="flex-grow: 0;"/>
             <ui:VisualElement name="ExitOverlayPanel" class="exit-overlay-panel" style="flex-grow: 1;">

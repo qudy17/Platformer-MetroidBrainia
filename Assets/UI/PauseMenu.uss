@@ -19,6 +19,10 @@
     
     --exit-button-default: url('project://database/Assets/UI/Png/button_start_normal.png');
     --exit-button-hover: url('project://database/Assets/UI/Sprites/ExitButton_Hover.png');
+
+    /* Кнопка перезагрузки (левый верхний угол) */
+    --reload-button-default: url('project://database/Assets/UI/Sprites/ReloadButton_Default.png');
+    --reload-button-hover: url('project://database/Assets/UI/Sprites/ReloadButton_Hover.png');
     
     /* Кнопки вкладок */
     --audio-button-default: url('project://database/Assets/UI/Png/button_start_normal.png');
@@ -458,6 +462,31 @@
 
 .exit-to-menu-button:hover {
     background-image: var(--exit-button-hover);
+}
+
+/* ==================== КНОПКА ПЕРЕЗАГРУЗКИ (ЛЕВЫЙ ВЕРХНИЙ УГОЛ) ==================== */
+
+.reload-button-top-left {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 64px;
+    height: 64px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: var(--reload-button-default);
+    -unity-background-scale-mode: scale-to-fit;
+    cursor: link;
+    transition-duration: 0.2s;
+}
+
+.reload-button-top-left:hover {
+    background-image: var(--reload-button-hover);
+    scale: 1.1;
+}
+
+.reload-button-top-left:active {
+    scale: 0.95;
 }
 
 /* ==================== АДАПТИВНОСТЬ ==================== */
