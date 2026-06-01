@@ -1,74 +1,111 @@
-<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+﻿<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/PauseMenu.uss?fileID=7433441132597879392&amp;guid=87eac8bbb58dba848b6b06c3b149c6a2&amp;type=3#PauseMenu"/>
-    <ui:VisualElement name="PauseMenuRoot" class="pause-menu-root hidden" style="flex-grow: 0;">
+    <ui:VisualElement name="PauseMenuRoot" class="pause-menu-root hidden pause-menu-root--no-grow">
         <ui:VisualElement name="PauseBackground" class="pause-background" style="flex-grow: 1;"/>
-        <ui:VisualElement name="PauseContent" class="pause-content" style="flex-grow: 0;">
-            <ui:VisualElement name="TitleContainer" class="title-container" style="flex-grow: 0;">
-                <ui:Label text="Paused" name="title-text" class="title-text"/>
-            </ui:VisualElement>
-            <ui:VisualElement name="MainContainer" class="main-container" style="flex-grow: 1;">
-                <ui:VisualElement name="OptionsButtonsContainer" class="options-buttons-container" style="flex-grow: 1;">
-                    <ui:Button text="Button" name="AudioTabButton" class="tab-button audio-tab-button"/>
-                    <ui:Button text="Button" name="StatisticsTabButton" class="tab-button statistics-tab-button"/>
-                    <ui:Button text="Button" name="InfoTabButton" class="tab-button info-tab-button"/>
+        <ui:VisualElement name="OptionsMenu" class="options-menu">
+            <ui:VisualElement name="OptionsBackground" class="options-background"/>
+            <ui:VisualElement name="OptionsContent" class="options-content">
+                <ui:VisualElement name="TitleContainer" class="title-container title-container--positioned">
+                    <ui:Label text="OPTIONS" name="TitleText" class="title-text title-text--large"/>
                 </ui:VisualElement>
-                <ui:VisualElement name="SettingsContainer" class="settings-container" style="flex-grow: 1;">
-                    <ui:VisualElement name="AudioSettings" class="settings-panel audio-settings" style="flex-grow: 0;">
-                        <ui:VisualElement name="MasterVolumeRow" class="audio-row">
-                            <ui:Label text="Master Volume" name="MasterVolumeLabel" class="audio-label"/>
-                            <ui:Button text="-" name="MasterVolumeDown" class="volume-button"/>
-                            <ui:Slider label="" value="100" high-value="100" name="MasterVolumeSlider" class="volume-slider"/>
-                            <ui:Button text="+" name="MasterVolumeUp" class="volume-button"/>
-                        </ui:VisualElement>
-                        <ui:VisualElement name="MusicVolumeRow" class="audio-row">
-                            <ui:Label text="Music Volume" name="MusicVolumeLabel" class="audio-label"/>
-                            <ui:Button text="-" name="MusicVolumeDown" class="volume-button"/>
-                            <ui:Slider label="" value="100" high-value="100" name="MusicVolumeSlider" class="volume-slider"/>
-                            <ui:Button text="+" name="MusicVolumeUp" class="volume-button"/>
-                        </ui:VisualElement>
+                <ui:VisualElement name="MainContainer" class="main-container">
+                    <ui:VisualElement name="OptionsButtonsContainer" class="options-buttons-container options-buttons-container--sized">
+                        <ui:Button text="" name="AudioTabButton" class="tab-button audio-tab-button active tab-button--sized">
+                            <ui:Label text="AUDIO" class="tab-label roboto-font"/>
+                        </ui:Button>
+                        <ui:Button text="" name="StatisticsTabButton" class="tab-button statistics-tab-button tab-button--sized tab-button--margin-bottom">
+                            <ui:Label text="STATISTIC" class="tab-label roboto-font"/>
+                        </ui:Button>
+                        <ui:Button text="" name="InfoTabButton" class="info-tab-button tab-button tab-button--sized">
+                            <ui:Label text="INFORMATION" class="tab-label roboto-font"/>
+                        </ui:Button>
                     </ui:VisualElement>
-                    <ui:VisualElement name="StatisticsSettings" class="settings-panel statistics-settings hidden">
-                        <ui:VisualElement name="TimeStatRow" class="stats-row">
-                            <ui:VisualElement name="TimerIcon" class="timer-icon stat-icon"/>
-                            <ui:Label text="Time: 00:00" name="TimeStatText" class="stat-text"/>
+                    <ui:VisualElement name="SettingsContainer" class="settings-container settings-container--sized">
+                        <ui:VisualElement name="AudioSettings" class="settings-panel audio-settings audio-settings--padded">
+                            <ui:VisualElement name="MasterVolumeRow" class="audio-row audio-row--master">
+                                <ui:VisualElement name="MasterVolumeIconContainer" class="icon-container">
+                                    <ui:VisualElement name="MasterIcon" class="master-icon"/>
+                                </ui:VisualElement>
+                                <ui:Button text="" name="MasterVolumeDown" class="volume-button down-volume-button volume-button--transparent"/>
+                                <ui:Slider label="" value="100" high-value="100" name="MasterVolumeSlider" class="volume-slider volume-slider--bottom-margin"/>
+                                <ui:Button text="" name="MasterVolumeUp" class="volume-button volume-button--transparent"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement name="MusicVolumeRow" class="audio-row audio-row--music">
+                                <ui:VisualElement name="MusicVolumeIconContainer" class="icon-container">
+                                    <ui:VisualElement name="MusicIcon" class="music-icon"/>
+                                </ui:VisualElement>
+                                <ui:Button text="" name="MusicVolumeDown" class="volume-button down-volume-button volume-button--transparent"/>
+                                <ui:Slider label="" value="100" high-value="100" name="MusicVolumeSlider" class="volume-slider volume-slider--bottom-margin"/>
+                                <ui:Button text="" name="MusicVolumeUp" class="volume-button volume-button--transparent"/>
+                            </ui:VisualElement>
                         </ui:VisualElement>
-                        <ui:VisualElement name="DeathsStatRow" class="stats-row">
-                            <ui:VisualElement name="SkullIcon" class="stat-icon skull-icon"/>
-                            <ui:Label text="Deaths: 0" name="DeathsStatText" class="stat-text"/>
+                        <ui:VisualElement name="StatisticsSettings" class="settings-panel statistics-settings hidden statistics-settings--padded">
+                            <ui:VisualElement name="TimeStatRow" class="stats-row stats-row--time">
+                                <ui:VisualElement name="TimeIconContainer" class="stats-icon-column">
+                                    <ui:VisualElement name="TimerIcon" class="stat-icon timer-icon"/>
+                                </ui:VisualElement>
+                                <ui:Label text="00:00:00" name="TimeStatText" class="stat-text stat-text--time rubik-font stat-text--normal-style"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement name="DeathsStatRow" class="stats-row stats-row--deaths">
+                                <ui:VisualElement name="DeathsIconContainer" class="stats-icon-column">
+                                    <ui:VisualElement name="SkullIcon" class="stat-icon skull-icon"/>
+                                </ui:VisualElement>
+                                <ui:Label text="2" name="DeathsStatText" class="stat-text stat-text--deaths rubik-font stat-text--normal-style"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement name="FlasksStatRow" class="stats-row stats-row--flasks">
+                                <ui:VisualElement name="FlaskIconContainer" class="stats-icon-column">
+                                    <ui:VisualElement name="FlaskIcon" class="stat-icon flask-icon"/>
+                                </ui:VisualElement>
+                                <ui:Label text="1/2" name="FlasksStatText" class="stat-text stat-text--flasks rubik-font stat-text--normal-style"/>
+                            </ui:VisualElement>
                         </ui:VisualElement>
-                        <ui:VisualElement name="FlasksStatRow" class="stats-row">
-                            <ui:VisualElement name="FlaskIcon" class="stat-icon flask-icon"/>
-                            <ui:Label text="Flasks: 0/0" name="FlasksStatText" class="stat-text"/>
-                        </ui:VisualElement>
-                    </ui:VisualElement>
-                    <ui:VisualElement name="InfoSettings" class="settings-panel info-settings hidden">
-                        <ui:VisualElement name="NamesColumn" class="info-column">
-                            <ui:Label text="Яруллина Алина" class="info-item"/>
-                            <ui:Label text="Плотников Максим" class="info-item"/>
-                            <ui:Label text="Нацибулин Денис" class="info-item"/>
-                            <ui:Label text="Гиззатуллина Регина " class="info-item"/>
-                            <ui:Label text="Демидова Ирина" class="info-item"/>
-                            <ui:Label text="Наврузов Алексей" class="info-item"/>
-                        </ui:VisualElement>
-                        <ui:VisualElement name="RolesColumn" class="info-column">
-                            <ui:Label text="Unity - разработчик" class="info-item"/>
-                            <ui:Label text="Tech - дизайнер" class="info-item"/>
-                            <ui:Label text="Unity - разработчик" class="info-item"/>
-                            <ui:Label text="Props - художник" class="info-item"/>
-                            <ui:Label text="BG - художник" class="info-item"/>
-                            <ui:Label text="Гейм - дизайнер" class="info-item"/>
+                        <ui:VisualElement name="InfoSettings" class="settings-panel info-settings hidden info-settings--padded">
+                            <ui:VisualElement name="Row1" class="info-row info-row--margin-bottom">
+                                <ui:VisualElement name="MaxContainer" class="member-container member-container--no-padding">
+                                    <ui:Label text="Плотников Максим" name="MaxName" class="member-name member-name--info rubik-font"/>
+                                    <ui:Label text="Unity - разработчик" name="MaxRole" class="member-role member-role--info rubik-font"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="ReginaContainer" class="member-container member-container--no-padding">
+                                    <ui:Label text="Гиззатуллина Регина" name="ReginaName" class="member-name member-name--info member-name--fixed-height rubik-font"/>
+                                    <ui:Label text="Tech - дизайнер" name="ReginaRole" class="member-role member-role--info"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement name="Row2" class="info-row info-row--margin-bottom">
+                                <ui:VisualElement name="DenisContainer" class="member-container member-container--no-padding">
+                                    <ui:Label text="Нацибулин Денис" name="DenisName" class="member-name member-name--info rubik-font"/>
+                                    <ui:Label text="Unity - разработчик" name="DenisRole" class="member-role member-role--info rubik-font"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="AlinaContainer" class="member-container member-container--no-padding">
+                                    <ui:Label text="Яруллина Алина" name="AlinaName" class="member-name member-name--info rubik-font"/>
+                                    <ui:Label text="Props - художник" name="AlinaRole" class="member-role member-role--info"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement name="Row3" class="info-row">
+                                <ui:VisualElement name="AlexContainer" class="member-container member-container--no-padding">
+                                    <ui:Label text="Наврузов Алексей" name="AlexName" class="member-name member-name--info rubik-font"/>
+                                    <ui:Label text="Гейм - дизайнер" name="AlexRole" class="member-role member-role--info rubik-font"/>
+                                </ui:VisualElement>
+                                <ui:VisualElement name="IrinaContainer" class="member-container member-container--no-padding">
+                                    <ui:Label text="Демидова Ирина" name="IrinaName" class="member-name member-name--info rubik-font"/>
+                                    <ui:Label text="BG - художник" name="IrinaRole" class="member-role member-role--info rubik-font"/>
+                                </ui:VisualElement>
+                            </ui:VisualElement>
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
+            <ui:Button text="" name="CloseOptionsButton" class="close-options-button close-options-button--positioned"/>
         </ui:VisualElement>
-        <ui:Button text="X" name="MenuButton" class="menu-button-top-right"/>
-        <ui:Button text="R" name="ReloadButton" class="reload-button-top-left"/>
-        <ui:VisualElement name="ExitOverlay" class="exit-overlay hidden" style="flex-grow: 0;">
-            <ui:VisualElement name="ExitOverlayBackground" class="exit-overlay-background" style="flex-grow: 0;"/>
-            <ui:VisualElement name="ExitOverlayPanel" class="exit-overlay-panel" style="flex-grow: 1;">
-                <ui:Button text="Resume" name="ResumeButton" class="exit-overlay-button resume-overlay-button"/>
-                <ui:Button text="Exit to Menu" name="ExitToMenuButton" class="exit-overlay-button exit-to-menu-button"/>
+        <ui:Button text="" name="ReloadButton" class="reload-button-top-left"/>
+        <ui:VisualElement name="ExitOverlay" class="exit-overlay hidden exit-overlay--no-grow">
+            <ui:VisualElement name="ExitOverlayBackground" class="exit-overlay-background exit-overlay-background--no-grow"/>
+            <ui:VisualElement name="ExitOverlayPanel" class="exit-overlay-panel exit-overlay-panel--grow">
+                <ui:Button text="" name="ResumeButton" class="exit-overlay-button resume-overlay-button exit-overlay-button--styled">
+                    <ui:Label text="RESUME" name="Label" class="exit-overlay-label"/>
+                </ui:Button>
+                <ui:Button text="" name="ExitToMenuButton" class="exit-overlay-button exit-to-menu-button exit-overlay-button--styled">
+                    <ui:Label text="EXIT TO MENU" class="exit-overlay-label"/>
+                </ui:Button>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

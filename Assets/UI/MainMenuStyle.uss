@@ -28,8 +28,19 @@
     --master-volume-icon: url("project://database/Assets/UI/Options/MasterVolumeIcon.svg");
     --music-volume-icon: url("project://database/Assets/UI/Options/MusicVolumeIcon.svg");
     --volume-button: url("project://database/Assets/UI/Options/VolumeButton.svg");
+    --rubik-font: url("project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&guid=0d91f7049f2966244ab5e9b102f76dbd&type=3#Rubik-Regular");
+    --roboto-font: url("project://database/Assets/PluginYourGames/Example/Content/Font/Roboto-Regular.ttf?fileID=12800000&guid=4b10251d8d1a40c4d97edcf51fc6b4ea&type=3#Roboto-Regular");
     --text-color: rgb(255, 255, 255);
     --text-shadow: rgba(0, 0, 0, 0.8);
+    --accent-color: rgb(242, 61, 112);
+}
+
+.rubik-font {
+    -unity-font-definition: var(--rubik-font);
+}
+
+.roboto-font {
+    -unity-font-definition: var(--roboto-font);
 }
 
 .background {
@@ -81,16 +92,38 @@
     -unity-background-scale-mode: scale-to-fit;
     transition-duration: 0.2s;
     cursor: link;
+    /* Reset default Button padding and margin */
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-left: 20px;
+    margin-top: 20px;
+    display: flex;
+}
+
+.options-button--offset {
+    margin-top: 2px;
 }
 
 .button-label {
-    display: none;
+    display: flex;
     font-size: 48px;
     color: rgb(255, 255, 255);
     -unity-font-definition: url("project://database/Assets/UI/MainMenu/Rubik-VariableFont_wght.ttf?fileID=12800000&guid=2cc1220340d431846af58f2e7da8da3a&type=3#Rubik-VariableFont_wght");
-    margin-top: 40px;
-    margin-left: 20px;
     -unity-font-style: bold;
+    -unity-text-align: middle-left;
+    white-space: nowrap;
+}
+
+.start-game-label {
+    margin-top: 35px;
+    margin-left: 30px;
+}
+
+.options-label {
+    margin-top: 30px;
+    margin-left: 30px;
 }
 
 .start-game-button {
@@ -125,6 +158,7 @@
     height: 100%;
     top: 0;
     left: 0;
+    opacity: 1;
 }
 
 .options-menu.hidden {
@@ -149,6 +183,11 @@
     left: 0;
     flex-direction: column;
     padding: 30px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    display: flex;
 }
 
 .title-container {
@@ -161,13 +200,32 @@
     margin-bottom: 20px;
 }
 
+.title-container--positioned {
+    width: 594px;
+    height: 218px;
+    background-position-x: center;
+    right: 648px;
+    left: 34%;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    top: -9px;
+}
+
 .title-text {
     font-size: 48px;
     color: var(--text-color);
     -unity-font-style: bold;
     -unity-text-align: middle-center;
     text-shadow: 2px 2px 4px var(--text-shadow);
-    -unity-font-definition: url("project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&guid=0d91f7049f2966244ab5e9b102f76dbd&type=3#Rubik-Regular");
+    -unity-font-definition: var(--rubik-font);
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.title-text--large {
+    font-size: 64px;
 }
 
 .main-container {
@@ -187,6 +245,18 @@
     -unity-background-image-tint-color: rgb(18, 21, 28);
 }
 
+.options-buttons-container--sized {
+    width: 552px;
+    height: 673px;
+    margin-right: 0;
+    margin-left: 34px;
+    margin-top: 15px;
+    justify-content: center;
+    align-items: center;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 .tab-button {
     width: 100%;
     height: 80px;
@@ -196,10 +266,39 @@
     -unity-background-scale-mode: scale-to-fit;
     transition-duration: 0.2s;
     cursor: link;
+    /* Reset default Button padding */
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tab-button--sized {
+    height: 144px;
+    width: 376px;
+    justify-content: flex-start;
+    align-items: stretch;
+    margin-top: 0;
+}
+
+.tab-button--margin-bottom {
+    margin-bottom: 40px;
+}
+
+.audio-tab-button.tab-button--sized {
+    margin-bottom: 50px;
 }
 
 .tab-button:active {
     scale: 0.98;
+}
+
+.tab-label {
+    color: rgb(255, 255, 255);
+    justify-content: center;
+    align-items: center;
+    align-self: auto;
+    align-content: auto;
+    margin-top: 30px;
+    font-size: 48px;
 }
 
 .audio-tab-button {
@@ -250,6 +349,15 @@
     -unity-background-image-tint-color: rgb(18, 21, 28);
 }
 
+.settings-container--sized {
+    width: 1112px;
+    height: 619px;
+    margin-left: 65px;
+    margin-top: 49px;
+    margin-right: 100px;
+    padding-bottom: 0;
+}
+
 .settings-panel {
     width: 100%;
     height: 100%;
@@ -264,6 +372,10 @@
     flex-direction: column;
 }
 
+.audio-settings--padded {
+    padding-top: 20px;
+}
+
 .audio-row {
     flex-direction: row;
     align-items: center;
@@ -271,6 +383,20 @@
     margin-top: 50px;
     width: 100%;
 }
+
+.audio-row--master {
+    margin-left: 60px;
+    padding-right: 120px;
+    margin-bottom: 105px;
+}
+
+/* Music row */
+.audio-row--music {
+    margin-left: 60px;
+    margin-right: 0;
+    padding-right: 120px;
+}
+
 .icon-container {
     width: 128px;
     height: 128px;
@@ -281,7 +407,9 @@
     margin-right: 15px;
     flex-shrink: 0;
 }
-.master-icon, .music-icon {
+
+.master-icon,
+.music-icon {
     width: 64px;
     height: 64px;
     -unity-background-scale-mode: scale-to-fit;
@@ -302,6 +430,14 @@
     margin-left: 10px;
     margin-right: 10px;
     background-image: var(--volume-button);
+}
+
+.volume-button--transparent {
+    background-color: rgba(188, 188, 188, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
 }
 
 .volume-button.down-volume-button {
@@ -329,6 +465,10 @@
     min-width: 200px;
 }
 
+.volume-slider--bottom-margin {
+    margin-bottom: 60px;
+}
+
 .volume-slider .unity-base-slider__fill {
     background-color: #F23D70;
     height: 64px;
@@ -348,7 +488,7 @@
     height: 48px;
     border-radius: 50%;
     border-width: 0px;
-    border-color: rgb(255,255,255);
+    border-color: rgb(255, 255, 255);
     -unity-background-image-tint-color: #F23D70;
     top: -30px;
     background-image: var(--dragger);
@@ -369,6 +509,10 @@
     padding: 50px 60px;
 }
 
+.statistics-settings--padded {
+    padding-top: 50px;
+}
+
 .stats-row {
     flex-direction: row;
     align-items: center;
@@ -376,6 +520,22 @@
     margin-bottom: 50px;
     width: 100%;
 }
+
+.stats-row--time {
+    margin-left: 175px;
+    margin-bottom: 100px;
+}
+
+.stats-row--deaths {
+    margin-left: 175px;
+    margin-bottom: 100px;
+}
+
+.stats-row--flasks {
+    margin-left: 175px;
+    margin-bottom: 0;
+}
+
 .stats-icon-column {
     width: 128px;
     height: 128px;
@@ -385,6 +545,7 @@
     justify-content: center;
     flex-shrink: 0;
 }
+
 .stats-text-column {
     flex-grow: 1;
     flex-direction: column;
@@ -419,22 +580,55 @@
     margin-left: 40px;
 }
 
+.stat-text--normal-style {
+    -unity-font-style: normal;
+}
+
+.stat-text--time {
+    padding-left: 200px;
+}
+
+.stat-text--deaths {
+    padding-left: 300px;
+}
+
+.stat-text--flasks {
+    padding-left: 285px;
+}
+
 .info-settings {
     flex-direction: column;
     padding: 30px 40px;
     gap: 30px;
 }
 
+.info-settings--padded {
+    padding-top: 50px;
+}
+
 .info-row {
     flex-direction: row;
     justify-content: space-between;
-    width: 100%;
+    width: 95%;
 }
+
+.info-row--margin-bottom {
+    margin-bottom: 50px;
+    width: 95%;
+}
+
 
 .member-container {
     flex-direction: column;
     width: 45%;
     padding: 15px 20px;
+}
+
+.member-container--no-padding {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
 }
 
 .member-name {
@@ -445,10 +639,40 @@
     margin-bottom: 8px;
 }
 
+.member-name--info {
+    font-size: 48px;
+    -unity-font-style: normal;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+.member-name--fixed-height {
+    height: 55px;
+}
+
 .member-role {
     font-size: 18px;
     color: rgb(200, 200, 200);
     text-shadow: 1px 1px 2px var(--text-shadow);
+}
+
+.member-role--info {
+    font-size: 40px;
+    color: var(--accent-color);
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
 }
 
 .close-options-button {
@@ -467,6 +691,23 @@
     -unity-text-align: middle-center;
     cursor: link;
     background-image: var(--close-button);
+}
+
+.close-options-button--positioned {
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-right: 16px;
+    margin-top: 16px;
 }
 
 .close-options-button:hover {

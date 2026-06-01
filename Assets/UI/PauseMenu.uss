@@ -1,50 +1,69 @@
 ﻿/* ==================== ПЕРЕМЕННЫЕ (ПУТИ К РЕСУРСАМ) ==================== */
 :root {
-    /* Фоны */
+    /* Фоны паузы */
     --pause-background: url('project://database/Assets/UI/Sprites/PauseBackground.png');
-    --title-container-bg: url('project://database/Assets/UI/Sprites/TitleContainerBG.png');
-    --options-buttons-container-bg: url('project://database/Assets/UI/Sprites/OptionsButtonsContainerBG.png');
-    --settings-container-bg: url('project://database/Assets/UI/Sprites/SettingsContainerBG.png');
-    
-    /* Кнопка меню (правый верхний угол) */
-    --menu-button-default: url('project://database/Assets/UI/Sprites/MenuButton_Default.png');
-    --menu-button-hover: url('project://database/Assets/UI/Sprites/MenuButton_Hover.png');
-    
-    /* Exit Overlay */
-    --exit-overlay-panel-bg: url('project://database/Assets/UI/Sprites/ExitOverlayPanel.png');
-    
-    /* Exit Overlay кнопки (376x144) */
-    --resume-button-default: url('project://database/Assets/UI/Png/button_start_normal.png');
-    --resume-button-hover: url('project://database/Assets/UI/Sprites/ResumeButton_Hover.png');
-    
-    --exit-button-default: url('project://database/Assets/UI/Png/button_start_normal.png');
-    --exit-button-hover: url('project://database/Assets/UI/Sprites/ExitButton_Hover.png');
+
+    /* Options — скопировано из MainMenuStyle */
+    --options-background: url("project://database/Assets/UI/Options/OptionsBackground.png?fileID=836023105048073361&guid=c36c6881fabc90245b5b59d2eb9a27ea&type=3#OptionsBackground_0");
+    --title-container-bg: url("project://database/Assets/UI/Options/OptionsTitleContainer.png?fileID=-3871136307603959565&guid=884ceaee47afb9e4aa5ca74082b10b2f&type=3#OptionsTitleContainer_0");
+    --options-buttons-container-bg: url("project://database/Assets/UI/Options/OptionsButtonsContainer.svg?fileID=7388822144124034973&guid=dd88018219ad44645835a5e2be2b888c&type=3#OptionsButtonsContainer");
+    --settings-container-bg: url("project://database/Assets/UI/Options/SettingsContainer.svg?fileID=7388822144124034973&guid=1870d2355e3edfa4fb842069aaab3618&type=3#SettingsContainer");
+
+    /* Кнопки вкладок */
+    --audio-button-default: url("project://database/Assets/UI/Sprites/AudioButton_Default.png");
+    --audio-button-hover: url("project://database/Assets/UI/Options/AudioButtonHover.png");
+    --audio-button-active: url("project://database/Assets/UI/Options/AudioButtonActive.png");
+    --statistics-button-default: url("project://database/Assets/UI/Sprites/StatisticsButton_Default.png");
+    --statistics-button-hover: url("project://database/Assets/UI/Options/StatisticButtonHover.png");
+    --statistics-button-active: url("project://database/Assets/UI/Options/StatisticButtonActive.png");
+    --info-button-default: url("project://database/Assets/UI/Sprites/InfoButton_Default.png");
+    --info-button-hover: url("project://database/Assets/UI/Options/InformationButtonHover.png");
+    --info-button-active: url("project://database/Assets/UI/Options/InformationButtonActive.png");
+
+    /* Иконки статистики */
+    --timer-icon: url("project://database/Assets/UI/Options/TimeIcon.svg");
+    --skull-icon: url("project://database/Assets/UI/Options/SkullICon.svg");
+    --flask-icon: url("project://database/Assets/UI/Options/FlaskIcon.svg");
+
+    /* Кнопка закрытия */
+    --close-button: url("project://database/Assets/UI/Options/CloseButton.png?fileID=7228427573584015795&guid=12f307e7bba14934184817ca02f172c8&type=3#CloseButton_0");
+
+    /* Слайдер и иконки громкости */
+    --dragger: url("project://database/Assets/UI/Options/SliderDragger.svg");
+    --volume-icon-container: url("project://database/Assets/UI/Options/VolumeIconContainer.png");
+    --master-volume-icon: url("project://database/Assets/UI/Options/MasterVolumeIcon.svg");
+    --music-volume-icon: url("project://database/Assets/UI/Options/MusicVolumeIcon.svg");
+    --volume-button: url("project://database/Assets/UI/Options/VolumeButton.svg");
 
     /* Кнопка перезагрузки (левый верхний угол) */
-    --reload-button-default: url('project://database/Assets/UI/Sprites/ReloadButton_Default.png');
-    --reload-button-hover: url('project://database/Assets/UI/Sprites/ReloadButton_Hover.png');
-    
-    /* Кнопки вкладок */
-    --audio-button-default: url('project://database/Assets/UI/Png/button_start_normal.png');
-    --audio-button-hover: url('project://database/Assets/UI/Sprites/AudioButton_Hover.png');
-    --audio-button-active: url('project://database/Assets/UI/Sprites/AudioButton_Active.png');
-    
-    --statistics-button-default: url('project://database/Assets/UI/Png/button_start_normal.png');
-    --statistics-button-hover: url('project://database/Assets/UI/Sprites/StatisticsButton_Hover.png');
-    --statistics-button-active: url('project://database/Assets/UI/Sprites/StatisticsButton_Active.png');
-    
-    --info-button-default: url('project://database/Assets/UI/Png/button_start_normal.png');
-    --info-button-hover: url('project://database/Assets/UI/Sprites/InfoButton_Hover.png');
-    --info-button-active: url('project://database/Assets/UI/Sprites/InfoButton_Active.png');
-    
-    /* Иконки статистики */
-    --timer-icon: url('project://database/Assets/UI/Sprites/TimerIcon.png');
-    --skull-icon: url('project://database/Assets/UI/Sprites/SkullIcon.png');
-    --flask-icon: url('project://database/Assets/UI/Sprites/FlaskIcon.png');
-    
+    --reload-button-default: url('project://database/Assets/UI/PauseMenu/ReloadButton.png');
+    --reload-button-hover: url('project://database/Assets/UI/PauseMenu/ReloadButton.png');
+
+    /* Exit Overlay */
+    --exit-overlay-panel-bg: url('project://database/Assets/UI/PauseMenu/ExitOverlayBG.png');
+    --resume-button-default: url('project://database/Assets/UI/Png/');
+    --resume-button-hover: url('project://database/Assets/UI/PauseMenu/ResumeButton.png');
+    --exit-button-default: url('project://database/Assets/UI/Png/');
+    --exit-button-hover: url('project://database/Assets/UI/PauseMenu/ExitToMenuButton.png');
+
+    /* Шрифты */
+    --rubik-font: url("project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&guid=0d91f7049f2966244ab5e9b102f76dbd&type=3#Rubik-Regular");
+    --roboto-font: url("project://database/Assets/PluginYourGames/Example/Content/Font/Roboto-Regular.ttf?fileID=12800000&guid=4b10251d8d1a40c4d97edcf51fc6b4ea&type=3#Roboto-Regular");
+
     /* Цвета */
     --text-color: rgb(255, 255, 255);
     --text-shadow: rgba(0, 0, 0, 0.8);
+    --accent-color: rgb(242, 61, 112);
+}
+
+/* ==================== ШРИФТЫ ==================== */
+
+.rubik-font {
+    -unity-font-definition: var(--rubik-font);
+}
+
+.roboto-font {
+    -unity-font-definition: var(--roboto-font);
 }
 
 /* ==================== КОРНЕВОЙ КОНТЕЙНЕР ПАУЗЫ ==================== */
@@ -55,6 +74,10 @@
     height: 100%;
     top: 0;
     left: 0;
+}
+
+.pause-menu-root--no-grow {
+    flex-grow: 0;
 }
 
 .pause-menu-root.hidden {
@@ -72,7 +95,32 @@
     background-color: rgba(0, 0, 0, 0.8);
 }
 
-.pause-content {
+/* ==================== OPTIONS MENU (скопировано из MainMenuStyle) ==================== */
+
+.options-menu {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 1;
+}
+
+.options-menu.hidden {
+    display: none;
+}
+
+.options-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-image: var(--options-background);
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.options-content {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -80,9 +128,12 @@
     left: 0;
     flex-direction: column;
     padding: 30px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    display: flex;
 }
-
-/* ==================== ЗАГОЛОВОК ==================== */
 
 .title-container {
     width: 400px;
@@ -94,23 +145,39 @@
     margin-bottom: 20px;
 }
 
+.title-container--positioned {
+    width: 594px;
+    height: 218px;
+    background-position-x: center;
+    right: 648px;
+    left: 34%;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    top: -9px;
+}
+
 .title-text {
     font-size: 48px;
     color: var(--text-color);
     -unity-font-style: bold;
     -unity-text-align: middle-center;
     text-shadow: 2px 2px 4px var(--text-shadow);
+    -unity-font-definition: var(--rubik-font);
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
 }
 
-/* ==================== ГЛАВНЫЙ КОНТЕЙНЕР ==================== */
+.title-text--large {
+    font-size: 64px;
+}
 
 .main-container {
     flex-direction: row;
     flex-grow: 1;
     width: 100%;
 }
-
-/* ==================== КОНТЕЙНЕР КНОПОК СЛЕВА ==================== */
 
 .options-buttons-container {
     width: 35%;
@@ -120,9 +187,20 @@
     flex-direction: column;
     padding: 20px;
     margin-right: 20px;
+    -unity-background-image-tint-color: rgb(18, 21, 28);
 }
 
-/* ==================== КНОПКИ ВКЛАДОК ==================== */
+.options-buttons-container--sized {
+    width: 552px;
+    height: 673px;
+    margin-right: 0;
+    margin-left: 34px;
+    margin-top: 15px;
+    justify-content: center;
+    align-items: center;
+    padding-top: 0;
+    padding-bottom: 0;
+}
 
 .tab-button {
     width: 100%;
@@ -133,13 +211,40 @@
     -unity-background-scale-mode: scale-to-fit;
     transition-duration: 0.2s;
     cursor: link;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tab-button--sized {
+    height: 144px;
+    width: 376px;
+    justify-content: flex-start;
+    align-items: stretch;
+    margin-top: 0;
+}
+
+.tab-button--margin-bottom {
+    margin-bottom: 40px;
+}
+
+.audio-tab-button.tab-button--sized {
+    margin-bottom: 50px;
 }
 
 .tab-button:active {
     scale: 0.98;
 }
 
-/* Audio Button */
+.tab-label {
+    color: rgb(255, 255, 255);
+    justify-content: center;
+    align-items: center;
+    align-self: auto;
+    align-content: auto;
+    margin-top: 30px;
+    font-size: 48px;
+}
+
 .audio-tab-button {
     background-image: var(--audio-button-default);
 }
@@ -153,7 +258,6 @@
     background-image: var(--audio-button-active);
 }
 
-/* Statistics Button */
 .statistics-tab-button {
     background-image: var(--statistics-button-default);
 }
@@ -167,7 +271,6 @@
     background-image: var(--statistics-button-active);
 }
 
-/* Info Button */
 .info-tab-button {
     background-image: var(--info-button-default);
 }
@@ -181,14 +284,22 @@
     background-image: var(--info-button-active);
 }
 
-/* ==================== КОНТЕЙНЕР НАСТРОЕК СПРАВА ==================== */
-
 .settings-container {
     width: 60%;
     flex-grow: 1;
     background-image: var(--settings-container-bg);
     -unity-background-scale-mode: stretch-to-fill;
     padding: 30px;
+    -unity-background-image-tint-color: rgb(18, 21, 28);
+}
+
+.settings-container--sized {
+    width: 1112px;
+    height: 619px;
+    margin-left: 65px;
+    margin-top: 49px;
+    margin-right: 100px;
+    padding-bottom: 0;
 }
 
 .settings-panel {
@@ -207,46 +318,91 @@
     flex-direction: column;
 }
 
+.audio-settings--padded {
+    padding-top: 20px;
+}
+
 .audio-row {
     flex-direction: row;
     align-items: center;
     margin-bottom: 30px;
+    margin-top: 50px;
     width: 100%;
 }
 
-.audio-label {
-    font-size: 24px;
-    color: var(--text-color);
-    width: 200px;
-    -unity-text-align: middle-left;
-    margin-right: 20px;
-    -unity-font-style: bold;
-    text-shadow: 2px 2px 4px var(--text-shadow);
+.audio-row--master {
+    margin-left: 60px;
+    padding-right: 120px;
+    margin-bottom: 105px;
+}
+
+.audio-row--music {
+    margin-left: 60px;
+    margin-right: 0;
+    padding-right: 120px;
+}
+
+.icon-container {
+    width: 128px;
+    height: 128px;
+    background-image: var(--volume-icon-container);
+    -unity-background-scale-mode: scale-to-fit;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.master-icon,
+.music-icon {
+    width: 64px;
+    height: 64px;
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: transparent;
+}
+
+.master-icon {
+    background-image: var(--master-volume-icon);
+}
+
+.music-icon {
+    background-image: var(--music-volume-icon);
 }
 
 .volume-button {
     width: 50px;
     height: 50px;
-    font-size: 28px;
-    -unity-font-style: bold;
-    background-color: rgb(80, 80, 80);
-    color: white;
-    border-width: 2px;
-    border-color: white;
-    border-radius: 8px;
     margin-left: 10px;
     margin-right: 10px;
-    cursor: link;
+    background-image: var(--volume-button);
+}
+
+.volume-button--transparent {
+    background-color: rgba(188, 188, 188, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
+.volume-button.down-volume-button {
+    scale: -1 1;
 }
 
 .volume-button:hover {
-    background-color: rgb(120, 120, 120);
     scale: 1.1;
 }
 
+.volume-button.down-volume-button:hover {
+    scale: -1.1 1.1;
+}
+
 .volume-button:active {
-    background-color: rgb(60, 60, 60);
     scale: 0.95;
+}
+
+.volume-button.down-volume-button:active {
+    scale: -0.95 0.95;
 }
 
 .volume-slider {
@@ -254,27 +410,38 @@
     min-width: 200px;
 }
 
-/* Стилизация слайдера */
+.volume-slider--bottom-margin {
+    margin-bottom: 60px;
+}
+
+.volume-slider .unity-base-slider__fill {
+    background-color: #F23D70;
+    height: 64px;
+    border-radius: 40px;
+}
+
 .volume-slider .unity-base-slider__tracker {
-    background-color: rgb(60, 60, 60);
-    border-radius: 10px;
-    height: 10px;
+    background-color: white;
+    border-radius: 40px;
+    height: 64px;
     border-width: 1px;
     border-color: rgb(100, 100, 100);
 }
 
 .volume-slider .unity-base-slider__dragger {
-    width: 20px;
-    height: 20px;
-    background-color: white;
+    width: 56px;
+    height: 48px;
     border-radius: 50%;
-    border-width: 2px;
-    border-color: rgb(100, 100, 100);
-    top: -5px;
+    border-width: 0px;
+    border-color: rgb(255, 255, 255);
+    -unity-background-image-tint-color: #F23D70;
+    top: -30px;
+    background-image: var(--dragger);
+    background-color: transparent;
+    -unity-background-scale-mode: scale-to-fit;
 }
 
 .volume-slider .unity-base-slider__dragger:hover {
-    background-color: rgb(200, 200, 255);
     scale: 1.2;
 }
 
@@ -286,19 +453,56 @@
 
 .statistics-settings {
     flex-direction: column;
+    padding: 50px 60px;
+}
+
+.statistics-settings--padded {
+    padding-top: 50px;
 }
 
 .stats-row {
     flex-direction: row;
     align-items: center;
-    margin-bottom: 30px;
+    justify-content: space-between;
+    margin-bottom: 50px;
+    width: 100%;
+}
+
+.stats-row--time {
+    margin-left: 175px;
+    margin-bottom: 100px;
+}
+
+.stats-row--deaths {
+    margin-left: 175px;
+    margin-bottom: 100px;
+}
+
+.stats-row--flasks {
+    margin-left: 175px;
+    margin-bottom: 0;
+}
+
+.stats-icon-column {
+    width: 128px;
+    height: 128px;
+    background-image: var(--volume-icon-container);
+    -unity-background-scale-mode: scale-to-fit;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.stats-text-column {
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .stat-icon {
     width: 64px;
     height: 64px;
     -unity-background-scale-mode: scale-to-fit;
-    margin-right: 20px;
 }
 
 .timer-icon {
@@ -314,166 +518,160 @@
 }
 
 .stat-text {
-    font-size: 32px;
+    font-size: 48px;
     color: var(--text-color);
     -unity-font-style: bold;
     text-shadow: 2px 2px 4px var(--text-shadow);
+    text-align: right;
+    flex-grow: 1;
+    margin-left: 40px;
+}
+
+.stat-text--normal-style {
+    -unity-font-style: normal;
+}
+
+.stat-text--time {
+    padding-left: 200px;
+}
+
+.stat-text--deaths {
+    padding-left: 300px;
+}
+
+.stat-text--flasks {
+    padding-left: 285px;
 }
 
 /* ==================== ИНФОРМАЦИЯ О КОМАНДЕ ==================== */
 
 .info-settings {
-    flex-direction: row;
-}
-
-.info-column {
     flex-direction: column;
-    width: 50%;
-    padding-right: 20px;
+    padding: 30px 40px;
+    gap: 30px;
 }
 
-.info-header {
-    font-size: 28px;
+.info-settings--padded {
+    padding-top: 50px;
+}
+
+.info-row {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 95%;
+}
+
+.info-row--margin-bottom {
+    margin-bottom: 50px;
+    width: 95%;
+}
+
+.member-container {
+    flex-direction: column;
+    width: 45%;
+    padding: 15px 20px;
+}
+
+.member-container--no-padding {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.member-name {
+    font-size: 24px;
     color: var(--text-color);
     -unity-font-style: bold;
-    margin-bottom: 15px;
     text-shadow: 2px 2px 4px var(--text-shadow);
+    margin-bottom: 8px;
 }
 
-.info-item {
-    font-size: 20px;
-    color: var(--text-color);
-    margin-bottom: 10px;
-    text-shadow: 1px 1px 3px var(--text-shadow);
+.member-name--info {
+    font-size: 48px;
+    -unity-font-style: normal;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
 }
 
-/* ==================== КНОПКА МЕНЮ (ПРАВЫЙ ВЕРХНИЙ УГОЛ) ==================== */
+.member-name--fixed-height {
+    height: 55px;
+}
 
-.menu-button-top-right {
+.member-role {
+    font-size: 18px;
+    color: rgb(200, 200, 200);
+    text-shadow: 1px 1px 2px var(--text-shadow);
+}
+
+.member-role--info {
+    font-size: 40px;
+    color: var(--accent-color);
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+/* ==================== КНОПКА ЗАКРЫТИЯ ==================== */
+
+.close-options-button {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 32px;
+    right: 32px;
     width: 64px;
     height: 64px;
-    border-width: 0;
-    background-color: rgba(0, 0, 0, 0);
-    background-image: var(--menu-button-default);
-    -unity-background-scale-mode: scale-to-fit;
+    margin: 0px;
+    padding: 0px;
+    -unity-text-align: middle-center;
     cursor: link;
+    background-image: var(--close-button);
     transition-duration: 0.2s;
 }
 
-.menu-button-top-right:hover {
-    background-image: var(--menu-button-hover);
+.close-options-button--positioned {
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.close-options-button:hover {
     scale: 1.1;
 }
 
-.menu-button-top-right:active {
+.close-options-button:active {
     scale: 0.95;
-}
-
-/* ==================== EXIT OVERLAY (ПОВЕРХ НАСТРОЕК) ==================== */
-
-.exit-overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.exit-overlay.hidden {
-    display: none;
-}
-
-/* Затемнённый фон 50% прозрачности */
-.exit-overlay-background {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-/* Панель с кнопками (ТОЧНО 1104x362) */
-.exit-overlay-panel {
-    width: 1104px;
-    height: 362px;
-    min-width: 1104px;
-    min-height: 362px;
-    max-width: 1104px;
-    max-height: 362px;
-    background-image: var(--exit-overlay-panel-bg);
-    -unity-background-scale-mode: stretch-to-fill;
-    background-color: rgb(40, 40, 40);
-    border-width: 4px;
-    border-color: white;
-    border-radius: 20px;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-}
-
-/* Базовый стиль для кнопок в оверлее (376x144 как в настройках) */
-.exit-overlay-button {
-    width: 376px;
-    height: 144px;
-    margin-bottom: 20px;
-    border-width: 0;
-    background-color: rgba(0, 0, 0, 0);
-    -unity-background-scale-mode: scale-to-fit;
-    transition-duration: 0.2s;
-    cursor: link;
-    font-size: 0;
-    color: rgba(0, 0, 0, 0);
-}
-
-.exit-overlay-button:hover {
-    scale: 1.05;
-}
-
-.exit-overlay-button:active {
-    scale: 0.98;
-}
-
-/* Последняя кнопка без отступа снизу */
-.exit-overlay-button:last-child {
-    margin-bottom: 0;
-}
-
-/* Resume Button */
-.resume-overlay-button {
-    background-image: var(--resume-button-default);
-}
-
-.resume-overlay-button:hover {
-    background-image: var(--resume-button-hover);
-}
-
-/* Exit to Menu Button */
-.exit-to-menu-button {
-    background-image: var(--exit-button-default);
-}
-
-.exit-to-menu-button:hover {
-    background-image: var(--exit-button-hover);
 }
 
 /* ==================== КНОПКА ПЕРЕЗАГРУЗКИ (ЛЕВЫЙ ВЕРХНИЙ УГОЛ) ==================== */
 
 .reload-button-top-left {
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: 32px;
+    left: 32px;
     width: 64px;
     height: 64px;
-    border-width: 0;
-    background-color: rgba(0, 0, 0, 0);
+    margin: 0px;
+    padding: 0px;
     background-image: var(--reload-button-default);
     -unity-background-scale-mode: scale-to-fit;
     cursor: link;
@@ -489,58 +687,107 @@
     scale: 0.95;
 }
 
-/* ==================== АДАПТИВНОСТЬ ==================== */
+/* ==================== EXIT OVERLAY ==================== */
 
-/* Для средних экранов */
-@media (max-width: 1600px) {
-    .exit-overlay-panel {
-        width: 900px;
-        height: 295px;
-        min-width: 900px;
-        min-height: 295px;
-        max-width: 900px;
-        max-height: 295px;
-    }
-    
-    .exit-overlay-button {
-        width: 306px;
-        height: 117px;
-    }
+.exit-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
-/* Для маленьких экранов */
-@media (max-width: 1280px) {
-    .title-container {
-        width: 300px;
-        height: 80px;
-    }
-    
-    .title-text {
-        font-size: 36px;
-    }
-    
-    .options-buttons-container {
-        width: 30%;
-        min-width: 250px;
-    }
-    
-    .tab-button {
-        height: 60px;
-    }
-    
-    .exit-overlay-panel {
-        width: 700px;
-        height: 229px;
-        min-width: 700px;
-        min-height: 229px;
-        max-width: 700px;
-        max-height: 229px;
-        padding: 30px;
-    }
-    
-    .exit-overlay-button {
-        width: 238px;
-        height: 91px;
-        margin-bottom: 15px;
-    }
+.exit-overlay--no-grow {
+    flex-grow: 0;
+}
+
+.exit-overlay.hidden {
+    display: none;
+}
+
+.exit-overlay-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.exit-overlay-background--no-grow {
+    flex-grow: 0;
+}
+
+.exit-overlay-panel {
+    width: 1104px;
+    height: 362px;
+    min-width: 1104px;
+    min-height: 362px;
+    max-width: 1104px;
+    max-height: 362px;
+    background-image: var(--exit-overlay-panel-bg);
+    -unity-background-scale-mode: stretch-to-fill;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.exit-overlay-panel--grow {
+    flex-grow: 1;
+}
+
+.exit-overlay-button {
+    width: 376px;
+    height: 144px;
+    margin-bottom: 20px;
+    border-width: 0;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-background-scale-mode: scale-to-fit;
+    transition-duration: 0.2s;
+    cursor: link;
+    font-size: 0;
+    color: rgba(0, 0, 0, 0);
+}
+
+.exit-overlay-button--styled {
+    font-size: 48px;
+    -unity-font-definition: var(--rubik-font);
+    -unity-font-style: bold;
+}
+
+.exit-overlay-button:hover {
+    scale: 1.05;
+}
+
+.exit-overlay-button:active {
+    scale: 0.98;
+}
+
+.exit-overlay-button:last-child {
+    margin-bottom: 0;
+}
+
+.exit-overlay-label {
+    color: rgb(255, 255, 255);
+    padding-top: 30px;
+}
+
+.resume-overlay-button {
+    background-image: var(--resume-button-default);
+}
+
+.resume-overlay-button:hover {
+    background-image: var(--resume-button-hover);
+}
+
+.exit-to-menu-button {
+    background-image: var(--exit-button-default);
+}
+
+.exit-to-menu-button:hover {
+    background-image: var(--exit-button-hover);
 }

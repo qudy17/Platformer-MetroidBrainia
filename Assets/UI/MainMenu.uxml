@@ -4,106 +4,106 @@
     <ui:VisualElement name="MainMenuContainer" class="main-menu-container">
         <ui:VisualElement name="GameLogo" class="game-logo"/>
         <ui:VisualElement name="ButtonsContainer" class="buttons-container">
-            <ui:Button text="" name="StartGameButton" class="menu-button start-game-button" style="-unity-font-definition: initial; display: flex; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-left: 20px; margin-top: 20px;">
-                <ui:Label text="START GAME" class="button-label" style="color: rgb(255, 255, 255); display: flex; -unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&amp;guid=0d91f7049f2966244ab5e9b102f76dbd&amp;type=3#Rubik-Regular&quot;); margin-top: 35px; -unity-text-align: middle-left; white-space: nowrap; margin-left: 30px;"/>
+            <ui:Button text="" name="StartGameButton" class="menu-button start-game-button">
+                <ui:Label text="START GAME" class="button-label start-game-label"/>
             </ui:Button>
-            <ui:Button text="" name="OptionsButton" class="menu-button options-button" style="margin-top: 2px; margin-left: 20px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
-                <ui:Label text="OPTIONS" class="button-label" style="display: flex; -unity-font-definition: url(&quot;project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&amp;guid=0d91f7049f2966244ab5e9b102f76dbd&amp;type=3#Rubik-Regular&quot;); margin-top: 30px; -unity-text-align: middle-left; margin-left: 30px;"/>
+            <ui:Button text="" name="OptionsButton" class="menu-button options-button options-button--offset">
+                <ui:Label text="OPTIONS" class="button-label options-label"/>
             </ui:Button>
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="OptionsMenu" class="options-menu hidden" style="opacity: 1;">
+    <ui:VisualElement name="OptionsMenu" class="options-menu hidden">
         <ui:VisualElement name="OptionsBackground" class="options-background"/>
-        <ui:VisualElement name="OptionsContent" class="options-content" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; display: flex;">
-            <ui:VisualElement name="TitleContainer" class="title-container" style="width: 594px; background-position-x: center; right: 648px; left: 34%; height: 218px; margin-bottom: 0; padding-bottom: 0; top: -9px;">
-                <ui:Label text="OPTIONS" name="TitleText" class="title-text" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 64px;"/>
+        <ui:VisualElement name="OptionsContent" class="options-content">
+            <ui:VisualElement name="TitleContainer" class="title-container title-container--positioned">
+                <ui:Label text="OPTIONS" name="TitleText" class="title-text title-text--large"/>
             </ui:VisualElement>
-            <ui:VisualElement name="MainContainer" class="main-container" style="flex-grow: 1;">
-                <ui:VisualElement name="OptionsButtonsContainer" class="options-buttons-container" style="width: 552px; height: 673px; margin-right: 0; margin-left: 34px; margin-top: 15px; justify-content: center; align-items: center; padding-top: 0; padding-bottom: 0;">
-                    <ui:Button text="" name="AudioTabButton" class="tab-button audio-tab-button active" style="height: 144px; width: 376px; justify-content: flex-start; padding-top: 0; margin-bottom: 50px; padding-bottom: 0; align-items: stretch; margin-top: 0;">
-                        <ui:Label text="AUDIO" style="color: rgb(255, 255, 255); justify-content: center; align-items: center; align-self: auto; align-content: auto; margin-top: 30px; -unity-font-definition: url(&quot;project://database/Assets/PluginYourGames/Example/Content/Font/Roboto-Regular.ttf?fileID=12800000&amp;guid=4b10251d8d1a40c4d97edcf51fc6b4ea&amp;type=3#Roboto-Regular&quot;); font-size: 48px;"/>
+            <ui:VisualElement name="MainContainer" class="main-container">
+                <ui:VisualElement name="OptionsButtonsContainer" class="options-buttons-container options-buttons-container--sized">
+                    <ui:Button text="" name="AudioTabButton" class="tab-button audio-tab-button active tab-button--sized">
+                        <ui:Label text="AUDIO" class="tab-label roboto-font"/>
                     </ui:Button>
-                    <ui:Button text="" name="StatisticsTabButton" class="tab-button statistics-tab-button" style="height: 144px; width: 376px; padding-top: 0; margin-bottom: 40px; padding-bottom: 0; margin-top: 0;">
-                        <ui:Label text="STATISTIC" style="color: rgb(255, 255, 255); margin-top: 30px; font-size: 48px; -unity-font-definition: url(&quot;project://database/Assets/PluginYourGames/Example/Content/Font/Roboto-Regular.ttf?fileID=12800000&amp;guid=4b10251d8d1a40c4d97edcf51fc6b4ea&amp;type=3#Roboto-Regular&quot;);"/>
+                    <ui:Button text="" name="StatisticsTabButton" class="tab-button statistics-tab-button tab-button--sized tab-button--margin-bottom">
+                        <ui:Label text="STATISTIC" class="tab-label roboto-font"/>
                     </ui:Button>
-                    <ui:Button text="" name="InfoTabButton" class="info-tab-button tab-button" style="height: 144px; width: 376px; padding-top: 0; padding-bottom: 0;">
-                        <ui:Label text="INFORMATION" style="color: rgb(255, 255, 255); margin-top: 30px; font-size: 48px; -unity-font-definition: url(&quot;project://database/Assets/PluginYourGames/Example/Content/Font/Roboto-Regular.ttf?fileID=12800000&amp;guid=4b10251d8d1a40c4d97edcf51fc6b4ea&amp;type=3#Roboto-Regular&quot;);"/>
+                    <ui:Button text="" name="InfoTabButton" class="info-tab-button tab-button tab-button--sized">
+                        <ui:Label text="INFORMATION" class="tab-label roboto-font"/>
                     </ui:Button>
                 </ui:VisualElement>
-                <ui:VisualElement name="SettingsContainer" class="settings-container" style="width: 1112px; height: 619px; margin-left: 65px; margin-top: 49px; margin-right: 100px; padding-bottom: 0;">
-                    <ui:VisualElement name="AudioSettings" class="settings-panel audio-settings" style="padding-top: 20px;">
-                        <ui:VisualElement name="MasterVolumeRow" class="audio-row" style="margin-left: 60px; padding-right: 120px; margin-bottom: 105px;">
+                <ui:VisualElement name="SettingsContainer" class="settings-container settings-container--sized">
+                    <ui:VisualElement name="AudioSettings" class="settings-panel audio-settings audio-settings--padded">
+                        <ui:VisualElement name="MasterVolumeRow" class="audio-row audio-row--master">
                             <ui:VisualElement name="MasterVolumeIconContainer" class="icon-container">
                                 <ui:VisualElement name="MasterIcon" class="master-icon"/>
                             </ui:VisualElement>
-                            <ui:Button text="" name="MasterVolumeDown" class="volume-button down-volume-button" style="background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;"/>
-                            <ui:Slider label="" value="100" high-value="100" name="MasterVolumeSlider" class="volume-slider" style="margin-bottom: 60px;"/>
-                            <ui:Button text="" name="MasterVolumeUp" class="volume-button" style="background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;"/>
+                            <ui:Button text="" name="MasterVolumeDown" class="volume-button down-volume-button volume-button--transparent"/>
+                            <ui:Slider label="" value="100" high-value="100" name="MasterVolumeSlider" class="volume-slider volume-slider--bottom-margin"/>
+                            <ui:Button text="" name="MasterVolumeUp" class="volume-button volume-button--transparent"/>
                         </ui:VisualElement>
-                        <ui:VisualElement name="MusicVolumeRow" class="audio-row" style="margin-left: 60px; margin-right: 0; padding-right: 120px;">
+                        <ui:VisualElement name="MusicVolumeRow" class="audio-row audio-row--music">
                             <ui:VisualElement name="MusicVolumeIconContainer" class="icon-container">
                                 <ui:VisualElement name="MusicIcon" class="music-icon"/>
                             </ui:VisualElement>
-                            <ui:Button text="" name="MusicVolumeDown" class="volume-button down-volume-button" style="background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;"/>
-                            <ui:Slider label="" value="100" high-value="100" name="MusicVolumeSlider" class="volume-slider" style="margin-bottom: 60px;"/>
-                            <ui:Button text="" name="MusicVolumeUp" class="volume-button" style="background-color: rgba(255, 255, 255, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;"/>
+                            <ui:Button text="" name="MusicVolumeDown" class="volume-button down-volume-button volume-button--transparent"/>
+                            <ui:Slider label="" value="100" high-value="100" name="MusicVolumeSlider" class="volume-slider volume-slider--bottom-margin"/>
+                            <ui:Button text="" name="MusicVolumeUp" class="volume-button volume-button--transparent"/>
                         </ui:VisualElement>
                     </ui:VisualElement>
-                    <ui:VisualElement name="StatisticsSettings" class="settings-panel statistics-settings hidden" style="padding-top: 50px;">
-                        <ui:VisualElement name="TimeStatRow" class="stats-row" style="margin-left: 175px; margin-bottom: 100px;">
+                    <ui:VisualElement name="StatisticsSettings" class="settings-panel statistics-settings hidden statistics-settings--padded">
+                        <ui:VisualElement name="TimeStatRow" class="stats-row stats-row--time">
                             <ui:VisualElement name="TimeIconContainer" class="stats-icon-column">
                                 <ui:VisualElement name="TimerIcon" class="stat-icon timer-icon"/>
                             </ui:VisualElement>
-                            <ui:Label text="00:00:00" name="TimeStatText" class="stat-text" style="padding-left: 200px; -unity-font-definition: url(&quot;project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&amp;guid=0d91f7049f2966244ab5e9b102f76dbd&amp;type=3#Rubik-Regular&quot;); -unity-font-style: normal;"/>
+                            <ui:Label text="00:00:00" name="TimeStatText" class="stat-text stat-text--time rubik-font stat-text--normal-style"/>
                         </ui:VisualElement>
-                        <ui:VisualElement name="DeathsStatRow" class="stats-row" style="margin-left: 175px; margin-bottom: 100px;">
+                        <ui:VisualElement name="DeathsStatRow" class="stats-row stats-row--deaths">
                             <ui:VisualElement name="DeathsIconContainer" class="stats-icon-column">
                                 <ui:VisualElement name="SkullIcon" class="stat-icon skull-icon"/>
                             </ui:VisualElement>
-                            <ui:Label text="2" name="DeathsStatText" class="stat-text" style="padding-left: 300px; -unity-font-definition: url(&quot;project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&amp;guid=0d91f7049f2966244ab5e9b102f76dbd&amp;type=3#Rubik-Regular&quot;); -unity-font-style: normal;"/>
+                            <ui:Label text="2" name="DeathsStatText" class="stat-text stat-text--deaths rubik-font stat-text--normal-style"/>
                         </ui:VisualElement>
-                        <ui:VisualElement name="FlasksStatRow" class="stats-row" style="margin-left: 175px; margin-bottom: 0;">
+                        <ui:VisualElement name="FlasksStatRow" class="stats-row stats-row--flasks">
                             <ui:VisualElement name="FlaskIconContainer" class="stats-icon-column">
                                 <ui:VisualElement name="FlaskIcon" class="stat-icon flask-icon"/>
                             </ui:VisualElement>
-                            <ui:Label text="1/2" name="FlasksStatText" class="stat-text" style="padding-left: 285px; -unity-font-definition: url(&quot;project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&amp;guid=0d91f7049f2966244ab5e9b102f76dbd&amp;type=3#Rubik-Regular&quot;); -unity-font-style: normal;"/>
+                            <ui:Label text="1/2" name="FlasksStatText" class="stat-text stat-text--flasks rubik-font stat-text--normal-style"/>
                         </ui:VisualElement>
                     </ui:VisualElement>
-                    <ui:VisualElement name="InfoSettings" class="settings-panel info-settings hidden" style="padding-top: 50px;">
-                        <ui:VisualElement name="Row1" class="info-row" style="margin-bottom: 50px; width: 95%;">
-                            <ui:VisualElement name="MaxContainer" class="member-container" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
-                                <ui:Label text="Плотников Максим" name="MaxName" class="member-name" style="-unity-font-definition: url(&quot;project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&amp;guid=0d91f7049f2966244ab5e9b102f76dbd&amp;type=3#Rubik-Regular&quot;); font-size: 48px; -unity-font-style: normal; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;"/>
-                                <ui:Label text="Unity - разработчик" name="MaxRole" class="member-role" style="-unity-font-definition: url(&quot;project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&amp;guid=0d91f7049f2966244ab5e9b102f76dbd&amp;type=3#Rubik-Regular&quot;); font-size: 40px; color: rgb(242, 61, 112); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;"/>
+                    <ui:VisualElement name="InfoSettings" class="settings-panel info-settings hidden info-settings--padded">
+                        <ui:VisualElement name="Row1" class="info-row info-row--margin-bottom">
+                            <ui:VisualElement name="MaxContainer" class="member-container member-container--no-padding">
+                                <ui:Label text="Плотников Максим" name="MaxName" class="member-name member-name--info rubik-font"/>
+                                <ui:Label text="Unity - разработчик" name="MaxRole" class="member-role member-role--info rubik-font"/>
                             </ui:VisualElement>
-                            <ui:VisualElement name="ReginaContainer" class="member-container" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
-                                <ui:Label text="Гиззатуллина Регина" name="ReginaName" class="member-name" style="font-size: 48px; -unity-font-definition: url(&quot;project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&amp;guid=0d91f7049f2966244ab5e9b102f76dbd&amp;type=3#Rubik-Regular&quot;); -unity-font-style: normal; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; height: 55px;"/>
-                                <ui:Label text="Tech - дизайнер" name="ReginaRole" class="member-role" style="color: rgb(242, 61, 112); font-size: 40px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;"/>
-                            </ui:VisualElement>
-                        </ui:VisualElement>
-                        <ui:VisualElement name="Row2" class="info-row" style="margin-bottom: 50px; width: 95%;">
-                            <ui:VisualElement name="DenisContainer" class="member-container" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
-                                <ui:Label text="Нацибулин Денис" name="DenisName" class="member-name" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-font-definition: url(&quot;project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&amp;guid=0d91f7049f2966244ab5e9b102f76dbd&amp;type=3#Rubik-Regular&quot;); font-size: 48px; -unity-font-style: normal;"/>
-                                <ui:Label text="Unity - разработчик" name="DenisRole" class="member-role" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; font-size: 40px; -unity-font-definition: url(&quot;project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&amp;guid=0d91f7049f2966244ab5e9b102f76dbd&amp;type=3#Rubik-Regular&quot;); color: rgb(242, 61, 112);"/>
-                            </ui:VisualElement>
-                            <ui:VisualElement name="AlinaContainer" class="member-container" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
-                                <ui:Label text="Яруллина Алина" name="AlinaName" class="member-name" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-font-definition: url(&quot;project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&amp;guid=0d91f7049f2966244ab5e9b102f76dbd&amp;type=3#Rubik-Regular&quot;); font-size: 48px; -unity-font-style: normal;"/>
-                                <ui:Label text="Props - художник" name="AlinaRole" class="member-role" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 40px; color: rgb(242, 61, 112);"/>
+                            <ui:VisualElement name="ReginaContainer" class="member-container member-container--no-padding">
+                                <ui:Label text="Гиззатуллина Регина" name="ReginaName" class="member-name member-name--info member-name--fixed-height rubik-font"/>
+                                <ui:Label text="Tech - дизайнер" name="ReginaRole" class="member-role member-role--info"/>
                             </ui:VisualElement>
                         </ui:VisualElement>
-                        <ui:VisualElement name="Row3" class="info-row" style="width: 95%;">
-                            <ui:VisualElement name="AlexContainer" class="member-container" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
-                                <ui:Label text="Наврузов Алексей" name="AlexName" class="member-name" style="-unity-font-definition: url(&quot;project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&amp;guid=0d91f7049f2966244ab5e9b102f76dbd&amp;type=3#Rubik-Regular&quot;); font-size: 48px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-font-style: normal;"/>
-                                <ui:Label text="Гейм - дизайнер" name="AlexRole" class="member-role" style="-unity-font-definition: url(&quot;project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&amp;guid=0d91f7049f2966244ab5e9b102f76dbd&amp;type=3#Rubik-Regular&quot;); font-size: 40px; color: rgb(242, 61, 112);"/>
+                        <ui:VisualElement name="Row2" class="info-row info-row--margin-bottom">
+                            <ui:VisualElement name="DenisContainer" class="member-container member-container--no-padding">
+                                <ui:Label text="Нацибулин Денис" name="DenisName" class="member-name member-name--info rubik-font"/>
+                                <ui:Label text="Unity - разработчик" name="DenisRole" class="member-role member-role--info rubik-font"/>
                             </ui:VisualElement>
-                            <ui:VisualElement name="IrinaContainer" class="member-container" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
-                                <ui:Label text="Демидова Ирина" name="IrinaName" class="member-name" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-font-definition: url(&quot;project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&amp;guid=0d91f7049f2966244ab5e9b102f76dbd&amp;type=3#Rubik-Regular&quot;); font-size: 48px; -unity-font-style: normal;"/>
-                                <ui:Label text="BG - художник" name="IrinaRole" class="member-role" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 40px; -unity-font-definition: url(&quot;project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&amp;guid=0d91f7049f2966244ab5e9b102f76dbd&amp;type=3#Rubik-Regular&quot;); color: rgb(242, 61, 112);"/>
+                            <ui:VisualElement name="AlinaContainer" class="member-container member-container--no-padding">
+                                <ui:Label text="Яруллина Алина" name="AlinaName" class="member-name member-name--info rubik-font"/>
+                                <ui:Label text="Props - художник" name="AlinaRole" class="member-role member-role--info"/>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="Row3" class="info-row">
+                            <ui:VisualElement name="AlexContainer" class="member-container member-container--no-padding">
+                                <ui:Label text="Наврузов Алексей" name="AlexName" class="member-name member-name--info rubik-font"/>
+                                <ui:Label text="Гейм - дизайнер" name="AlexRole" class="member-role member-role--info rubik-font"/>
+                            </ui:VisualElement>
+                            <ui:VisualElement name="IrinaContainer" class="member-container member-container--no-padding">
+                                <ui:Label text="Демидова Ирина" name="IrinaName" class="member-name member-name--info rubik-font"/>
+                                <ui:Label text="BG - художник" name="IrinaRole" class="member-role member-role--info rubik-font"/>
                             </ui:VisualElement>
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:Button text="" name="CloseOptionsButton" class="close-options-button" style="border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-right: 16px; margin-top: 16px;"/>
+        <ui:Button text="" name="CloseOptionsButton" class="close-options-button close-options-button--positioned"/>
     </ui:VisualElement>
 </ui:UXML>

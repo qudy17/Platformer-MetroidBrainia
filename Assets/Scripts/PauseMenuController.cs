@@ -28,6 +28,9 @@ public class PauseMenuController : MonoBehaviour
     // Кнопка меню
     private Button menuButton;
 
+    // Кнопка закрытия опций (открывает Exit Overlay)
+    private Button closeOptionsButton;
+
     // Кнопка перезагрузки уровня
     private Button reloadButton;
 
@@ -135,6 +138,9 @@ public class PauseMenuController : MonoBehaviour
         // Кнопка меню
         menuButton = root.Q<Button>("MenuButton");
 
+        // Кнопка закрытия опций
+        closeOptionsButton = root.Q<Button>("CloseOptionsButton");
+
         // Кнопка перезагрузки уровня
         reloadButton = root.Q<Button>("ReloadButton");
 
@@ -161,6 +167,12 @@ public class PauseMenuController : MonoBehaviour
         musicVolumeDown = root.Q<Button>("MusicVolumeDown");
         musicVolumeUp = root.Q<Button>("MusicVolumeUp");
 
+        if (masterVolumeSlider != null)
+            masterVolumeSlider.fill = true;
+
+        if (musicVolumeSlider != null)
+            musicVolumeSlider.fill = true;
+
         // Статистика
         timeStatText = root.Q<Label>("TimeStatText");
         deathsStatText = root.Q<Label>("DeathsStatText");
@@ -176,6 +188,10 @@ public class PauseMenuController : MonoBehaviour
         // Кнопка меню
         if (menuButton != null)
             menuButton.clicked += OnMenuButtonClicked;
+
+        // Кнопка закрытия опций — открывает Exit Overlay
+        if (closeOptionsButton != null)
+            closeOptionsButton.clicked += OpenExitOverlay;
 
         // Кнопка перезагрузки
         if (reloadButton != null)
@@ -223,6 +239,9 @@ public class PauseMenuController : MonoBehaviour
     {
         if (menuButton != null)
             menuButton.clicked -= OnMenuButtonClicked;
+
+        if (closeOptionsButton != null)
+            closeOptionsButton.clicked -= OpenExitOverlay;
 
         if (reloadButton != null)
             reloadButton.clicked -= OnReloadButtonClicked;
@@ -445,20 +464,20 @@ public class PauseMenuController : MonoBehaviour
         {
             float playTime = PlayerPrefs.GetFloat("PlayTime", 0f);
             TimeSpan timeSpan = TimeSpan.FromSeconds(playTime);
-            timeStatText.text = $"Time: {timeSpan.Hours:D2}:{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
+            timeStatText.text = $"{timeSpan.Hours:D2}:{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
         }
 
         if (deathsStatText != null)
         {
             int deaths = PlayerPrefs.GetInt("Deaths", 0);
-            deathsStatText.text = $"Deaths: {deaths}";
+            deathsStatText.text = $"{deaths}";
         }
 
         if (flasksStatText != null)
         {
             int flasksCollected = PlayerPrefs.GetInt("FlasksCollected", 0);
             int totalFlasks = PlayerPrefs.GetInt("TotalFlasks", 10);
-            flasksStatText.text = $"Flasks: {flasksCollected}/{totalFlasks}";
+            flasksStatText.text = $"{flasksCollected}/{totalFlasks}";
         }
     }
 
