@@ -143,6 +143,14 @@ public class MainMenuController : MonoBehaviour
         masterVolumeSlider = root.Q<Slider>("MasterVolumeSlider");
         musicVolumeSlider = root.Q<Slider>("MusicVolumeSlider");
 
+
+        if (masterVolumeSlider != null)
+            masterVolumeSlider.fill = true;
+
+        if (musicVolumeSlider != null)
+            musicVolumeSlider.fill = true;
+
+
         // Кнопки +/-
         masterVolumeDown = root.Q<Button>("MasterVolumeDown");
         masterVolumeUp = root.Q<Button>("MasterVolumeUp");
@@ -397,14 +405,14 @@ public class MainMenuController : MonoBehaviour
         {
             float playTime = PlayerPrefs.GetFloat("PlayTime", 0f);
             TimeSpan timeSpan = TimeSpan.FromSeconds(playTime);
-            timeStatText.text = $"Time: {timeSpan.Hours:D2}:{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
+            timeStatText.text = $"{timeSpan.Hours:D2}:{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
         }
 
         // Количество смертей
         if (deathsStatText != null)
         {
             int deaths = PlayerPrefs.GetInt("Deaths", 0);
-            deathsStatText.text = $"Deaths: {deaths}";
+            deathsStatText.text = $"{deaths}";
         }
 
         // Количество колб (заглушка)
@@ -412,7 +420,7 @@ public class MainMenuController : MonoBehaviour
         {
             int flasksCollected = PlayerPrefs.GetInt("FlasksCollected", 0);
             int totalFlasks = PlayerPrefs.GetInt("TotalFlasks", 10);
-            flasksStatText.text = $"Flasks: {flasksCollected}/{totalFlasks}";
+            flasksStatText.text = $"{flasksCollected}/{totalFlasks}";
         }
     }
 

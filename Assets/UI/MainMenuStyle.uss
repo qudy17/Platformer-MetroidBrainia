@@ -1,56 +1,37 @@
-/* ==================== ÏÅĞÅÌÅÍÍÛÅ (ÏÓÒÈ Ê ĞÅÑÓĞÑÀÌ) ==================== */
-/* 
-   ÈÍÑÒĞÓÊÖÈß: Çàìåíèòå ïóòè íèæå íà âàøè èçîáğàæåíèÿ
-   Ïğèìåğ: url('project://database/Assets/UI/Sprites/background.png')
-*/
-
-:root {
-    /* ========== ÃËÀÂÍÎÅ ÌÅÍŞ ========== */
-    /* Ïóòè ê èçîáğàæåíèÿì - ÇÀÌÅÍÈÒÅ ÍÀ ÑÂÎÈ */
-    --background-image: url('project://database/Assets/UI/Sprites/MenuBackground.png');
-    --game-logo-image: url('project://database/Assets/UI/Png/Yell.png');
-    --buttons-container-bg: url('project://database/Assets/UI/Sprites/ButtonsContainerBG.png');
-    
-    /* Êíîïêà Start Game */
-    --start-button-default: url('project://database/Assets/UI/Png/button_start_normal.png');
-    --start-button-hover: url('project://database/Assets/UI/Png/button_start_hover.png');
-    
-    /* Êíîïêà Options */
-    --options-button-default: url('project://database/Assets/UI/Png/button_options_normal.png');
-    --options-button-hover: url('project://database/Assets/UI/Png/button_options_hover.png');
-    
-    /* ========== ÌÅÍŞ ÍÀÑÒĞÎÅÊ ========== */
-    --options-background: url('project://database/Assets/UI/Png/options-background.png');
-    --title-container-bg: url('project://database/Assets/UI/Sprites/TitleContainerBG.png');
-    --options-buttons-container-bg: url('project://database/Assets/UI/Sprites/OptionsButtonsContainerBG.png');
-    --settings-container-bg: url('project://database/Assets/UI/Sprites/SettingsContainerBG.png');
-    
-    /* Êíîïêè ïåğåêëş÷åíèÿ âêëàäîê */
-    --audio-button-default: url('project://database/Assets/UI/Sprites/AudioButton_Default.png');
-    --audio-button-hover: url('project://database/Assets/UI/Sprites/AudioButton_Hover.png');
-    --audio-button-active: url('project://database/Assets/UI/Sprites/AudioButton_Active.png');
-    
-    --statistics-button-default: url('project://database/Assets/UI/Sprites/StatisticsButton_Default.png');
-    --statistics-button-hover: url('project://database/Assets/UI/Sprites/StatisticsButton_Hover.png');
-    --statistics-button-active: url('project://database/Assets/UI/Sprites/StatisticsButton_Active.png');
-    
-    --info-button-default: url('project://database/Assets/UI/Sprites/InfoButton_Default.png');
-    --info-button-hover: url('project://database/Assets/UI/Sprites/InfoButton_Hover.png');
-    --info-button-active: url('project://database/Assets/UI/Sprites/InfoButton_Active.png');
-    
-    /* Èêîíêè ñòàòèñòèêè */
-    --timer-icon: url('project://database/Assets/UI/Sprites/TimerIcon.png');
-    --skull-icon: url('project://database/Assets/UI/Sprites/SkullIcon.png');
-    --flask-icon: url('project://database/Assets/UI/Sprites/FlaskIcon.png');
-    
-    /* Öâåòà */
+ï»¿:root {
+    --background-image: url("project://database/Assets/UI/MainMenu/MenuBackground.png?fileID=-961990212438608285&guid=7ffbbe36ff6c7994f9c10b8818dff148&type=3#MenuBackground_0");
+    --game-logo-image: url("project://database/Assets/UI/MainMenu/Yell.png?fileID=-276854878510880552&guid=36a2be57b0361dd419122cd98bf2db14&type=3#Yell_0");
+    --buttons-container-bg: url("project://database/Assets/UI/MainMenu/ButtonsContainerBGMainMenu.svg?fileID=7388822144124034973&guid=559841901192d7445957b5a5791de8c7&type=3#ButtonsContainerBGMainMenu");
+    --start-button-default: url("project://database/Assets/UI/Pnga/button_start_normal.png");
+    --start-button-hover: url("project://database/Assets/UI/MainMenu/StartButtonHover.png?fileID=-1410543623192155935&guid=cc6e7a3a12f65404ab66e0ba8aeabcca&type=3#StartButtonHover_0");
+    --options-button-default: url("project://database/Assets/UI/aPng/button_options_normal.png");
+    --options-button-hover: url("project://database/Assets/UI/MainMenu/OptionsButtonHover.png?fileID=6998123776648737841&guid=4c32265e16351e94b98cd06694df2947&type=3#OptionsButtonHover_0");
+    --options-background: url("project://database/Assets/UI/Options/OptionsBackground.png?fileID=836023105048073361&guid=c36c6881fabc90245b5b59d2eb9a27ea&type=3#OptionsBackground_0");
+    --title-container-bg: url("project://database/Assets/UI/Options/OptionsTitleContainer.png?fileID=-3871136307603959565&guid=884ceaee47afb9e4aa5ca74082b10b2f&type=3#OptionsTitleContainer_0");
+    --options-buttons-container-bg: url("project://database/Assets/UI/Options/OptionsButtonsContainer.svg?fileID=7388822144124034973&guid=dd88018219ad44645835a5e2be2b888c&type=3#OptionsButtonsContainer");
+    --settings-container-bg: url("project://database/Assets/UI/Options/SettingsContainer.svg?fileID=7388822144124034973&guid=1870d2355e3edfa4fb842069aaab3618&type=3#SettingsContainer");
+    --audio-button-default: url("project://database/Assets/UI/Sprites/AudioButton_Default.png");
+    --audio-button-hover: url("project://database/Assets/UI/Options/AudioButtonHover.png");
+    --audio-button-active: url("project://database/Assets/UI/Options/AudioButtonActive.png");
+    --statistics-button-default: url("project://database/Assets/UI/Sprites/StatisticsButton_Default.png");
+    --statistics-button-hover: url("project://database/Assets/UI/Options/StatisticButtonHover.png");
+    --statistics-button-active: url("project://database/Assets/UI/Options/StatisticButtonActive.png");
+    --info-button-default: url("project://database/Assets/UI/Sprites/InfoButton_Default.png");
+    --info-button-hover: url("project://database/Assets/UI/Options/InformationButtonHover.png");
+    --info-button-active: url("project://database/Assets/UI/Options/InformationButtonActive.png");
+    --timer-icon: url("project://database/Assets/UI/Options/TimeIcon.svg");
+    --skull-icon: url("project://database/Assets/UI/Options/SkullICon.svg");
+    --flask-icon: url("project://database/Assets/UI/Options/FlaskIcon.svg");
+    --close-button: url("project://database/Assets/UI/Options/CloseButton.png?fileID=7228427573584015795&guid=12f307e7bba14934184817ca02f172c8&type=3#CloseButton_0");
+    --dragger: url("project://database/Assets/UI/Options/SliderDragger.svg");
+    --volume-icon-container: url("project://database/Assets/UI/Options/VolumeIconContainer.png");
+    --master-volume-icon: url("project://database/Assets/UI/Options/MasterVolumeIcon.svg");
+    --music-volume-icon: url("project://database/Assets/UI/Options/MusicVolumeIcon.svg");
+    --volume-button: url("project://database/Assets/UI/Options/VolumeButton.svg");
     --text-color: rgb(255, 255, 255);
     --text-shadow: rgba(0, 0, 0, 0.8);
 }
 
-/* ==================== ÃËÀÂÍÎÅ ÌÅÍŞ ==================== */
-
-/* Ôîí ãëàâíîãî ìåíş */
 .background {
     position: absolute;
     width: 100%;
@@ -59,109 +40,84 @@
     -unity-background-scale-mode: scale-and-crop;
 }
 
-/* Ãëàâíûé êîíòåéíåğ ìåíş */
 .main-menu-container {
     width: 100%;
     height: 100%;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    padding-left: 50px;
-    padding-top: 50px;
+    padding-left: 64px;
+    padding-top: 64px;
 }
-
-/* ==================== ËÎÃÎÒÈÏ ÈÃĞÛ ==================== */
 
 .game-logo {
-    width: 832px;
-    height: 384px;
+    width: 719px;
+    height: 281px;
     background-image: var(--game-logo-image);
     -unity-background-scale-mode: scale-to-fit;
-    margin-bottom: 30px;
+    margin-bottom: 64px;
+    margin-top: 32px;
+    margin-left: 64px;
 }
 
-/* ==================== ÊÎÍÒÅÉÍÅĞ ÊÍÎÏÎÊ ÃËÀÂÍÎÃÎ ÌÅÍŞ ==================== */
-
 .buttons-container {
+    width: 832px;
+    height: 384px;
     flex-direction: column;
     align-items: flex-start;
     background-image: var(--buttons-container-bg);
     -unity-background-scale-mode: scale-to-fit;
     padding: 20px;
-    margin-top: 20px;
+    margin-top: 32px;
+    -unity-background-image-tint-color: rgb(18, 21, 28);
 }
-
-/* ==================== ÊÍÎÏÊÈ ÃËÀÂÍÎÃÎ ÌÅÍŞ ==================== */
 
 .menu-button {
     width: 376px;
     height: 144px;
     margin-bottom: 20px;
     border-width: 0;
-    background-color: rgba(0, 0, 0, 0); /* Ïğîçğà÷íûé ôîí */
+    background-color: rgba(0, 0, 0, 0);
     -unity-background-scale-mode: scale-to-fit;
     transition-duration: 0.2s;
     cursor: link;
 }
 
-/* Óáèğàåì òåêñò êíîïîê (èñïîëüçóåì ñïğàéòû) */
 .button-label {
     display: none;
+    font-size: 48px;
+    color: rgb(255, 255, 255);
+    -unity-font-definition: url("project://database/Assets/UI/MainMenu/Rubik-VariableFont_wght.ttf?fileID=12800000&guid=2cc1220340d431846af58f2e7da8da3a&type=3#Rubik-VariableFont_wght");
+    margin-top: 40px;
+    margin-left: 20px;
+    -unity-font-style: bold;
 }
 
-/* Êíîïêà Start Game - Default */
 .start-game-button {
     background-image: var(--start-button-default);
 }
 
-/* Êíîïêà Start Game - Hover */
 .start-game-button:hover {
     background-image: var(--start-button-hover);
     scale: 1.05;
 }
 
-/* Êíîïêà Start Game - Active (êëèê) */
 .start-game-button:active {
     scale: 0.98;
 }
 
-/* Êíîïêà Options - Default */
 .options-button {
     background-image: var(--options-button-default);
 }
 
-/* Êíîïêà Options - Hover */
 .options-button:hover {
     background-image: var(--options-button-hover);
     scale: 1.05;
 }
 
-/* Êíîïêà Options - Active (êëèê) */
 .options-button:active {
     scale: 0.98;
 }
-
-/* ==================== ÀÄÀÏÒÈÂÍÎÑÒÜ ÃËÀÂÍÎÃÎ ÌÅÍŞ ==================== */
-
-/* Äëÿ ìàëåíüêèõ ıêğàíîâ */
-@media (max-width: 1280px) {
-    .game-logo {
-        width: 624px;
-        height: 288px;
-    }
-    
-    .menu-button {
-        width: 282px;
-        height: 108px;
-    }
-    
-    .main-menu-container {
-        padding-left: 30px;
-        padding-top: 30px;
-    }
-}
-
-/* ==================== ÌÅÍŞ ÍÀÑÒĞÎÅÊ (OVERLAY) ==================== */
 
 .options-menu {
     position: absolute;
@@ -195,8 +151,6 @@
     padding: 30px;
 }
 
-/* ==================== ÇÀÃÎËÎÂÎÊ ÍÀÑÒĞÎÅÊ ==================== */
-
 .title-container {
     width: 400px;
     height: 100px;
@@ -213,17 +167,14 @@
     -unity-font-style: bold;
     -unity-text-align: middle-center;
     text-shadow: 2px 2px 4px var(--text-shadow);
+    -unity-font-definition: url("project://database/Assets/UI/MainMenu/Rubik-Regular.ttf?fileID=12800000&guid=0d91f7049f2966244ab5e9b102f76dbd&type=3#Rubik-Regular");
 }
-
-/* ==================== ÃËÀÂÍÛÉ ÊÎÍÒÅÉÍÅĞ ÍÀÑÒĞÎÅÊ (ÊÍÎÏÊÈ + ÏÀÍÅËÈ) ==================== */
 
 .main-container {
     flex-direction: row;
     flex-grow: 1;
     width: 100%;
 }
-
-/* ==================== ÊÎÍÒÅÉÍÅĞ ÊÍÎÏÎÊ ÏÅĞÅÊËŞ×ÅÍÈß (ÑËÅÂÀ) ==================== */
 
 .options-buttons-container {
     width: 35%;
@@ -233,9 +184,8 @@
     flex-direction: column;
     padding: 20px;
     margin-right: 20px;
+    -unity-background-image-tint-color: rgb(18, 21, 28);
 }
-
-/* ==================== ÊÍÎÏÊÈ ÏÅĞÅÊËŞ×ÅÍÈß ÂÊËÀÄÎÊ ==================== */
 
 .tab-button {
     width: 100%;
@@ -252,7 +202,6 @@
     scale: 0.98;
 }
 
-/* Audio Button */
 .audio-tab-button {
     background-image: var(--audio-button-default);
 }
@@ -266,7 +215,6 @@
     background-image: var(--audio-button-active);
 }
 
-/* Statistics Button */
 .statistics-tab-button {
     background-image: var(--statistics-button-default);
 }
@@ -280,7 +228,6 @@
     background-image: var(--statistics-button-active);
 }
 
-/* Info Button */
 .info-tab-button {
     background-image: var(--info-button-default);
 }
@@ -294,17 +241,15 @@
     background-image: var(--info-button-active);
 }
 
-/* ==================== ÊÎÍÒÅÉÍÅĞ ÍÀÑÒĞÎÅÊ (ÑÏĞÀÂÀ) ==================== */
-
 .settings-container {
     width: 60%;
     flex-grow: 1;
     background-image: var(--settings-container-bg);
     -unity-background-scale-mode: stretch-to-fill;
     padding: 30px;
+    -unity-background-image-tint-color: rgb(18, 21, 28);
 }
 
-/* Ïàíåëè íàñòğîåê */
 .settings-panel {
     width: 100%;
     height: 100%;
@@ -315,8 +260,6 @@
     display: none;
 }
 
-/* ==================== ÀÓÄÈÎ ÍÀÑÒĞÎÉÊÈ ==================== */
-
 .audio-settings {
     flex-direction: column;
 }
@@ -325,42 +268,60 @@
     flex-direction: row;
     align-items: center;
     margin-bottom: 30px;
+    margin-top: 50px;
     width: 100%;
 }
+.icon-container {
+    width: 128px;
+    height: 128px;
+    background-image: var(--volume-icon-container);
+    -unity-background-scale-mode: scale-to-fit;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+.master-icon, .music-icon {
+    width: 64px;
+    height: 64px;
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: transparent;
+}
 
-.audio-label {
-    font-size: 24px;
-    color: var(--text-color);
-    width: 200px;
-    -unity-text-align: middle-left;
-    margin-right: 20px;
-    -unity-font-style: bold;
-    text-shadow: 2px 2px 4px var(--text-shadow);
+.master-icon {
+    background-image: var(--master-volume-icon);
+}
+
+.music-icon {
+    background-image: var(--music-volume-icon);
 }
 
 .volume-button {
     width: 50px;
     height: 50px;
-    font-size: 28px;
-    -unity-font-style: bold;
-    background-color: rgb(80, 80, 80);
-    color: white;
-    border-width: 2px;
-    border-color: white;
-    border-radius: 8px;
     margin-left: 10px;
     margin-right: 10px;
-    cursor: link;
+    background-image: var(--volume-button);
+}
+
+.volume-button.down-volume-button {
+    scale: -1 1;
 }
 
 .volume-button:hover {
-    background-color: rgb(120, 120, 120);
     scale: 1.1;
 }
 
+.volume-button.down-volume-button:hover {
+    scale: -1.1 1.1;
+}
+
 .volume-button:active {
-    background-color: rgb(60, 60, 60);
     scale: 0.95;
+}
+
+.volume-button.down-volume-button:active {
+    scale: -0.95 0.95;
 }
 
 .volume-slider {
@@ -368,27 +329,34 @@
     min-width: 200px;
 }
 
-/* Ñòèëèçàöèÿ ñëàéäåğà */
+.volume-slider .unity-base-slider__fill {
+    background-color: #F23D70;
+    height: 64px;
+    border-radius: 40px;
+}
+
 .volume-slider .unity-base-slider__tracker {
-    background-color: rgb(60, 60, 60);
-    border-radius: 10px;
-    height: 10px;
+    background-color: white;
+    border-radius: 40px;
+    height: 64px;
     border-width: 1px;
     border-color: rgb(100, 100, 100);
 }
 
 .volume-slider .unity-base-slider__dragger {
-    width: 20px;
-    height: 20px;
-    background-color: white;
+    width: 56px;
+    height: 48px;
     border-radius: 50%;
-    border-width: 2px;
-    border-color: rgb(100, 100, 100);
-    top: -5px;
+    border-width: 0px;
+    border-color: rgb(255,255,255);
+    -unity-background-image-tint-color: #F23D70;
+    top: -30px;
+    background-image: var(--dragger);
+    background-color: transparent;
+    -unity-background-scale-mode: scale-to-fit;
 }
 
 .volume-slider .unity-base-slider__dragger:hover {
-    background-color: rgb(200, 200, 255);
     scale: 1.2;
 }
 
@@ -396,23 +364,37 @@
     background-color: rgb(150, 150, 255);
 }
 
-/* ==================== ÑÒÀÒÈÑÒÈÊÀ ==================== */
-
 .statistics-settings {
     flex-direction: column;
+    padding: 50px 60px;
 }
 
 .stats-row {
     flex-direction: row;
     align-items: center;
-    margin-bottom: 30px;
+    justify-content: space-between;
+    margin-bottom: 50px;
+    width: 100%;
+}
+.stats-icon-column {
+    width: 128px;
+    height: 128px;
+    background-image: var(--volume-icon-container);
+    -unity-background-scale-mode: scale-to-fit;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.stats-text-column {
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .stat-icon {
     width: 64px;
     height: 64px;
     -unity-background-scale-mode: scale-to-fit;
-    margin-right: 20px;
 }
 
 .timer-icon {
@@ -428,40 +410,46 @@
 }
 
 .stat-text {
-    font-size: 32px;
+    font-size: 48px;
     color: var(--text-color);
     -unity-font-style: bold;
     text-shadow: 2px 2px 4px var(--text-shadow);
+    text-align: right;
+    flex-grow: 1;
+    margin-left: 40px;
 }
-
-/* ==================== ÈÍÔÎĞÌÀÖÈß Î ÊÎÌÀÍÄÅ ==================== */
 
 .info-settings {
-    flex-direction: row;
-}
-
-.info-column {
     flex-direction: column;
-    width: 50%;
-    padding-right: 20px;
+    padding: 30px 40px;
+    gap: 30px;
 }
 
-.info-header {
-    font-size: 28px;
+.info-row {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.member-container {
+    flex-direction: column;
+    width: 45%;
+    padding: 15px 20px;
+}
+
+.member-name {
+    font-size: 24px;
     color: var(--text-color);
     -unity-font-style: bold;
-    margin-bottom: 15px;
     text-shadow: 2px 2px 4px var(--text-shadow);
+    margin-bottom: 8px;
 }
 
-.info-item {
-    font-size: 20px;
-    color: var(--text-color);
-    margin-bottom: 10px;
-    text-shadow: 1px 1px 3px var(--text-shadow);
+.member-role {
+    font-size: 18px;
+    color: rgb(200, 200, 200);
+    text-shadow: 1px 1px 2px var(--text-shadow);
 }
-
-/* ==================== ÊÍÎÏÊÀ ÇÀÊĞÛÒÈß ÍÀÑÒĞÎÅÊ ==================== */
 
 .close-options-button {
     position: absolute;
@@ -478,6 +466,7 @@
     border-radius: 10px;
     -unity-text-align: middle-center;
     cursor: link;
+    background-image: var(--close-button);
 }
 
 .close-options-button:hover {
