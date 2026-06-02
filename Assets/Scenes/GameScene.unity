@@ -1234,7 +1234,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 0
-      m_TileSpriteIndex: 0
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1244,7 +1244,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 0
-      m_TileSpriteIndex: 0
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1254,7 +1254,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 0
-      m_TileSpriteIndex: 0
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1264,7 +1264,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 0
-      m_TileSpriteIndex: 0
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1277,11 +1277,11 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 454e812a36d290a499e95ee49ab7b03d, type: 2}
   m_TileSpriteArray:
   - serializedVersion: 2
-    m_RefCount: 4
+    m_RefCount: 0
     m_Data: {fileID: 5213229242370633579, guid: 6570a58a9c03c1842a017ad5e2c30c59, type: 3}
   - serializedVersion: 2
-    m_RefCount: 0
-    m_Data: {fileID: -5587899151745921581, guid: 85127a08e533e994ca0943a213a75edd, type: 3}
+    m_RefCount: 4
+    m_Data: {fileID: -5587899151745921581, guid: daf30eae95dbd0e4d9fe2938ac8486cb, type: 3}
   m_TileMatrixArray:
   - serializedVersion: 2
     m_RefCount: 4
@@ -1418,7 +1418,7 @@ TilemapRenderer:
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
+  m_ChunkCullingBounds: {x: 0, y: 0.5, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
@@ -1438,6 +1438,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DoorsManager
   doorsTilemap: {fileID: 577936105}
   doorsCollider: {fileID: 577936106}
+  closedDoorPrefab: {fileID: 2606824265520056253, guid: 51793b67baf85c64ab84c4ff4524f97f, type: 3}
+  openDoorPrefab: {fileID: 2606824265520056253, guid: f7d4d13f861610c4b9bde0c82f358f1d, type: 3}
+  doorsParent: {fileID: 0}
 --- !u!4 &577936109
 Transform:
   m_ObjectHideFlags: 0
