@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b08ceb78e3b2495b8d808a5860e66794, type: 3}
   m_Name: EnemyTile
   m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.Tilemaps.AutoTile
-  m_DefaultSprite: {fileID: 8596640243658272642, guid: 56cbfdf1c442acc498be57bef78ae7d8, type: 3}
+  m_DefaultSprite: {fileID: 7942249098920568159, guid: 4a42bc016e3239d4eb64165a579474aa, type: 3}
   m_DefaultGameObject: {fileID: 6633217168791908204, guid: 71cfa53d800fe2744b25f83b635681d4, type: 3}
   m_DefaultColliderType: 1
   m_MaskType: 0

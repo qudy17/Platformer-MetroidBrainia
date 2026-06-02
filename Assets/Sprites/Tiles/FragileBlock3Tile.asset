@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b08ceb78e3b2495b8d808a5860e66794, type: 3}
-  m_Name: CheckpointTile
+  m_Name: FragileBlock3Tile
   m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.Tilemaps.AutoTile
-  m_DefaultSprite: {fileID: -8676872707537995133, guid: e065668149ea60c4bbe14b45c703d029, type: 3}
-  m_DefaultGameObject: {fileID: 5180346327607825151, guid: b0b1033ffc9dd9e4798e04b97b2f11b7, type: 3}
+  m_DefaultSprite: {fileID: 9008714500755336509, guid: 25db158b86de385469b5f6cf182b4713, type: 3}
+  m_DefaultGameObject: {fileID: 5144408612395268278, guid: 43c25e98e15fa834cb56d3559ccff060, type: 3}
   m_DefaultColliderType: 1
   m_MaskType: 0
   m_Random: 0

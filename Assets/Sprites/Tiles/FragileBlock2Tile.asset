@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b08ceb78e3b2495b8d808a5860e66794, type: 3}
-  m_Name: FragileBlockTile
+  m_Name: FragileBlock2Tile
   m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.Tilemaps.AutoTile
-  m_DefaultSprite: {fileID: -1898487595906982981, guid: 9d42f491f0c5d7c4dbbeb8190710f72e, type: 3}
+  m_DefaultSprite: {fileID: 2720480703212860996, guid: de92aa081720fc241b9a936383417f8a, type: 3}
   m_DefaultGameObject: {fileID: 5144408612395268278, guid: 43c25e98e15fa834cb56d3559ccff060, type: 3}
   m_DefaultColliderType: 1
   m_MaskType: 0

@@ -2,6 +2,7 @@
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Настройки движения")]
@@ -19,6 +20,9 @@ public class PlayerMovement : MonoBehaviour
     public float groundCheckRadius = 0.1f;
     public LayerMask groundLayer;
 
+    [Header("Анимация")]
+    private Animator animator;
+
     public Vector2 FacingDirection { get; private set; } = Vector2.right;
 
     private Rigidbody2D rb;
@@ -32,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
 
         // Важно для работы с платформами
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
@@ -51,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Move();
         ClampFallSpeed();
-
+        UpdateAnimation();
         // Обновляем позицию платформы
         if (currentPlatform != null)
         {
@@ -160,6 +165,34 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector3(1f, 1f, 1f);
         else if (horizontalInput < 0f)
             transform.localScale = new Vector3(-1f, 1f, 1f);
+    }
+
+    void UpdateAnimation()
+    {
+        // Вариант 1: Если хотите плавно по скорости
+        if (IsGrounded)
+        {
+            float horizontalSpeed = Mathf.Abs(rb.linearVelocity.x);
+            float threshold = 0.5f; // Порог для переключения
+
+            if (horizontalSpeed > threshold)
+            {
+                animator.SetFloat("Speed", 1f);
+                
+            }
+            else if (horizontalInput != 0 && horizontalSpeed > 0.1f)
+            {
+                animator.SetFloat("Speed", 1f);
+            }
+            else
+            {
+                animator.SetFloat("Speed", 0f);
+            }
+        }
+        else
+        {
+            animator.SetFloat("Speed", 0f);
+        }
     }
 
     void OnDrawGizmosSelected()

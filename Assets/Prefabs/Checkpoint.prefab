@@ -83,7 +83,7 @@ SpriteRenderer:
   m_SortingLayer: 4
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -3448120935943364757, guid: 34ed8c6f849274c4393e8e8d254e224f, type: 3}
+  m_Sprite: {fileID: -8676872707537995133, guid: e065668149ea60c4bbe14b45c703d029, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -131,7 +131,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 0.859375, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -151,10 +151,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f93bfe92a70fb4393acbce782bc46f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Checkpoint
-  activeSprite: {fileID: -3448120935943364757, guid: 34ed8c6f849274c4393e8e8d254e224f, type: 3}
-  inactiveSprite: {fileID: -3448120935943364757, guid: 34ed8c6f849274c4393e8e8d254e224f, type: 3}
-  activeColor: {r: 1, g: 0, b: 0.8039954, a: 1}
-  inactiveColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  activeSprite: {fileID: -6952634797502961505, guid: 5605748cf78622545b3cb02d0d6786c6, type: 3}
+  inactiveSprite: {fileID: -8676872707537995133, guid: e065668149ea60c4bbe14b45c703d029, type: 3}
+  activeColor: {r: 1, g: 1, b: 1, a: 1}
+  inactiveColor: {r: 1, g: 1, b: 1, a: 1}
+  checkpointID: 
   playerLayer:
     serializedVersion: 2
     m_Bits: 256
