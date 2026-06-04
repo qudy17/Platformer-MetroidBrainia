@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b08ceb78e3b2495b8d808a5860e66794, type: 3}
-  m_Name: MovableBlockTile
+  m_Name: Spiketile 2
   m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.Tilemaps.AutoTile
-  m_DefaultSprite: {fileID: -3444132769346087664, guid: 958be98f476b4f04bb683d0dfd481dc5, type: 3}
-  m_DefaultGameObject: {fileID: 544766747840344223, guid: 2c23803f7c04a4344a7bdac070f11340, type: 3}
+  m_DefaultSprite: {fileID: -3118188309873099925, guid: fa7ea86576ce89341af952e69bad866b, type: 3}
+  m_DefaultGameObject: {fileID: 3185803719788179667, guid: 9a04d236d229df7458523ab40f202878, type: 3}
   m_DefaultColliderType: 1
   m_MaskType: 0
   m_Random: 0

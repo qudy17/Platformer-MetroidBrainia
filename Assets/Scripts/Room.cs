@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-// тест русского языка
+
 public class Room : MonoBehaviour
 {
     [Header("Размеры комнаты (в юнитах)")]

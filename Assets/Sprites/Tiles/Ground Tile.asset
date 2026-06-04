@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b08ceb78e3b2495b8d808a5860e66794, type: 3}
   m_Name: Ground Tile
   m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.Tilemaps.AutoTile
-  m_DefaultSprite: {fileID: -8024500100866721055, guid: 3ec28f015cca03a458345cb875bd70d9, type: 3}
+  m_DefaultSprite: {fileID: -7192357222849136107, guid: a8bf384490f73a54fb3475fe1155b780, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_MaskType: 0

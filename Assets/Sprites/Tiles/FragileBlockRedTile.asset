@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b08ceb78e3b2495b8d808a5860e66794, type: 3}
-  m_Name: MovableBlockTile
+  m_Name: FragileBlockRedTile
   m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.Tilemaps.AutoTile
-  m_DefaultSprite: {fileID: -3444132769346087664, guid: 958be98f476b4f04bb683d0dfd481dc5, type: 3}
-  m_DefaultGameObject: {fileID: 544766747840344223, guid: 2c23803f7c04a4344a7bdac070f11340, type: 3}
+  m_DefaultSprite: {fileID: 683514679745049015, guid: 0abf78cc98f889945b2492dd29406339, type: 3}
+  m_DefaultGameObject: {fileID: 5144408612395268278, guid: 43c25e98e15fa834cb56d3559ccff060, type: 3}
   m_DefaultColliderType: 1
   m_MaskType: 0
   m_Random: 0
