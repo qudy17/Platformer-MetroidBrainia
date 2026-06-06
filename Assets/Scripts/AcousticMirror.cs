@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-// тест русского языка
 public class AcousticMirror : MonoBehaviour
 {
     [Header("Отладка")]
@@ -54,9 +53,11 @@ public class AcousticMirror : MonoBehaviour
         Gizmos.DrawWireCube(transform.position, boxCollider ?
             boxCollider.bounds.size : Vector3.one);
 
+#if UNITY_EDITOR
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * 0.7f,
             $"MIRROR\nRotation: {transform.rotation.eulerAngles.z:F0}°"
         );
+#endif
     }
 }

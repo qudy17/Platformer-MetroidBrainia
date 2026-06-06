@@ -767,10 +767,6 @@
     scale: 0.98;
 }
 
-.exit-overlay-button:last-child {
-    margin-bottom: 0;
-}
-
 .exit-overlay-label {
     color: rgb(255, 255, 255);
     padding-top: 30px;

@@ -247,11 +247,13 @@ public class ResonancePipe : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
+#if UNITY_EDITOR
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * 1f,
             pipeType == PipeType.Input ?
                 $"INPUT\nID: {pipeID}\nAccept: {-transform.up}" :
                 $"OUTPUT\nID: {pipeID}\nEmit: {outputDirection}"
         );
+#endif
     }
 }

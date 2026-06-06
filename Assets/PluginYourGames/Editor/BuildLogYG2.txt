@@ -1,0 +1,3 @@
+﻿Build path: D:/URFU/Platformer-MetroidBrainia/Build
+Build number: 22
+PluginYG version: 2.0092

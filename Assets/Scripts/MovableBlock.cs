@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-// тест русского языка
 [RequireComponent(typeof(Rigidbody2D))]
 public class MovableBlock : MonoBehaviour
 {
@@ -290,7 +289,9 @@ public class MovableBlock : MonoBehaviour
             Gizmos.DrawWireCube(compositeCollider.bounds.center, compositeCollider.bounds.size);
         }
 
+#if UNITY_EDITOR
         UnityEditor.Handles.Label(transform.position + Vector3.up * 0.5f,
             hasBeenHit ? $"ACTIVE\n{gameObject.name}" : $"FROZEN\n{gameObject.name}");
+#endif
     }
 }

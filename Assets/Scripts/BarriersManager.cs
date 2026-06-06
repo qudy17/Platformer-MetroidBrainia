@@ -106,7 +106,7 @@ public class BarriersManager : MonoBehaviour
         // Убираем коллайдер с фантомного тайлмапа
         TilemapCollider2D phantomCollider = phantomObj.GetComponent<TilemapCollider2D>();
         if (phantomCollider != null)
-            DestroyImmediate(phantomCollider);
+            Destroy(phantomCollider);
 
         // Делаем объект видимым в иерархии
         phantomObj.hideFlags = HideFlags.None;

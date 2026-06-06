@@ -2,7 +2,7 @@
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 using System;
-// тест русского языка
+using System.Collections;
 public class MainMenuController : MonoBehaviour
 {
     [Header("UI Document")]
@@ -58,6 +58,19 @@ public class MainMenuController : MonoBehaviour
 
     void OnEnable()
     {
+        // Проверяем какая сейчас сцена
+        if (SceneManager.GetActiveScene().name != "MainMenu")
+        {
+            Debug.Log($"[MainMenuController] Не MainMenu, отключаю UI. Текущая сцена: {SceneManager.GetActiveScene().name}");
+            // Отключаем весь UI
+            if (uiDocument != null)
+            {
+                uiDocument.enabled = false;
+            }
+            this.enabled = false;
+            return;
+        }
+
         if (uiDocument == null)
         {
             uiDocument = GetComponent<UIDocument>();
@@ -247,7 +260,25 @@ public class MainMenuController : MonoBehaviour
 
     void OnStartGameClicked()
     {
-        Debug.Log("[MainMenuController] Start Game нажата - загружаю сцену: " + gameSceneName);
+        Debug.Log("[MainMenuController] Start Game нажата");
+
+        // СНАЧАЛА скрываем UI
+        if (uiDocument != null)
+        {
+            uiDocument.rootVisualElement.style.display = DisplayStyle.None;
+        }
+
+        // ПОТОМ загружаем сцену
+        StartCoroutine(LoadGameScene());
+    }
+
+    IEnumerator LoadGameScene()
+    {
+        // Ждем кадр чтобы UI скрылся
+        yield return null;
+
+        Debug.Log("[MainMenuController] Загружаю GameScene...");
+        Time.timeScale = 1f;
         SceneManager.LoadScene(gameSceneName);
     }
 

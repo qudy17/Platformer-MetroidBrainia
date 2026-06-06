@@ -1,6 +1,8 @@
 ﻿using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using YG;
+using YG.Utils;
 
 /// <summary>
 /// Отслеживает игровую статистику (время, смерти, колбы)
@@ -159,5 +161,39 @@ public class GameStatsTracker : MonoBehaviour
         PlayerPrefs.SetInt("FlasksCollected", 0);
         PlayerPrefs.Save();
         Debug.Log("[GameStatsTracker] Статистика сброшена");
+    }
+
+    public static void SaveAllStats()
+    {
+        PlayerPrefs.Save();
+        Debug.Log("[GameStatsTracker] Статистика сохранена локально");
+
+#if !UNITY_EDITOR
+        // Проверяем что SDK готов
+        if (YG2.isSDKEnabled)
+        {
+            // Создаем объект с данными
+            GameStatsData stats = new GameStatsData
+            {
+                playTime = PlayerPrefs.GetFloat("PlayTime", 0f),
+                deaths = PlayerPrefs.GetInt("Deaths", 0),
+                flasks = PlayerPrefs.GetInt("FlasksCollected", 0)
+            };
+            
+            // Сохраняем через LocalStorage из YG.Utils
+            string statsJson = JsonUtility.ToJson(stats);
+            LocalStorage.SetKey("GameStats", statsJson);
+            
+            Debug.Log("[GameStatsTracker] Статистика отправлена в облако");
+        }
+#endif
+    }
+
+    [System.Serializable]
+    private class GameStatsData
+    {
+        public float playTime;
+        public int deaths;
+        public int flasks;
     }
 }

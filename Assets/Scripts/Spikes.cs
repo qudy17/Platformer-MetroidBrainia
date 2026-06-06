@@ -91,9 +91,11 @@ public class Spikes : MonoBehaviour
         Gizmos.DrawWireCube(transform.position, boxCollider ?
             boxCollider.bounds.size : Vector3.one);
 
+#if UNITY_EDITOR
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * 0.7f,
             "SPIKES"
         );
+#endif
     }
 }

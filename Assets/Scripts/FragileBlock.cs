@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
-// тест русского языка
 [RequireComponent(typeof(BoxCollider2D))]
 public class FragileBlock : MonoBehaviour
 {

@@ -68,6 +68,8 @@ public class PauseMenuController : MonoBehaviour
 
     void OnEnable()
     {
+        Time.timeScale = 1f;
+
         if (uiDocument == null)
             uiDocument = GetComponent<UIDocument>();
 
@@ -288,6 +290,7 @@ public class PauseMenuController : MonoBehaviour
     {
         isPaused = true;
         Time.timeScale = 0f;
+        AudioListener.pause = true;
 
         if (pauseMenuRoot != null)
         {
@@ -308,6 +311,7 @@ public class PauseMenuController : MonoBehaviour
 
         isPaused = false;
         Time.timeScale = 1f;
+        AudioListener.pause = false;
 
         if (pauseMenuRoot != null)
         {

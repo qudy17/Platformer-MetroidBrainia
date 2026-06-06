@@ -52,6 +52,13 @@ public class ScreamAbility : MonoBehaviour
 
     void HandleInput()
     {
+        // Проверяем, что UI не перехватывает ввод
+        if (UnityEngine.EventSystems.EventSystem.current != null &&
+            UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject != null)
+        {
+            return; // Фокус на UI элементе - не кричим
+        }
+
         bool screamPressed = Keyboard.current != null &&
                              Keyboard.current.spaceKey.wasPressedThisFrame;
 

@@ -32,7 +32,6 @@ public class Checkpoint : MonoBehaviour
 
     void Awake()
     {
-        // Генерируем уникальный ID если его нет
         if (string.IsNullOrEmpty(checkpointID))
         {
             checkpointID = System.Guid.NewGuid().ToString();
@@ -44,29 +43,28 @@ public class Checkpoint : MonoBehaviour
         {
             spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         }
-
-        // Проверяем, является ли объект частью Tilemap
-        parentTilemap = GetComponentInParent<Tilemap>();
-        if (parentTilemap != null)
-        {
-            cellPosition = parentTilemap.WorldToCell(transform.position);
-            parentTilemap.SetTile(cellPosition, null);
-        }
-
-        SetVisualState(false);
-        Debug.Log($"[Checkpoint] Инициализирован в позиции {transform.position}, ID: {checkpointID}");
     }
 
     void Start()
     {
-        // Проверяем, был ли этот чекпоинт последним активированным
+        parentTilemap = GetComponentInParent<Tilemap>();
+        if (parentTilemap != null)
+        {
+            cellPosition = parentTilemap.WorldToCell(transform.position);
+
+            parentTilemap.SetTileFlags(cellPosition, TileFlags.None);
+            parentTilemap.SetColor(cellPosition, new Color(0f, 0f, 0f, 0f));
+        }
+
+        SetVisualState(false);
+        Debug.Log($"[Checkpoint] Инициализирован в позиции {transform.position}, ID: {checkpointID}");
+
         string savedCheckpointID = GetSavedCheckpointID();
         string currentScene = SceneManager.GetActiveScene().name;
         string savedScene = GetSavedCheckpointScene();
 
         if (savedCheckpointID == checkpointID && savedScene == currentScene)
         {
-            // Этот чекпоинт был последним активирован в этой сцене
             ActivateCheckpoint(false); // false = не сохранять снова
             Debug.Log($"[Checkpoint] Восстановлен последний чекпоинт: {checkpointID}");
         }
@@ -78,7 +76,7 @@ public class Checkpoint : MonoBehaviour
 
         if (((1 << other.gameObject.layer) & playerLayer) != 0)
         {
-            ActivateCheckpoint(true); // true = сохранить
+            ActivateCheckpoint(true);
         }
     }
 
@@ -89,7 +87,6 @@ public class Checkpoint : MonoBehaviour
         isActivated = true;
         Debug.Log($"[Checkpoint] Активирован в позиции {transform.position}");
 
-        // Деактивируем предыдущий чекпоинт
         if (currentCheckpoint != null && currentCheckpoint != this)
         {
             currentCheckpoint.DeactivateCheckpoint();
@@ -103,7 +100,6 @@ public class Checkpoint : MonoBehaviour
             SaveCheckpoint();
         }
 
-        // Устанавливаем точку возрождения игрока
         SetPlayerRespawnPoint();
     }
 
@@ -115,42 +111,29 @@ public class Checkpoint : MonoBehaviour
 
     void SetVisualState(bool active)
     {
-        if (spriteRenderer == null)
-        {
-            spriteRenderer = GetComponent<SpriteRenderer>();
-            if (spriteRenderer == null) return;
-        }
+        if (spriteRenderer == null) return;
 
         if (active)
         {
-            if (activeSprite != null)
-                spriteRenderer.sprite = activeSprite;
-
+            if (activeSprite != null) spriteRenderer.sprite = activeSprite;
             spriteRenderer.color = activeColor;
         }
         else
         {
-            if (inactiveSprite != null)
-                spriteRenderer.sprite = inactiveSprite;
-
+            if (inactiveSprite != null) spriteRenderer.sprite = inactiveSprite;
             spriteRenderer.color = inactiveColor;
         }
-
-        spriteRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        // УДАЛЕНА СТРОКА С Shader.Find, которая крашила сборку и вызывала утечку памяти
     }
 
     void SaveCheckpoint()
     {
         string currentScene = SceneManager.GetActiveScene().name;
 
-        // Сохраняем ID чекпоинта и сцену
         PlayerPrefs.SetString($"LastCheckpointID_{currentScene}", checkpointID);
         PlayerPrefs.SetString($"LastCheckpointScene", currentScene);
-
-        // Сохраняем позицию
         PlayerPrefs.SetFloat($"CheckpointX_{checkpointID}", transform.position.x);
         PlayerPrefs.SetFloat($"CheckpointY_{checkpointID}", transform.position.y);
-
         PlayerPrefs.Save();
 
         Debug.Log($"[Checkpoint] Сохранён: ID={checkpointID}, Scene={currentScene}, Pos={transform.position}");
@@ -158,7 +141,8 @@ public class Checkpoint : MonoBehaviour
 
     void SetPlayerRespawnPoint()
     {
-        PlayerRespawn playerRespawn = FindFirstObjectByType<PlayerRespawn>();
+        // ИСПОЛЬЗУЕТСЯ НОВАЯ КОМАНДА ДЛЯ UNITY 6
+        PlayerRespawn playerRespawn = FindAnyObjectByType<PlayerRespawn>();
         if (playerRespawn != null)
         {
             playerRespawn.SetRespawnPoint(transform.position);
@@ -169,7 +153,6 @@ public class Checkpoint : MonoBehaviour
         }
     }
 
-    // Статические методы для получения сохранённых данных
     public static string GetSavedCheckpointID()
     {
         string currentScene = SceneManager.GetActiveScene().name;

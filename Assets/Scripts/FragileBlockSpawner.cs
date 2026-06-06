@@ -14,7 +14,8 @@ public class FragileBlockSpawner : MonoBehaviour
 
     private List<Vector3Int> originalMarkerPositions = new List<Vector3Int>();
 
-    void Awake()
+    // ВАЖНО: ИЗМЕНЕНО НА Start
+    void Start()
     {
         if (markerTilemap == null)
         {
@@ -47,32 +48,22 @@ public class FragileBlockSpawner : MonoBehaviour
                 originalMarkerPositions.Add(cellPos);
             }
         }
-
-        Debug.Log($"[FragileBlockSpawner] Сохранено маркеров: {originalMarkerPositions.Count}");
     }
 
     public void RespawnBlocks()
     {
-        Debug.Log("[FragileBlockSpawner] Начинается респавн блоков...");
         RestoreMarkers();
         SpawnBlocksAsGroups();
-        Debug.Log("[FragileBlockSpawner] Респавн блоков завершен");
     }
 
     void RestoreMarkers()
     {
-        if (markerTile == null)
-        {
-            Debug.LogWarning("[FragileBlockSpawner] markerTile не задан, пропускаю восстановление");
-            return;
-        }
+        if (markerTile == null) return;
 
         foreach (Vector3Int pos in originalMarkerPositions)
         {
             markerTilemap.SetTile(pos, markerTile);
         }
-
-        Debug.Log($"[FragileBlockSpawner] Восстановлено маркеров: {originalMarkerPositions.Count}");
     }
 
     void SpawnBlocksAsGroups()
@@ -81,7 +72,6 @@ public class FragileBlockSpawner : MonoBehaviour
         HashSet<Vector3Int> processedCells = new HashSet<Vector3Int>();
         List<List<Vector3Int>> groups = new List<List<Vector3Int>>();
 
-        // Находим все связанные группы тайлов
         foreach (Vector3Int cellPos in bounds.allPositionsWithin)
         {
             if (processedCells.Contains(cellPos)) continue;
@@ -95,7 +85,6 @@ public class FragileBlockSpawner : MonoBehaviour
             queue.Enqueue(cellPos);
             processedCells.Add(cellPos);
 
-            // BFS для поиска всех соседних тайлов
             while (queue.Count > 0)
             {
                 Vector3Int current = queue.Dequeue();
@@ -122,30 +111,24 @@ public class FragileBlockSpawner : MonoBehaviour
                     }
                 }
             }
-
             groups.Add(group);
         }
 
-        // Создаём группы блоков
         foreach (var group in groups)
         {
             SpawnBlockGroup(group);
         }
 
-        // Очищаем маркеры
         foreach (var pos in processedCells)
         {
             markerTilemap.SetTile(pos, null);
         }
-
-        Debug.Log($"[FragileBlockSpawner] Создано групп хрупких блоков: {groups.Count}");
     }
 
     void SpawnBlockGroup(List<Vector3Int> cells)
     {
         if (cells.Count == 0) return;
 
-        // Если только один тайл - создаём одиночный блок
         if (cells.Count == 1)
         {
             Vector3 cellWorldPos = markerTilemap.GetCellCenterWorld(cells[0]) + (Vector3)spawnOffset;
@@ -154,11 +137,9 @@ public class FragileBlockSpawner : MonoBehaviour
             return;
         }
 
-        // Создаём родительский объект для группы
         GameObject parent = new GameObject($"FragileGroup_{cells[0].x}_{cells[0].y}");
         parent.layer = fragileBlockPrefab.layer;
 
-        // Вычисляем центр группы
         Vector3 centerWorld = Vector3.zero;
         foreach (var cell in cells)
         {
@@ -168,10 +149,8 @@ public class FragileBlockSpawner : MonoBehaviour
         centerWorld += (Vector3)spawnOffset;
         parent.transform.position = centerWorld;
 
-        // Получаем настройки из префаба
         FragileBlock prefabBlock = fragileBlockPrefab.GetComponent<FragileBlock>();
 
-        // Создаём дочерние объекты
         foreach (var cell in cells)
         {
             Vector3 cellWorldPos = markerTilemap.GetCellCenterWorld(cell) + (Vector3)spawnOffset;
@@ -182,35 +161,37 @@ public class FragileBlockSpawner : MonoBehaviour
             child.transform.localRotation = Quaternion.identity;
             child.name = $"Block_{cell.x}_{cell.y}";
 
-            // ВАЖНО: сначала удаляем FragileBlock
             FragileBlock childFragile = child.GetComponent<FragileBlock>();
             if (childFragile != null)
             {
-                DestroyImmediate(childFragile);
+                childFragile.enabled = false;
+                Destroy(childFragile);
             }
 
-            // Настраиваем коллайдер для композита
+            Rigidbody2D childRb = child.GetComponent<Rigidbody2D>();
+            if (childRb != null)
+            {
+                childRb.simulated = false; // Мгновенно отключаем физику для WebGL
+                Destroy(childRb);
+            }
+
             BoxCollider2D childCollider = child.GetComponent<BoxCollider2D>();
             if (childCollider != null)
             {
-                childCollider.usedByComposite = true;
+                childCollider.compositeOperation = Collider2D.CompositeOperation.Merge; // Убрали варнинг
                 childCollider.isTrigger = false;
             }
         }
 
-        // Добавляем Rigidbody2D на родителя (статический, для Composite)
         Rigidbody2D rb = parent.AddComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Static;
 
-        // Добавляем CompositeCollider2D
         CompositeCollider2D composite = parent.AddComponent<CompositeCollider2D>();
         composite.geometryType = CompositeCollider2D.GeometryType.Polygons;
         composite.offsetDistance = 0.0001f;
 
-        // Добавляем FragileBlock на родителя
         FragileBlock fragileBlock = parent.AddComponent<FragileBlock>();
 
-        // Копируем настройки из префаба
         if (prefabBlock != null)
         {
             fragileBlock.destroyEffectPrefab = prefabBlock.destroyEffectPrefab;
@@ -218,7 +199,5 @@ public class FragileBlockSpawner : MonoBehaviour
             fragileBlock.recoilForce = prefabBlock.recoilForce;
             fragileBlock.playerLayer = prefabBlock.playerLayer;
         }
-
-        Debug.Log($"[FragileBlockSpawner] Создана группа из {cells.Count} блоков: {parent.name}");
     }
 }

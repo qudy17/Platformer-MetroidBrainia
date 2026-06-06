@@ -14,19 +14,10 @@ public class MovableBlockSpawner : MonoBehaviour
 
     private List<Vector3Int> originalMarkerPositions = new List<Vector3Int>();
 
-    void Awake()
+    // ВАЖНО: ИЗМЕНЕНО НА Start
+    void Start()
     {
-        if (markerTilemap == null)
-        {
-            Debug.LogError("[MovableBlockSpawner] markerTilemap не назначен!");
-            return;
-        }
-
-        if (movableBlockPrefab == null)
-        {
-            Debug.LogError("[MovableBlockSpawner] movableBlockPrefab не назначен!");
-            return;
-        }
+        if (markerTilemap == null || movableBlockPrefab == null) return;
 
         SaveOriginalMarkers();
         SpawnBlocksAsGroups();
@@ -41,38 +32,23 @@ public class MovableBlockSpawner : MonoBehaviour
         {
             TileBase tile = markerTilemap.GetTile(cellPos);
             bool isMarkerTile = (markerTile == null) ? tile != null : tile == markerTile;
-
-            if (isMarkerTile)
-            {
-                originalMarkerPositions.Add(cellPos);
-            }
+            if (isMarkerTile) originalMarkerPositions.Add(cellPos);
         }
-
-        Debug.Log($"[MovableBlockSpawner] Сохранено маркеров: {originalMarkerPositions.Count}");
     }
 
     public void RespawnBlocks()
     {
-        Debug.Log("[MovableBlockSpawner] Начинается респавн блоков...");
         RestoreMarkers();
         SpawnBlocksAsGroups();
-        Debug.Log("[MovableBlockSpawner] Респавн блоков завершен");
     }
 
     void RestoreMarkers()
     {
-        if (markerTile == null)
-        {
-            Debug.LogWarning("[MovableBlockSpawner] markerTile не задан, пропускаю восстановление");
-            return;
-        }
-
+        if (markerTile == null) return;
         foreach (Vector3Int pos in originalMarkerPositions)
         {
             markerTilemap.SetTile(pos, markerTile);
         }
-
-        Debug.Log($"[MovableBlockSpawner] Восстановлено маркеров: {originalMarkerPositions.Count}");
     }
 
     void SpawnBlocksAsGroups()
@@ -100,10 +76,8 @@ public class MovableBlockSpawner : MonoBehaviour
                 group.Add(current);
 
                 Vector3Int[] neighbors = {
-                    current + Vector3Int.right,
-                    current + Vector3Int.left,
-                    current + Vector3Int.up,
-                    current + Vector3Int.down
+                    current + Vector3Int.right, current + Vector3Int.left,
+                    current + Vector3Int.up, current + Vector3Int.down
                 };
 
                 foreach (Vector3Int neighbor in neighbors)
@@ -120,21 +94,12 @@ public class MovableBlockSpawner : MonoBehaviour
                     }
                 }
             }
-
             groups.Add(group);
         }
 
-        foreach (var group in groups)
-        {
-            SpawnBlockGroup(group);
-        }
+        foreach (var group in groups) SpawnBlockGroup(group);
 
-        foreach (var pos in processedCells)
-        {
-            markerTilemap.SetTile(pos, null);
-        }
-
-        Debug.Log($"[MovableBlockSpawner] Создано групп блоков: {groups.Count}");
+        foreach (var pos in processedCells) markerTilemap.SetTile(pos, null);
     }
 
     void SpawnBlockGroup(List<Vector3Int> cells)
@@ -145,19 +110,15 @@ public class MovableBlockSpawner : MonoBehaviour
         parent.layer = movableBlockPrefab.layer;
 
         Vector3 centerWorld = Vector3.zero;
-        foreach (var cell in cells)
-        {
-            centerWorld += markerTilemap.GetCellCenterWorld(cell);
-        }
+        foreach (var cell in cells) centerWorld += markerTilemap.GetCellCenterWorld(cell);
+
         centerWorld /= cells.Count;
         centerWorld += (Vector3)spawnOffset;
         parent.transform.position = centerWorld;
 
-        // Получаем настройки из префаба ДО его изменения
         MovableBlock prefabBlock = movableBlockPrefab.GetComponent<MovableBlock>();
         float prefabMass = prefabBlock != null ? prefabBlock.blockMass : 2f;
 
-        // Спавним дочерние объекты
         foreach (var cell in cells)
         {
             Vector3 cellWorldPos = markerTilemap.GetCellCenterWorld(cell) + (Vector3)spawnOffset;
@@ -168,47 +129,42 @@ public class MovableBlockSpawner : MonoBehaviour
             child.transform.localRotation = Quaternion.identity;
             child.name = $"Block_{cell.x}_{cell.y}";
 
-            // ВАЖНО: сначала удаляем MovableBlock, потом Rigidbody2D
             MovableBlock childMovable = child.GetComponent<MovableBlock>();
             if (childMovable != null)
             {
-                DestroyImmediate(childMovable);
+                childMovable.enabled = false;
+                Destroy(childMovable);
             }
 
             Rigidbody2D childRb = child.GetComponent<Rigidbody2D>();
             if (childRb != null)
             {
-                DestroyImmediate(childRb);
+                childRb.simulated = false; // Мгновенно отключаем физику!
+                Destroy(childRb);
             }
 
-            // Настраиваем коллайдер для композита
             BoxCollider2D childCollider = child.GetComponent<BoxCollider2D>();
             if (childCollider != null)
             {
-                childCollider.usedByComposite = true;
+                childCollider.compositeOperation = Collider2D.CompositeOperation.Merge; // Убрали варнинг
                 childCollider.isTrigger = false;
             }
         }
 
-
-        // Добавляем Rigidbody2D на родителя
         Rigidbody2D rb = parent.AddComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.mass = prefabMass * cells.Count;
-        rb.gravityScale = 0f; // Временно отключаем гравитацию
+        rb.gravityScale = 0f;
         rb.freezeRotation = true;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-        // НЕ замораживаем позицию! Пусть физика работает
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        rb.sleepMode = RigidbodySleepMode2D.NeverSleep; // Не даём "заснуть"
+        rb.sleepMode = RigidbodySleepMode2D.NeverSleep;
 
-        // Добавляем CompositeCollider2D
         CompositeCollider2D composite = parent.AddComponent<CompositeCollider2D>();
         composite.geometryType = CompositeCollider2D.GeometryType.Polygons;
         composite.offsetDistance = 0.0001f;
 
-        // Добавляем MovableBlock на родителя
         MovableBlock movableBlock = parent.AddComponent<MovableBlock>();
 
         if (prefabBlock != null)

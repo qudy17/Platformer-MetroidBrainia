@@ -329,7 +329,9 @@ public class Enemy : MonoBehaviour
         Gizmos.color = hasBeenHit ? Color.yellow : Color.gray;
         Gizmos.DrawWireCube(center, size);
 
+#if UNITY_EDITOR
         UnityEditor.Handles.Label(transform.position + Vector3.up * 0.5f,
             hasBeenHit ? $"ACTIVE\n{gameObject.name}" : $"FROZEN\n{gameObject.name}");
+#endif
     }
 }

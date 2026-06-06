@@ -41,10 +41,26 @@ public class PlayerMovement : MonoBehaviour
         // Важно для работы с платформами
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+
+        // Отключаем контекстное меню браузера
+#if !UNITY_EDITOR
+        WebGLInput.captureAllKeyboardInput = true;
+#endif
     }
 
     void Update()
     {
+        // Блокируем системные горячие клавиши через новый Input System
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.f5Key.isPressed ||
+                Keyboard.current.altKey.isPressed ||
+                Keyboard.current.ctrlKey.isPressed)
+            {
+                return;
+            }
+        }
+
         ReadInput();
         UpdateFacingDirection();
         CheckGround();
