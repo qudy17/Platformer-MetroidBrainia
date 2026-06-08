@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.Tilemaps;
 using System.Collections;
-// тест русского языка
+
 public class Door : MonoBehaviour
 {
     [Header("Идентификатор")]
@@ -10,6 +10,9 @@ public class Door : MonoBehaviour
 
     [Header("Состояние")]
     public bool startOpen = false;
+
+    [Header("Отражение")]
+    public bool isReversed = false; // галочка для отражения по X
 
     [Header("Ячейки этой двери в общем Tilemap")]
     [Tooltip("Список ячеек которые принадлежат этой двери")]
@@ -24,18 +27,12 @@ public class Door : MonoBehaviour
 
     public bool IsOpen => isOpen;
 
-    // ───────────────────────────────────────────
-    //  Unity lifecycle
-    // ───────────────────────────────────────────
     void Start()
     {
         isOpen = startOpen;
         ApplyStateInstant();
     }
 
-    // ───────────────────────────────────────────
-    //  Публичные методы
-    // ───────────────────────────────────────────
     public void AddActivation()
     {
         activationCount++;
@@ -70,9 +67,6 @@ public class Door : MonoBehaviour
         ApplyState();
     }
 
-    // ───────────────────────────────────────────
-    //  Внутренняя логика
-    // ───────────────────────────────────────────
     void UpdateFromCount()
     {
         bool shouldBeOpen = activationCount > 0;
@@ -83,7 +77,6 @@ public class Door : MonoBehaviour
         }
     }
 
-    // Мгновенное применение при старте
     void ApplyStateInstant()
     {
         if (DoorsManager.Instance == null)
@@ -95,10 +88,9 @@ public class Door : MonoBehaviour
         if (isOpen)
             DoorsManager.Instance.OpenCells(doorCells);
         else
-            DoorsManager.Instance.CloseCells(doorCells);
+            DoorsManager.Instance.CloseCells(doorCells, isReversed);
     }
 
-    // Анимированное применение
     void ApplyState()
     {
         if (DoorsManager.Instance == null) return;
@@ -106,15 +98,11 @@ public class Door : MonoBehaviour
         if (isOpen)
             DoorsManager.Instance.OpenCells(doorCells);
         else
-            DoorsManager.Instance.CloseCells(doorCells);
+            DoorsManager.Instance.CloseCells(doorCells, isReversed);
     }
 
-    // ───────────────────────────────────────────
-    //  Гизмо — показывает ячейки двери в редакторе
-    // ───────────────────────────────────────────
     void OnDrawGizmosSelected()
     {
-        // Ищем DoorsManager чтобы получить Tilemap
         DoorsManager manager = FindFirstObjectByType<DoorsManager>();
         if (manager == null || manager.doorsTilemap == null) return;
 
@@ -126,12 +114,10 @@ public class Door : MonoBehaviour
 
         foreach (DoorCell cell in doorCells)
         {
-            // Переводим координаты ячейки в мировые координаты
             Vector3 worldPos = tilemap.GetCellCenterWorld(cell.cellPosition);
             Gizmos.DrawCube(worldPos, Vector3.one * 0.9f);
         }
 
-        // Рисуем ID рядом с первой ячейкой
         if (doorCells.Count > 0)
         {
             Vector3 labelPos = tilemap.GetCellCenterWorld(

@@ -450,7 +450,7 @@ public class MainMenuController : MonoBehaviour
         if (flasksStatText != null)
         {
             int flasksCollected = PlayerPrefs.GetInt("FlasksCollected", 0);
-            int totalFlasks = PlayerPrefs.GetInt("TotalFlasks", 10);
+            int totalFlasks = PlayerPrefs.GetInt("TotalFlasks", 1);
             flasksStatText.text = $"{flasksCollected}/{totalFlasks}";
         }
     }

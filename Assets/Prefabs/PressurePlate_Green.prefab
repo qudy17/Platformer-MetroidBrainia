@@ -83,12 +83,12 @@ SpriteRenderer:
   m_SortingLayer: 4
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -5783415477749713636, guid: 61ef2640a0cc673429ec8466ea99db0a, type: 3}
-  m_Color: {r: 0, g: 0.102321506, b: 1, a: 1}
+  m_Sprite: {fileID: -4169286143178590643, guid: ffc0b11631eac0a4da1f5d6f07d7b18c, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.64, y: 0.17}
+  m_Size: {x: 0.73, y: 0.25}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -131,8 +131,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.64, y: 0.17}
-    newSize: {x: 0.64, y: 0.17}
+    oldSize: {x: 0.73, y: 0.25}
+    newSize: {x: 0.73, y: 0.25}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -152,11 +152,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PressurePlate
   plateType: 0
-  plateColor: 0
   linkedDoors: []
   linkedBarrierGroups: []
   activatorLayers:
     serializedVersion: 2
     m_Bits: 4864
-  spriteIdle: {fileID: 0}
+  spriteIdle: {fileID: -7284651073769292876, guid: 4d6fc4afaa3408b45a9fd2fbf8ea4924, type: 3}
   spritePressed: {fileID: 0}

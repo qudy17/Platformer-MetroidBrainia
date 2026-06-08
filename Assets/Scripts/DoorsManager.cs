@@ -13,6 +13,7 @@ public class DoorsManager : MonoBehaviour
     [Header("Префабы")]
     public GameObject closedDoorPrefab;
     public GameObject openDoorPrefab;
+    public GameObject reversedClosedDoorPrefab;
 
     public Transform doorsParent;
 
@@ -24,6 +25,10 @@ public class DoorsManager : MonoBehaviour
 
     private Dictionary<Vector3Int, bool> doorIsOpen
         = new Dictionary<Vector3Int, bool>();
+
+    // Хранит какие двери перевёрнуты
+    private HashSet<Vector3Int> reversedDoors
+        = new HashSet<Vector3Int>();
 
     void Awake()
     {
@@ -62,7 +67,6 @@ public class DoorsManager : MonoBehaviour
 
     void ReplaceAllTilesWithPrefabs()
     {
-        // Находим все нижние клетки
         HashSet<Vector3Int> lowerCells = new HashSet<Vector3Int>();
 
         foreach (Vector3Int pos in originalTiles.Keys)
@@ -74,28 +78,80 @@ public class DoorsManager : MonoBehaviour
             }
         }
 
-        // Удаляем ВСЕ тайлы из Tilemap
         doorsTilemap.ClearAllTiles();
 
-        // Создаём префабы закрытых дверей
+        // Собираем информацию об отражённых дверях от Door-компонентов
+        Door[] allDoors = FindObjectsByType<Door>(FindObjectsSortMode.None);
+        foreach (Door door in allDoors)
+        {
+            if (!door.isReversed) continue;
+
+            foreach (DoorCell cell in door.doorCells)
+            {
+                Vector3Int lowerCell = GetLowerCell(cell.cellPosition);
+                reversedDoors.Add(lowerCell);
+            }
+        }
+
         foreach (Vector3Int lowerCell in lowerCells)
         {
-            if (closedDoorPrefab != null)
-            {
-                GameObject doorObj = Instantiate(closedDoorPrefab, doorsParent);
-
-                Vector3 worldLower = doorsTilemap.GetCellCenterWorld(lowerCell);
-                Vector3 worldUpper = doorsTilemap.GetCellCenterWorld(lowerCell + Vector3Int.up);
-                doorObj.transform.position = (worldLower + worldUpper) / 2f;
-
-                currentDoorObjects[lowerCell] = doorObj;
-                doorIsOpen[lowerCell] = false;
-            }
+            bool isReversed = reversedDoors.Contains(lowerCell);
+            SpawnClosedDoor(lowerCell, isReversed);
         }
 
         RefreshCollider();
         Debug.Log($"[DoorsManager] Создано префабов: {currentDoorObjects.Count}");
     }
+
+    // -------------------------------------------------------
+    // Вспомогательные методы
+    // -------------------------------------------------------
+
+    Vector3 GetDoorWorldPosition(Vector3Int lowerCell)
+    {
+        Vector3 worldLower = doorsTilemap.GetCellCenterWorld(lowerCell);
+        Vector3 worldUpper = doorsTilemap.GetCellCenterWorld(lowerCell + Vector3Int.up);
+        return (worldLower + worldUpper) / 2f;
+    }
+
+    void SpawnClosedDoor(Vector3Int lowerCell, bool isReversed)
+    {
+        GameObject prefabToUse = (isReversed && reversedClosedDoorPrefab != null)
+            ? reversedClosedDoorPrefab
+            : closedDoorPrefab;
+
+        if (prefabToUse == null) return;
+
+        GameObject doorObj = Instantiate(prefabToUse, doorsParent);
+        doorObj.transform.position = GetDoorWorldPosition(lowerCell);
+
+        currentDoorObjects[lowerCell] = doorObj;
+        doorIsOpen[lowerCell] = false;
+    }
+
+    void SpawnOpenDoor(Vector3Int lowerCell)
+    {
+        if (openDoorPrefab == null) return;
+
+        GameObject doorObj = Instantiate(openDoorPrefab, doorsParent);
+        doorObj.transform.position = GetDoorWorldPosition(lowerCell);
+
+        currentDoorObjects[lowerCell] = doorObj;
+        doorIsOpen[lowerCell] = true;
+    }
+
+    void DestroyDoorObject(Vector3Int lowerCell)
+    {
+        if (currentDoorObjects.TryGetValue(lowerCell, out GameObject oldObj))
+        {
+            Destroy(oldObj);
+            currentDoorObjects.Remove(lowerCell);
+        }
+    }
+
+    // -------------------------------------------------------
+    // Публичные методы
+    // -------------------------------------------------------
 
     public void OpenCells(List<DoorCell> cells)
     {
@@ -109,31 +165,13 @@ public class DoorsManager : MonoBehaviour
             processed.Add(lowerCell);
             processed.Add(lowerCell + Vector3Int.up);
 
-            // Удаляем старый префаб (закрытый)
-            if (currentDoorObjects.TryGetValue(lowerCell, out GameObject oldObj))
-            {
-                Destroy(oldObj);
-                currentDoorObjects.Remove(lowerCell);
-            }
-
-            // Создаём префаб открытой двери
-            if (openDoorPrefab != null)
-            {
-                GameObject doorObj = Instantiate(openDoorPrefab, doorsParent);
-
-                Vector3 worldLower = doorsTilemap.GetCellCenterWorld(lowerCell);
-                Vector3 worldUpper = doorsTilemap.GetCellCenterWorld(lowerCell + Vector3Int.up);
-                doorObj.transform.position = (worldLower + worldUpper) / 2f;
-
-                currentDoorObjects[lowerCell] = doorObj;
-            }
-
-            doorIsOpen[lowerCell] = true;
+            DestroyDoorObject(lowerCell);
+            SpawnOpenDoor(lowerCell);
         }
         RefreshCollider();
     }
 
-    public void CloseCells(List<DoorCell> cells)
+    public void CloseCells(List<DoorCell> cells, bool isReversed = false)
     {
         HashSet<Vector3Int> processed = new HashSet<Vector3Int>();
 
@@ -145,26 +183,14 @@ public class DoorsManager : MonoBehaviour
             processed.Add(lowerCell);
             processed.Add(lowerCell + Vector3Int.up);
 
-            // Удаляем старый префаб (открытый)
-            if (currentDoorObjects.TryGetValue(lowerCell, out GameObject oldObj))
-            {
-                Destroy(oldObj);
-                currentDoorObjects.Remove(lowerCell);
-            }
+            // Обновляем словарь отражённых дверей
+            if (isReversed)
+                reversedDoors.Add(lowerCell);
+            else
+                reversedDoors.Remove(lowerCell);
 
-            // Создаём префаб закрытой двери
-            if (closedDoorPrefab != null)
-            {
-                GameObject doorObj = Instantiate(closedDoorPrefab, doorsParent);
-
-                Vector3 worldLower = doorsTilemap.GetCellCenterWorld(lowerCell);
-                Vector3 worldUpper = doorsTilemap.GetCellCenterWorld(lowerCell + Vector3Int.up);
-                doorObj.transform.position = (worldLower + worldUpper) / 2f;
-
-                currentDoorObjects[lowerCell] = doorObj;
-            }
-
-            doorIsOpen[lowerCell] = false;
+            DestroyDoorObject(lowerCell);
+            SpawnClosedDoor(lowerCell, isReversed);
         }
         RefreshCollider();
     }
@@ -179,11 +205,9 @@ public class DoorsManager : MonoBehaviour
     {
         Vector3Int below = cellPos + Vector3Int.down;
 
-        // Ищем нижнюю клетку по originalTiles
         if (originalTiles.ContainsKey(below))
             return below;
 
-        // Или по currentDoorObjects
         if (currentDoorObjects.ContainsKey(below))
             return below;
 
