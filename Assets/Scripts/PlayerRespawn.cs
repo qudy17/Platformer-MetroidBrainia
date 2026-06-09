@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using YG;
 
 public class PlayerRespawn : MonoBehaviour
 {
@@ -79,6 +80,7 @@ public class PlayerRespawn : MonoBehaviour
     {
         // Защита от повторного вызова
         if (isDead) return;
+        YG2.InterstitialAdvShow();
         StartCoroutine(RespawnCoroutine());
     }
 

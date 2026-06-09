@@ -1,0 +1,109 @@
+=== ОТЧЕТ ДЛЯ ЯНДЕКС ИГР ===
+
+1. РАЗМЕР БИЛДА (Макс 100 МБ):
+Размер папки Build: 30.12 МБ
+
+2. НАСТРОЙКИ UNITY PROJECT SETTINGS:
+ - defaultScreenWidth: 1920
+ - defaultScreenHeight: 1080
+ - defaultScreenWidthWeb: 1280
+ - defaultScreenHeightWeb: 720
+ - runInBackground: 0
+ - m_BuildTargetIcons: []
+ - m_BuildTargetPlatformIcons: []
+ - m_BuildTargetBatching:
+ - - m_BuildTarget: WebGL
+ - - m_BuildTarget: WebGL
+ - m_BuildTargetShaderSettings: []
+ - m_BuildTargetGraphicsJobs: []
+ - m_BuildTargetGraphicsJobMode: []
+ - m_BuildTargetGraphicsAPIs:
+ - - m_BuildTarget: WebGLSupport
+ - - m_BuildTarget: WebGLSupport
+ - m_BuildTargetVRSettings: []
+ - m_BuildTargetGroupLightmapEncodingQuality:
+ - m_BuildTarget: WebGL
+ - m_BuildTarget: WebGL
+ - m_BuildTargetGroupHDRCubemapEncodingQuality: []
+ - m_BuildTargetGroupLightmapSettings: []
+ - m_BuildTargetGroupLoadStoreDebugModeSettings: []
+ - m_BuildTargetNormalMapEncoding: []
+ - m_BuildTargetDefaultTextureCompressionFormat:
+ - m_BuildTarget: WebGL
+ - m_BuildTarget: WebGL
+ - WebGL: PLUGIN_YG_2;TMP_YG2;YandexGamesPlatform_yg
+ - WebGL: 4
+
+3. АНАЛИЗ C# СКРИПТОВ:
+
+--- Категория: SDK_Init ---
+[BasicData.cs:12] YG2.onGetSDKData += DrawText;
+[BasicData.cs:13] YG2.onFocusWindowGame += OnDrawTextHostBool;
+[BasicData.cs:14] YG2.onPauseGame += OnDrawTextHostBool;
+[BasicData.cs:19] YG2.onGetSDKData -= DrawText;
+[BasicData.cs:20] YG2.onFocusWindowGame -= OnDrawTextHostBool;
+[BasicData.cs:21] YG2.onPauseGame -= OnDrawTextHostBool;
+[BasicData.cs:31] string platformName = $"platform = <color=#cd5200>{YG2.platform}</color>";
+[BasicData.cs:32] string isFirstGameSession = $"is First Game Session = {YG2.isFirstGameSession.ToString()}";
+[BasicData.cs:33] string gameplaying = $"is Gameplaying = {YG2.isGameplaying.ToString()}";
+[BasicData.cs:34] string pauseGame = $"is Pause Game = {YG2.isPauseGame.ToString()}";
+... и еще 136 совпадений.
+
+--- Категория: Ads_Calls ---
+[EventsYG2.cs:162] public void _InterstitialAdvShow() => YG2.InterstitialAdvShow();
+[EventsYG2.cs:173] public void _RewardedAdvShow(string id) => YG2.RewardedAdvShow(id);
+
+--- Категория: Audio_Pause ---
+[DebugViewing.cs:34] audioPauseText.text = "Audio Pause: " + AudioListener.pause;
+[DebugViewing.cs:47] if (AudioListener.pause)
+[PauseGameYG.cs:47] audioPause_save = AudioListener.pause;
+[PauseGameYG.cs:48] AudioListener.pause = true;
+[PauseGameYG.cs:81] AudioListener.pause = audioPause;
+[PauseGameYG.cs:154] if (editAudioPause && !AudioListener.pause)
+[PauseGameYG.cs:156] audioPause_save = AudioListener.pause;
+[PauseGameYG.cs:157] AudioListener.pause = true;
+[PauseGameYG.cs:192] AudioListener.pause = audioPause_save;
+[MainMenuController.cs:374] AudioListener.volume = volume;
+... и еще 8 совпадений.
+
+--- Категория: Saves ---
+[YG2.cs:57] if (LocalStorage.GetKey("WasFirstGameSession_YG", "false") == "false")
+[YG2.cs:59] LocalStorage.SetKey("WasFirstGameSession_YG", "true");
+[EventsYG2.cs:204] public void _SaveProgress() => YG2.SaveProgress();
+[LocalStorage_yg.cs:6] public static class LocalStorage
+[LocalStorage_yg.cs:10] public static extern void SetKey_LocalStorage_js(string key, string value);
+[LocalStorage_yg.cs:15] SetKey_LocalStorage_js(key, value);
+[LocalStorage_yg.cs:17] PlayerPrefs.SetString(key, value);
+[LocalStorage_yg.cs:18] PlayerPrefs.Save();
+[LocalStorage_yg.cs:23] public static extern string GetKey_LocalStorage_js(string key);
+[LocalStorage_yg.cs:31] return GetKey_LocalStorage_js(key);
+... и еще 61 совпадений.
+
+--- Категория: Input_Desktop ---
+[CameraController.cs:131] mouseWheel = Input.GetAxis("Mouse ScrollWheel");
+[CameraController.cs:135] if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) || touchCount > 0)
+[CameraController.cs:139] if (Input.GetKeyDown(KeyCode.I))
+[CameraController.cs:139] if (Input.GetKeyDown(KeyCode.I))
+[CameraController.cs:142] if (Input.GetKeyDown(KeyCode.F))
+[CameraController.cs:142] if (Input.GetKeyDown(KeyCode.F))
+[CameraController.cs:145] if (Input.GetKeyDown(KeyCode.S))
+[CameraController.cs:145] if (Input.GetKeyDown(KeyCode.S))
+[CameraController.cs:152] mouseY = Input.GetAxis("Mouse Y");
+[CameraController.cs:153] mouseX = Input.GetAxis("Mouse X");
+... и еще 5 совпадений.
+
+--- Категория: Input_Mobile ---
+[DemoSceneLoadButton.cs:2] using UnityEngine.EventSystems;
+[DemoScenePartial.cs:2] using UnityEngine.EventSystems;
+[DemoScenePartial.cs:39] EventSystem[] eventSystem = FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
+[DemoScenePartial.cs:69] eventSystemObj = new GameObject { name = "EventSystemBase" };
+[DemoScenePartial.cs:70] eventSystemObj.AddComponent<EventSystem>();
+[GamePause.cs:15] public static void PauseGame(bool pause, bool editTimeScale, bool editAudioPause, bool editCursor, b
+[GamePause.cs:69] pauseScr.Setup(editTimeScale, editAudioPause, editCursor, editEventSystem);
+[GamePause.cs:78] public static void PauseGame(bool pause) => PauseGame(pause, infoYG.Basic.editTimeScale, true, true,
+[GamePause.cs:79] public static void PauseGameNoEditEventSystem(bool pause) => PauseGame(pause, true, true, true, fals
+[BasicSettings.cs:33] [NestedYG(nameof(autoPauseGame)), Tooltip(Langs.t_editEventSystem)]
+... и еще 28 совпадений.
+
+--- Категория: Localization ---
+Ничего не найдено.

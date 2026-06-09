@@ -156,8 +156,6 @@ public class GameStatsTracker : MonoBehaviour
     /// </summary>
     public static void ResetStats()
     {
-        PlayerPrefs.SetFloat("PlayTime", 0f);
-        PlayerPrefs.SetInt("Deaths", 0);
         PlayerPrefs.SetInt("FlasksCollected", 0);
         PlayerPrefs.Save();
         Debug.Log("[GameStatsTracker] Статистика сброшена");

@@ -65,6 +65,9 @@ TagManager:
   - name: UI
     uniqueID: 4100623345
     locked: 0
+  - name: IrisLayer
+    uniqueID: 1870882161
+    locked: 0
   m_RenderingLayers:
   - Default
   m_MigratedRenderPipelines: []

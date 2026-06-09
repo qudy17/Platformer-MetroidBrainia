@@ -6,9 +6,11 @@ public class Room : MonoBehaviour
     public float roomWidth = 60f;
     public float roomHeight = 33.75f;
 
+    [Header("Финальная комната")]
+    public bool isFinalRoom = false;
+
     public Vector3 RoomCenter => transform.position;
 
-    // Границы комнаты
     public Bounds RoomBounds => new Bounds(
         transform.position,
         new Vector3(roomWidth, roomHeight, 0)
@@ -19,14 +21,16 @@ public class Room : MonoBehaviour
         return RoomBounds.Contains(new Vector3(point.x, point.y, 0));
     }
 
-    // Рисуем границы комнаты в редакторе
     void OnDrawGizmos()
     {
-        Gizmos.color = new Color(0f, 1f, 1f, 0.3f);
+        // Меняем цвет если финальная комната
+        Gizmos.color = isFinalRoom
+            ? new Color(1f, 0.5f, 0f, 0.3f)
+            : new Color(0f, 1f, 1f, 0.3f);
+
         Gizmos.DrawWireCube(transform.position, new Vector3(roomWidth, roomHeight, 0));
 
-        // Крестик в центре
-        Gizmos.color = Color.cyan;
+        Gizmos.color = isFinalRoom ? Color.yellow : Color.cyan;
         Gizmos.DrawLine(
             transform.position + Vector3.left * 0.5f,
             transform.position + Vector3.right * 0.5f

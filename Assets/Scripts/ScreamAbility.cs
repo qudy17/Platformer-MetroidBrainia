@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 // тест русского языка
 public class ScreamAbility : MonoBehaviour
 {
@@ -59,8 +60,8 @@ public class ScreamAbility : MonoBehaviour
             return; // Фокус на UI элементе - не кричим
         }
 
-        bool screamPressed = Keyboard.current != null &&
-                             Keyboard.current.spaceKey.wasPressedThisFrame;
+        bool screamPressed = Mouse.current != null &&
+                             Mouse.current.leftButton.wasPressedThisFrame;
 
         if (screamPressed && currentCharges > 0)
         {
