@@ -7480,6 +7480,7 @@ GameObject:
   - component: {fileID: 519420030}
   - component: {fileID: 519420033}
   - component: {fileID: 519420034}
+  - component: {fileID: 519420035}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -7620,6 +7621,8 @@ MonoBehaviour:
   player: {fileID: 934121129}
   transitionSpeed: 3
   transitionThreshold: 0.01
+  targetAspectWidth: 16
+  targetAspectHeight: 9
   currentRoom: {fileID: 0}
 --- !u!114 &519420034
 MonoBehaviour:
@@ -7637,6 +7640,21 @@ MonoBehaviour:
   circleMask: {fileID: 201950559}
   closeDuration: 3
   openDuration: 3
+--- !u!114 &519420035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db524975a13bd0488201b7a6c23576c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraAspectRatio
+  targetAspectWidth: 16
+  targetAspectHeight: 9
+  barsColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &532497973
 GameObject:
   m_ObjectHideFlags: 0
@@ -14778,7 +14796,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4448534472773253625, guid: 008395e7bb78a98418f0ce67b61fb46f, type: 3}
       propertyPath: plateType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4448534472773253625, guid: 008395e7bb78a98418f0ce67b61fb46f, type: 3}
       propertyPath: spriteIdle

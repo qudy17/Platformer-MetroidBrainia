@@ -1,3 +1,3 @@
-﻿Build path: D:/URFU/Platformer-MetroidBrainia/Build
-Build number: 0
+﻿Build path: E:/unity/projects/Platformer-MetroidBrainia/build
+Build number: 3
 PluginYG version: 0
